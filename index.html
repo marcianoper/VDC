@@ -226,7 +226,2750 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
   </section>
 </section>
 
-<section id="notasCredito" class="module"><div class="empty">Aquí vamos a integrar Notas a Crédito.</div></section>
+<section id="notasCredito" class="module">
+<div class="card" style="padding:0; overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff;">
+    <div>
+      <h3 style="margin:0;font-size:18px;">🧾 Notas a Crédito</h3>
+      <p style="margin:4px 0 0;color:var(--muted);font-weight:700;font-size:13px;">Módulo integrado sin abrir otra página. Conserva slots A/B, báscula, QR, impresión y reportes.</p>
+    </div>
+    <button class="btn light" onclick="document.getElementById('notasFrame').contentWindow.location.reload()">🔄 Recargar módulo</button>
+  </div>
+  <iframe id="notasFrame" title="Notas a Crédito VDC" style="width:100%;height:82vh;border:0;background:#f6f7f8;display:block;" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
+  &lt;title&gt;VDC360° — Notas a Crédito&lt;/title&gt;
+
+  &lt;style&gt;
+    :root{--ink:#111;--brand:#0a7a3b;--muted:#6b7280;--bg:#f6f7f8;--card:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family: ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto}
+    header{background:var(--brand);color:#fff;padding:14px 18px}
+    header h1{margin:0;font-size:18px}
+    main{max-width:1240px;margin:0 auto;padding:16px;display:grid;gap:16px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:16px}
+    h2{margin:0 0 10px 0;font-size:18px}
+    label{display:block;margin-top:8px;font-size:14px;color:#111}
+    input,select,button,textarea{width:100%;padding:10px;margin-top:6px;font-size:14px;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:8px;border-bottom:1px solid #eef0f2;text-align:left;font-size:14px}
+    th{background:#fafafa}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .right{margin-left:auto}
+    .btn{cursor:pointer}
+    .btn-primary{background:var(--brand);color:#fff;border:none}
+    .btn-ghost{background:#fff;border:1px solid #e5e7eb;color:#111}
+    .btn-muted{background:#111;color:#fff;border:none}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#eef7f0;color:#0a7a3b;font-size:12px}
+    .muted{color:var(--muted);font-size:13px}
+    .danger{color:#b91c1c}
+    .slotbar{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .slotbtn{border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;background:#fff;cursor:pointer}
+    .slotbtn.active{background:#0a7a3b;color:#fff;border-color:#0a7a3b}
+    .btn-sm{padding:4px 8px;font-size:12px}
+    .cell-editing input{width:100%;padding:6px;font-size:14px}
+
+    .helperBadges{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .helperBadges .pill{background:#f3f4f6;color:#111}
+    .okBox{
+      background:#eef7f0;
+      border:1px solid #cde7d4;
+      color:#0a7a3b;
+      border-radius:10px;
+      padding:10px;
+      margin-top:10px;
+      font-size:13px;
+    }
+    .warnBox{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#9a3412;
+      border-radius:10px;
+      padding:10px;
+      margin-top:10px;
+      font-size:13px;
+    }
+
+    @media print{
+      body *{visibility:hidden}
+      #printArea, #printArea *{visibility:visible}
+      #printArea{position:fixed; left:0; top:0}
+      @page{ size: A4 landscape; margin: 10mm; }
+
+      #printArea:not(.ticket80){
+        width:297mm;
+        padding:8mm 10mm;
+      }
+      #printArea:not(.ticket80) h3{ margin:0 0 4mm 0; font-size:14px; }
+      #printArea:not(.ticket80) table{ width:100%; border-collapse:collapse; }
+      #printArea:not(.ticket80) th,
+      #printArea:not(.ticket80) td{ border:1px solid #aaa; padding:3px 4px; font-size:11px; }
+
+      #printArea.ticket80{width:80mm; padding:2mm}
+      #printArea.ticket80 .tk-header{ text-align:center; font-size:12px; line-height:1.2; margin-bottom:6px }
+      #printArea.ticket80 .tk-header .store{ font-weight:700; font-size:14px }
+      #printArea.ticket80 .tk-meta{ font-size:11px; margin-bottom:6px }
+      #printArea.ticket80 .tk-line{ border-top:1px dashed #000; margin:6px 0 }
+      #printArea.ticket80 .tk-items{ width:100%; font-size:11px; border-collapse:collapse }
+      #printArea.ticket80 .tk-items th,
+      #printArea.ticket80 .tk-items td{ padding:2px 0; }
+      #printArea.ticket80 .right{ float:right }
+      #printArea.ticket80 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, &quot;Courier New&quot;, monospace }
+      #printArea.ticket80 .totals{ font-size:12px; font-weight:700; margin-top:4px }
+      #printArea.ticket80 .obs-title{ font-weight:700; font-size:11px; margin-top:6px }
+      #printArea.ticket80 .obs{ white-space:pre-wrap; font-size:11px; }
+      #printArea.ticket80 .thanks{ text-align:center; margin-top:8px; font-size:11px }
+    }
+
+    .bandejaWrap{
+      max-height: 55vh;
+      overflow:auto;
+      border:1px solid #eef0f2;
+      border-radius:12px;
+      margin-top:12px;
+    }
+    .bandejaWrap table{ margin-top:0; }
+    .bandejaWrap thead th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background:#fafafa;
+    }
+    .bandejaTools{
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+    }
+    .bandejaTools input, .bandejaTools select, .bandejaTools button{ margin-top:0; }
+
+    details.actionMenu{ position:relative; display:inline-block; }
+    details.actionMenu summary{
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      font-weight:800;
+    }
+    details.actionMenu[open] summary{
+      background:#0a7a3b;
+      color:#fff;
+      border-color:#0a7a3b;
+    }
+    details.actionMenu summary::-webkit-details-marker{ display:none; }
+
+    .menuPanel{
+      position:absolute;
+      right:0;
+      margin-top:8px;
+      min-width:220px;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      box-shadow:0 12px 28px rgba(0,0,0,.12);
+      padding:8px;
+      z-index:50;
+    }
+    .menuPanel button{
+      width:100%;
+      text-align:left;
+      padding:10px 10px;
+      border-radius:10px;
+      border:1px solid #eef0f2;
+      background:#fff;
+      margin:6px 0;
+      cursor:pointer;
+      font-weight:800;
+    }
+    .menuPanel button:hover{ background:#f6f7f8; }
+    .menuPanel button.danger{ border-color:#fee2e2; color:#b91c1c; }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;VDC360° · Notas a Crédito (Slots A/B + Reporte Diario)&lt;/h1&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;h2&gt;🧭 Trabajo en paralelo (2 clientes)&lt;/h2&gt;
+      &lt;div class=&quot;slotbar&quot;&gt;
+        &lt;button class=&quot;slotbtn active&quot; id=&quot;slotA&quot; type=&quot;button&quot;&gt;Slot A&lt;/button&gt;
+        &lt;span class=&quot;pill&quot; id=&quot;slotALabel&quot;&gt;—&lt;/span&gt;
+
+        &lt;button class=&quot;slotbtn&quot; id=&quot;slotB&quot; type=&quot;button&quot;&gt;Slot B&lt;/button&gt;
+        &lt;span class=&quot;pill&quot; id=&quot;slotBLabel&quot;&gt;—&lt;/span&gt;
+
+        &lt;span class=&quot;right flex&quot; style=&quot;gap:6px&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;exitGuardToggle&quot; /&gt;
+          &lt;label for=&quot;exitGuardToggle&quot; class=&quot;muted&quot; style=&quot;margin:0&quot;&gt;Confirmar al salir&lt;/label&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;h2&gt;🧾 Nota (Slot activo)&lt;/h2&gt;
+
+      &lt;div class=&quot;row&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Cliente&lt;/label&gt;
+          &lt;div class=&quot;flex&quot; style=&quot;gap:6px; align-items:stretch&quot;&gt;
+            &lt;select id=&quot;cliSelect&quot;&gt;&lt;/select&gt;
+            &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnAbrirVentaBodega&quot; type=&quot;button&quot;&gt;Abrir Venta Bodega&lt;/button&gt;
+            &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnNuevoCliente&quot; type=&quot;button&quot;&gt;+ Cliente&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Teléfono (WhatsApp)&lt;/label&gt;
+          &lt;input id=&quot;cliTelefono&quot; placeholder=&quot;10 dígitos&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;row-3&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Folio&lt;/label&gt;
+          &lt;input id=&quot;notaFolio&quot; placeholder=&quot;Autogenerado&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Fecha&lt;/label&gt;
+          &lt;input id=&quot;notaFecha&quot; type=&quot;date&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;Días de crédito&lt;/label&gt;
+          &lt;select id=&quot;notaDias&quot;&gt;
+            &lt;option value=&quot;7&quot;&gt;7&lt;/option&gt;
+            &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;
+            &lt;option value=&quot;30&quot; selected&gt;30&lt;/option&gt;
+            &lt;option value=&quot;45&quot;&gt;45&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;row&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Vence&lt;/label&gt;
+          &lt;input id=&quot;notaVence&quot; type=&quot;date&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;&amp;nbsp;&lt;/label&gt;
+          &lt;div class=&quot;flex&quot;&gt;
+            &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnContinuar&quot; type=&quot;button&quot;&gt;
+              Crear / Continuar Nota en Slot Activo
+            &lt;/button&gt;
+            &lt;span class=&quot;pill right&quot; id=&quot;notaInfo&quot;&gt;Sin nota en slot&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;div class=&quot;grid-2&quot;&gt;
+      &lt;section class=&quot;card&quot;&gt;
+        &lt;h2&gt;🧺 Capturar partidas&lt;/h2&gt;
+
+        &lt;div id=&quot;capNormal&quot;&gt;
+          &lt;div class=&quot;row-3&quot;&gt;
+            &lt;div&gt;
+              &lt;label&gt;Producto&lt;/label&gt;
+              &lt;input id=&quot;pProducto&quot; list=&quot;catProductos&quot; placeholder=&quot;Ej. Panza de Res&quot; /&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;label&gt;Kilos&lt;/label&gt;
+              &lt;input id=&quot;pKg&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.01&quot; value=&quot;1&quot; /&gt;
+
+              &lt;div class=&quot;flex&quot; style=&quot;margin-top:8px; gap:8px&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn btn-ghost&quot; id=&quot;btnPeso&quot;&gt;📥 Tomar peso&lt;/button&gt;
+
+                &lt;label class=&quot;muted&quot; style=&quot;display:flex; align-items:center; gap:8px; margin:0&quot;&gt;
+                  &lt;input type=&quot;checkbox&quot; id=&quot;rtBascula&quot; /&gt;
+                  Real-time
+                &lt;/label&gt;
+
+                &lt;select id=&quot;rtModo&quot; style=&quot;max-width:220px&quot;&gt;
+                  &lt;option value=&quot;auto&quot; selected&gt;Auto (Realtime Supabase)&lt;/option&gt;
+                  &lt;option value=&quot;poll&quot;&gt;Poll (consultar cada X ms)&lt;/option&gt;
+                &lt;/select&gt;
+
+                &lt;select id=&quot;rtMs&quot; style=&quot;max-width:140px&quot;&gt;
+                  &lt;option value=&quot;250&quot;&gt;0.25s&lt;/option&gt;
+                  &lt;option value=&quot;500&quot; selected&gt;0.50s&lt;/option&gt;
+                  &lt;option value=&quot;800&quot;&gt;0.80s&lt;/option&gt;
+                  &lt;option value=&quot;1000&quot;&gt;1.0s&lt;/option&gt;
+                  &lt;option value=&quot;1500&quot;&gt;1.5s&lt;/option&gt;
+                &lt;/select&gt;
+
+                &lt;span id=&quot;pesoStatus&quot; class=&quot;pill&quot;&gt;Báscula: —&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;label&gt;Piezas (opcional)&lt;/label&gt;
+              &lt;input id=&quot;pPzas&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div style=&quot;margin-top:8px&quot;&gt;
+            &lt;label&gt;Precio/kg&lt;/label&gt;
+            &lt;input id=&quot;pPrecio&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.01&quot; value=&quot;0&quot; /&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;flex&quot; style=&quot;margin-top:10px&quot;&gt;
+            &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnAgregar&quot; type=&quot;button&quot;&gt;Agregar a nota (Enter)&lt;/button&gt;
+            &lt;span class=&quot;pill right&quot; id=&quot;subtotalBox&quot;&gt;Subtotal: $0.00&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;capVentaBodega&quot; style=&quot;display:none&quot;&gt;
+          &lt;div class=&quot;warnBox&quot;&gt;
+            Cliente especial detectado: &lt;b&gt;Venta Bodega&lt;/b&gt;.  
+            Aquí no capturas producto a mano: subes la foto del ticket QR o pegas el contenido y las partidas se agregan solas a la nota activa.
+          &lt;/div&gt;
+
+          &lt;div class=&quot;helperBadges&quot;&gt;
+            &lt;span class=&quot;pill&quot;&gt;🖼️ Foto QR&lt;/span&gt;
+            &lt;span class=&quot;pill&quot;&gt;⌨️ Pegar contenido&lt;/span&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;flex&quot; style=&quot;margin-top:10px&quot;&gt;
+            &lt;button type=&quot;button&quot; class=&quot;btn btn-ghost&quot; id=&quot;vbProcesarManual&quot;&gt;Procesar contenido&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;btn btn-ghost&quot; id=&quot;vbLimpiar&quot;&gt;Limpiar&lt;/button&gt;
+          &lt;/div&gt;
+
+          &lt;label class=&quot;btn btn-ghost&quot; for=&quot;vbFile&quot; style=&quot;display:block;text-align:center;margin-top:10px;cursor:pointer&quot;&gt;
+            Subir foto del QR
+            &lt;input id=&quot;vbFile&quot; type=&quot;file&quot; accept=&quot;image/*&quot; style=&quot;display:none&quot; /&gt;
+          &lt;/label&gt;
+
+          &lt;label&gt;Contenido del QR&lt;/label&gt;
+          &lt;textarea id=&quot;vbPayload&quot; rows=&quot;5&quot; placeholder=&quot;Aquí aparecerá el contenido del QR o puedes pegarlo manualmente.&quot;&gt;&lt;/textarea&gt;
+
+          &lt;div class=&quot;okBox&quot; id=&quot;vbStatus&quot;&gt;
+            Esperando ticket QR.
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;capPG&quot; style=&quot;display:none&quot;&gt;
+          &lt;div class=&quot;row-3&quot;&gt;
+            &lt;div&gt;
+              &lt;label&gt;Producto&lt;/label&gt;
+              &lt;input value=&quot;Sebo&quot; disabled /&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Kilos&lt;/label&gt;
+              &lt;input id=&quot;seboKg&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.01&quot; value=&quot;0&quot; /&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Piezas (opcional)&lt;/label&gt;
+              &lt;input id=&quot;seboPzas&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;flex&quot; style=&quot;margin-top:10px&quot;&gt;
+            &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnAgregarSebo&quot; type=&quot;button&quot;&gt;Agregar Sebo&lt;/button&gt;
+            &lt;span class=&quot;pill right&quot; id=&quot;subtotalBox2&quot;&gt;Subtotal: $0.00&lt;/span&gt;
+          &lt;/div&gt;
+
+          &lt;hr style=&quot;border:none;border-top:1px solid #eef0f2;margin:14px 0&quot; /&gt;
+
+          &lt;div class=&quot;row-3&quot;&gt;
+            &lt;div&gt;
+              &lt;label&gt;Producto&lt;/label&gt;
+              &lt;input value=&quot;Hueso&quot; disabled /&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Kilos&lt;/label&gt;
+              &lt;input id=&quot;huesoKg&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.01&quot; value=&quot;0&quot; /&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;label&gt;Piezas (opcional)&lt;/label&gt;
+              &lt;input id=&quot;huesoPzas&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;flex&quot; style=&quot;margin-top:10px&quot;&gt;
+            &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnAgregarHueso&quot; type=&quot;button&quot;&gt;Agregar Hueso&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;label style=&quot;margin-top:12px&quot;&gt;Observaciones&lt;/label&gt;
+        &lt;textarea id=&quot;notaObs&quot; rows=&quot;2&quot; placeholder=&quot;Instrucciones, cortes, etc.&quot;&gt;&lt;/textarea&gt;
+      &lt;/section&gt;
+
+      &lt;section class=&quot;card&quot;&gt;
+        &lt;h2&gt;👤 Vista del cliente (slot activo)&lt;/h2&gt;
+
+        &lt;div class=&quot;flex&quot; style=&quot;gap:6px;margin-bottom:6px&quot;&gt;
+          &lt;div class=&quot;pill&quot;&gt;Folio: &lt;span id=&quot;vFolio&quot;&gt;—&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;pill&quot;&gt;Estado: &lt;span id=&quot;vEstado&quot;&gt;—&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;pill&quot;&gt;Saldo: $&lt;span id=&quot;vSaldo&quot;&gt;0.00&lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;table&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Fecha/Hora&lt;/th&gt;
+              &lt;th&gt;Producto&lt;/th&gt;
+              &lt;th&gt;Kg&lt;/th&gt;
+              &lt;th&gt;Pzas&lt;/th&gt;
+              &lt;th&gt;P.Unit&lt;/th&gt;
+              &lt;th&gt;Importe&lt;/th&gt;
+              &lt;th&gt;Acciones&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody id=&quot;vistaBody&quot;&gt;&lt;/tbody&gt;
+          &lt;tfoot&gt;
+            &lt;tr&gt;
+              &lt;td colspan=&quot;6&quot; style=&quot;text-align:right&quot;&gt;Total&lt;/td&gt;
+              &lt;td id=&quot;vistaTotal&quot;&gt;$0.00&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tfoot&gt;
+        &lt;/table&gt;
+      &lt;/section&gt;
+    &lt;/div&gt;
+
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;h2&gt;📥 Notas abiertas hoy (todas)&lt;/h2&gt;
+
+      &lt;div class=&quot;bandejaTools&quot;&gt;
+        &lt;div style=&quot;flex:1; min-width:220px&quot;&gt;
+          &lt;label&gt;Fecha&lt;/label&gt;
+          &lt;input id=&quot;bandejaFecha&quot; type=&quot;date&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;flex:2; min-width:260px&quot;&gt;
+          &lt;label&gt;Buscar (folio o cliente)&lt;/label&gt;
+          &lt;input id=&quot;bandejaBuscar&quot; placeholder=&quot;Ej. CVC-20260206... o Carnicería&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;min-width:220px&quot;&gt;
+          &lt;label&gt;&amp;nbsp;&lt;/label&gt;
+          &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnBandeja&quot; type=&quot;button&quot;&gt;Actualizar&lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;span class=&quot;muted&quot; style=&quot;align-self:center&quot;&gt;Tip: carga una nota al Slot A o B y alterna rápido.&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;bandejaWrap&quot;&gt;
+        &lt;table&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Folio&lt;/th&gt;
+              &lt;th&gt;Cliente&lt;/th&gt;
+              &lt;th&gt;Saldo&lt;/th&gt;
+              &lt;th&gt;Estado&lt;/th&gt;
+              &lt;th style=&quot;text-align:right&quot;&gt;Acciones&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody id=&quot;bandejaBody&quot;&gt;&lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;h2&gt;📄 Reporte diario GENERAL (todos los clientes)&lt;/h2&gt;
+
+      &lt;div class=&quot;row&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Fecha&lt;/label&gt;
+          &lt;input id=&quot;diaFecha&quot; type=&quot;date&quot; /&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+          &lt;label&gt;&amp;nbsp;&lt;/label&gt;
+          &lt;div class=&quot;flex&quot;&gt;
+            &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnDiaA4&quot; type=&quot;button&quot;&gt;Imprimir A4 (todos)&lt;/button&gt;
+            &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnDiaCSV&quot; type=&quot;button&quot;&gt;CSV (todos)&lt;/button&gt;
+            &lt;span class=&quot;pill right&quot; id=&quot;diaResumen&quot;&gt;—&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+   
+  &lt;/main&gt;
+
+  &lt;div id=&quot;printArea&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+  &lt;datalist id=&quot;catProductos&quot;&gt;&lt;/datalist&gt;
+
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://unpkg.com/html5-qrcode&quot;&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+    // 🔥 IMPRESIÓN SILENCIOSA VDC
+const IMPRESION_SILENCIOSA_URL = &quot;http://192.168.1.84:5050/imprimir&quot;;
+const USAR_IMPRESION_SILENCIOSA = true;
+
+async function imprimirSilenciosoTexto(texto){
+  try{
+    const res = await fetch(IMPRESION_SILENCIOSA_URL, {
+      method: &quot;POST&quot;,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ texto })
+    });
+
+    const data = await res.json();
+
+    if(!data.ok){
+      throw new Error(data.error || &quot;Error desconocido&quot;);
+    }
+
+    return true;
+  }catch(err){
+    console.error(err);
+    alert(&quot;No se pudo imprimir silenciosamente. Verifica que el programa esté abierto.&quot;);
+    return false;
+  }
+}
+    const SUPABASE_URL = &quot;https://bjebybdqcqscouxlinfd.supabase.co&quot;;
+    const SUPABASE_ANON_KEY = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqZWJ5YmRxY3FzY291eGxpbmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjQ3MTksImV4cCI6MjA3MTkwMDcxOX0.mQgWtiYEyJTiF04pdcLv63SqPNrU1Iehws0vKqr82O0&quot;;
+
+    const sb = window.__sb || (window.__sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY));
+
+    const STORE_NAME = &quot;Carnes y Vísceras del Centro&quot;;
+    const CAJA_KG = 27.22;
+    const VENTA_BODEGA_NOMBRE = &quot;Venta Bodega&quot;;
+
+    const BASCULA_ID = &quot;torrey_1&quot;;
+    const BASCULA_TABLE = &quot;bascula_live&quot;;
+
+    const btnPeso = document.getElementById(&quot;btnPeso&quot;);
+    const rtBascula = document.getElementById(&quot;rtBascula&quot;);
+    const rtModo = document.getElementById(&quot;rtModo&quot;);
+    const rtMs = document.getElementById(&quot;rtMs&quot;);
+    const pesoStatus = document.getElementById(&quot;pesoStatus&quot;);
+
+    let basculaChannel = null;
+    let basculaPollTimer = null;
+    let basculaInFlight = false;
+
+    const bascStable = { last:null, okCount:0, needed:2, tol:0.03 };
+
+    function setPesoStatus(txt, ok=true){
+      if(!pesoStatus) return;
+      pesoStatus.textContent = txt || &quot;Báscula: —&quot;;
+      pesoStatus.style.background = ok ? &quot;#eef7f0&quot; : &quot;#fee2e2&quot;;
+      pesoStatus.style.color = ok ? &quot;#0a7a3b&quot; : &quot;#b91c1c&quot;;
+    }
+
+    function setKgValue(kg){
+      const el = document.getElementById(&quot;pKg&quot;);
+      if(!el) return;
+
+      const next = Number(kg || 0);
+      if(!isFinite(next)) return;
+
+      const current = Number(el.value || 0);
+      if (Math.abs(current - next) &lt; 0.001) return;
+
+      el.value = next.toFixed(2);
+      el.dispatchEvent(new Event(&quot;input&quot;, { bubbles:true }));
+      el.dispatchEvent(new Event(&quot;change&quot;, { bubbles:true }));
+    }
+
+    function updateStability(kg){
+      if (bascStable.last == null){
+        bascStable.last = kg;
+        bascStable.okCount = 1;
+        return { accept:false, okCount:bascStable.okCount };
+      }
+      if (Math.abs(kg - bascStable.last) &lt;= bascStable.tol){
+        bascStable.okCount += 1;
+      } else {
+        bascStable.last = kg;
+        bascStable.okCount = 1;
+      }
+      return { accept: bascStable.okCount &gt;= bascStable.needed, okCount:bascStable.okCount };
+    }
+
+    async function readPesoFromSupabase(){
+      const { data, error } = await sb
+        .from(BASCULA_TABLE)
+        .select(&quot;peso, updated_at&quot;)
+        .eq(&quot;id&quot;, BASCULA_ID)
+        .maybeSingle();
+
+      if(error) throw error;
+      const peso = data?.peso;
+      return { peso: (peso==null ? null : Math.abs(Number(peso))), updated_at: data?.updated_at || null };
+    }
+
+    async function tomarPesoManual(){
+      if(!btnPeso) return;
+      btnPeso.disabled = true;
+      setPesoStatus(&quot;Báscula: leyendo…&quot;, true);
+
+      try{
+        const { peso } = await readPesoFromSupabase();
+        if(peso == null){
+          setPesoStatus(&quot;Báscula: sin lectura&quot;, false);
+          alert(&quot;No hay peso en Supabase. Revisa que el Windows esté subiendo bascula_live.&quot;);
+          return;
+        }
+        setKgValue(peso);
+        setPesoStatus(`Báscula OK: ${peso.toFixed(2)} kg`, true);
+      }catch(e){
+        console.error(e);
+        setPesoStatus(&quot;Báscula: error&quot;, false);
+        alert(&quot;Error leyendo Supabase (bascula_live). Revisa internet / RLS / tabla.&quot;);
+      }finally{
+        btnPeso.disabled = false;
+      }
+    }
+
+    function stopBasculaRealtime(){
+      if(basculaPollTimer){ clearInterval(basculaPollTimer); basculaPollTimer = null; }
+      if(basculaChannel){ sb.removeChannel(basculaChannel); basculaChannel = null; }
+      bascStable.last = null; bascStable.okCount = 0;
+      setPesoStatus(&quot;Báscula: —&quot;, true);
+    }
+
+    function startBasculaRealtime(){
+      stopBasculaRealtime();
+
+      const modo = (rtModo?.value || &quot;auto&quot;);
+      const interval = Number(rtMs?.value || 500);
+
+      setPesoStatus(&quot;Báscula: real-time ON…&quot;, true);
+
+      if(modo === &quot;poll&quot;){
+        basculaPollTimer = setInterval(async ()=&gt;{
+          if(basculaInFlight) return;
+          basculaInFlight = true;
+          try{
+            const { peso } = await readPesoFromSupabase();
+            if(peso == null){
+              setPesoStatus(&quot;Báscula: sin lectura&quot;, false);
+              return;
+            }
+            const st = updateStability(peso);
+            if(st.accept){
+              setKgValue(peso);
+              setPesoStatus(`Báscula: ${peso.toFixed(2)} kg ✅`, true);
+            } else {
+              setPesoStatus(`Báscula: ${peso.toFixed(2)} kg (est ${st.okCount}/${bascStable.needed})`, true);
+            }
+          }catch(e){
+            console.error(e);
+            setPesoStatus(&quot;Báscula: error (poll)&quot;, false);
+          }finally{
+            basculaInFlight = false;
+          }
+        }, interval);
+        return;
+      }
+
+      basculaChannel = sb
+        .channel(`bascula-${BASCULA_ID}`)
+        .on(
+          &quot;postgres_changes&quot;,
+          { event: &quot;*&quot;, schema: &quot;public&quot;, table: BASCULA_TABLE, filter: `id=eq.${BASCULA_ID}` },
+          async (payload)=&gt;{
+            const row = payload.new || payload.old;
+            const peso = row?.peso;
+            const kg = (peso==null ? null : Math.abs(Number(peso)));
+
+            if(kg == null){
+              setPesoStatus(&quot;Báscula: sin lectura&quot;, false);
+              return;
+            }
+
+            const st = updateStability(kg);
+            if(st.accept){
+              setKgValue(kg);
+              setPesoStatus(`Báscula: ${kg.toFixed(2)} kg ✅`, true);
+            } else {
+              setPesoStatus(`Báscula: ${kg.toFixed(2)} kg (est ${st.okCount}/${bascStable.needed})`, true);
+            }
+          }
+        )
+        .subscribe(async (status)=&gt;{
+          if(status === &quot;SUBSCRIBED&quot;){
+            try{
+              const { peso } = await readPesoFromSupabase();
+              if(peso != null){
+                setKgValue(peso);
+                setPesoStatus(`Báscula: ${peso.toFixed(2)} kg (init)`, true);
+              }
+            }catch{}
+          }
+        });
+    }
+
+    btnPeso?.addEventListener(&quot;click&quot;, tomarPesoManual);
+    rtBascula?.addEventListener(&quot;change&quot;, ()=&gt; rtBascula.checked ? startBasculaRealtime() : stopBasculaRealtime());
+    rtModo?.addEventListener(&quot;change&quot;, ()=&gt; { if(rtBascula?.checked) startBasculaRealtime(); });
+    rtMs?.addEventListener(&quot;change&quot;, ()=&gt; { if(rtBascula?.checked) startBasculaRealtime(); });
+
+    const $ = s =&gt; document.querySelector(s);
+    const $$ = s =&gt; Array.from(document.querySelectorAll(s));
+    const to2 = n =&gt; Number(n || 0).toFixed(2);
+
+    function todayISO(){
+      const d = new Date();
+      const z = d.getTimezoneOffset() * 60000;
+      return new Date(d - z).toISOString().slice(0,10);
+    }
+
+    function addDays(dateISO, days){
+      const d = new Date(dateISO);
+      d.setDate(d.getDate() + Number(days || 0));
+      const z = d.getTimezoneOffset() * 60000;
+      return new Date(d - z).toISOString().slice(0,10);
+    }
+
+    function genFolio(){
+      const d = new Date();
+      const pad = n =&gt; String(n).padStart(2,&#x27;0&#x27;);
+      return `CVC-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+    }
+
+    function csvEscape(s){
+      return &#x27;&quot;&#x27; + String(s).replaceAll(&#x27;&quot;&#x27;,&#x27;&quot;&quot;&#x27;) + &#x27;&quot;&#x27;;
+    }
+
+    function normalizeName(s){
+      return (s || &#x27;&#x27;).toString().trim().toLowerCase();
+    }
+
+    function normalizeKey(s){
+      return String(s || &#x27;&#x27;)
+        .trim()
+        .toLowerCase()
+        .normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;)
+        .replace(/\s+/g, &#x27; &#x27;);
+    }
+
+    function normalizeLine(s){
+      return String(s || &quot;&quot;).replace(/\s+/g, &quot; &quot;).trim();
+    }
+
+    function productoBonito(s){
+      const limpio = String(s || &quot;&quot;)
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, &quot; &quot;);
+
+      if(!limpio) return &quot;&quot;;
+      return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+    }
+
+    function hashQr(str){
+      let h = 2166136261;
+      for(let i=0;i&lt;str.length;i++){
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return &quot;QR_&quot; + (h &gt;&gt;&gt; 0).toString(16);
+    }
+
+    const PRODUCTO_ALIAS = {
+      &#x27;cabeza&#x27;: [&#x27;cabeza&#x27;, &#x27;cabeza de res&#x27;, &#x27;cabeza congelada&#x27;, &#x27;cabeza sin lengua&#x27;, &#x27;cabeza de rastro&#x27;],
+      &#x27;cabeza de res&#x27;: [&#x27;cabeza&#x27;, &#x27;cabeza de res&#x27;],
+      &#x27;cabeza congelada&#x27;: [&#x27;cabeza congelada&#x27;],
+      &#x27;cabeza sin lengua&#x27;: [&#x27;cabeza sin lengua&#x27;],
+      &#x27;cabeza de rastro&#x27;: [&#x27;cabeza de rastro&#x27;],
+      &#x27;pellejo&#x27;: [&#x27;pellejo&#x27;],
+      &#x27;tripa&#x27;: [&#x27;tripa&#x27;, &#x27;tripas&#x27;],
+      &#x27;corazon&#x27;: [&#x27;corazon&#x27;, &#x27;cora&#x27;, &#x27;corazón&#x27;],
+      &#x27;lengua&#x27;: [&#x27;lengua&#x27;, &#x27;lenguas&#x27;]
+    };
+
+    function resolverProductoCatalogo(productoOriginal, sku=&#x27;&#x27;){
+      const limpio = normalizeKey(productoOriginal);
+      const skuLimpio = normalizeKey(String(sku || &#x27;&#x27;).replaceAll(&#x27;_&#x27;, &#x27; &#x27;));
+
+      const catalogo = (PRODUCTOS || []).map(p =&gt; ({
+        original: productoBonito(p.nombre),
+        key: normalizeKey(p.nombre)
+      }));
+
+      const exacto = catalogo.find(x =&gt; x.key === limpio);
+      if(exacto) return exacto.original;
+
+      const exactoSku = catalogo.find(x =&gt; x.key === skuLimpio);
+      if(exactoSku) return exactoSku.original;
+
+      for (const item of catalogo){
+        const alias = PRODUCTO_ALIAS[item.key] || [];
+        if(alias.includes(limpio) || alias.includes(skuLimpio)) return item.original;
+      }
+
+      if(limpio === &#x27;cabeza&#x27; || sku === &#x27;CABEZA_RES&#x27;){
+        const cabezaPreferida =
+          catalogo.find(x =&gt; x.key === &#x27;cabeza de res&#x27;) ||
+          catalogo.find(x =&gt; x.key === &#x27;cabeza&#x27;) ||
+          catalogo.find(x =&gt; x.key.includes(&#x27;cabeza&#x27;));
+        if(cabezaPreferida) return cabezaPreferida.original;
+      }
+
+      return productoBonito(productoOriginal || sku || &#x27;Producto Libre&#x27;);
+    }
+
+    function canonSku(productoOriginal){
+      let t = String(productoOriginal || &quot;&quot;)
+        .trim()
+        .toUpperCase()
+        .normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;);
+
+      if(/PATA[\s_-]*MORENA/.test(t)) return &quot;PATA_MORENA&quot;;
+      if(/^CAJA\s+AZUL\b/.test(t) || t.includes(&quot;CAJA AZUL&quot;)) return &quot;CAJA_MENUDO_NATIONAL&quot;;
+      if(/^CAJA\s+CANADIAN\b/.test(t) || t.includes(&quot;CAJA CANADIAN&quot;)) return &quot;MENUDO_CANADIAN&quot;;
+      if(t.includes(&quot;NATIONAL&quot;)) return &quot;CAJA_MENUDO_NATIONAL&quot;;
+      if(t.includes(&quot;WASHINGTON&quot;)) return &quot;CAJA_WASHINGTON&quot;;
+      if(t.includes(&quot;CABEZA&quot;)) return &quot;CABEZA_RES&quot;;
+      if(t.includes(&quot;CANADIAN&quot;)) return &quot;MENUDO_CANADIAN&quot;;
+      return t.replace(/\s+/g, &quot;_&quot;);
+    }
+
+    function isIgnorableItem(productoOriginal){
+      const t = String(productoOriginal||&quot;&quot;)
+        .trim()
+        .toUpperCase()
+        .normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;);
+
+      return (
+        /\bPELLEJO\b/.test(t) ||
+        /\bBOLSA(S)?\b/.test(t) ||
+        /\bSERVICIO\b/.test(t) ||
+        /\bPROPINA\b/.test(t)
+      );
+    }
+
+    function applyBoxRules(productoOriginal, qty){
+      const name = String(productoOriginal || &quot;&quot;).toUpperCase();
+      const q = Number(qty);
+
+      const isCajaCompleta =
+        name.includes(&quot;CAJA&quot;) &amp;&amp;
+        name.includes(&quot;COMPLETA&quot;) &amp;&amp;
+        Number.isFinite(q) &amp;&amp;
+        Math.abs(q - 1) &lt; 1e-9;
+
+      let kgForDb = Number.isFinite(q) ? q : 0;
+
+      if(isCajaCompleta){
+        if(name.includes(&quot;AZUL&quot;) || name.includes(&quot;CANADIAN&quot;) || name.includes(&quot;NATIONAL&quot;) || name.includes(&quot;WASHINGTON&quot;)){
+          kgForDb = CAJA_KG;
+        }
+      }
+
+      return { kgForDb };
+    }
+
+    function safeParseJson(text){
+      const raw = String(text || &quot;&quot;).trim();
+      if(!raw) throw new Error(&quot;QR vacío.&quot;);
+
+      try{
+        return JSON.parse(raw);
+      }catch(_e){}
+
+      let s = raw;
+      const parts = s.split(/[\t\r\n]+/).map(x =&gt; x.trim()).filter(Boolean);
+      if(parts.length &gt;= 2){
+        const first = parts[0];
+        const allSame = parts.every(x =&gt; x === first);
+        if(allSame) s = first;
+      }
+
+      s = s
+        .replace(/´¨/g, &#x27;&quot;&#x27;)
+        .replace(/¨/g, &#x27;&quot;&#x27;)
+        .replace(/´/g, &#x27;&quot;&#x27;)
+        .replace(/Ñ/g, &#x27;:&#x27;)
+        .replace(/ñ/g, &#x27;:&#x27;);
+
+      try{
+        return JSON.parse(s);
+      }catch(_e){}
+
+      const itemsLong = [];
+      const reLong = /cantidad\W*&quot;?([0-9]+(?:\.[0-9]+)?)&quot;?\W*producto\W*&quot;?(.*?)&quot;?(?=\s*[\]}]|,|\s*$)/gi;
+      let mLong;
+      while((mLong = reLong.exec(s)) !== null){
+        const cantidad = String(mLong[1] || &quot;&quot;).trim();
+        let producto = String(mLong[2] || &quot;&quot;)
+          .replace(/[\[\]{}]+/g, &quot; &quot;)
+          .replace(/\s+/g, &quot; &quot;)
+          .trim();
+
+        producto = producto.replace(/^&quot;+|&quot;+$/g, &quot;&quot;).trim();
+        producto = producto.replace(/\bCANTIDAD\b.*$/i, &quot;&quot;).trim();
+
+        if(cantidad &amp;&amp; producto){
+          itemsLong.push({ cantidad, producto });
+        }
+      }
+      if(itemsLong.length) return itemsLong;
+
+      const itemsShort = [];
+      const reShort = /[&quot;&#x27;]?c[&quot;&#x27;]?\s*[:=]\s*[&quot;&#x27;]?([0-9]+(?:\.[0-9]+)?)[&quot;&#x27;]?\s*[,;]\s*[&quot;&#x27;]?p[&quot;&#x27;]?\s*[:=]\s*[&quot;&#x27;]?([^&quot;&#x27;}\],]+(?:\s[^&quot;&#x27;}\],]+)*)[&quot;&#x27;]?/gi;
+      let mShort;
+      while((mShort = reShort.exec(s)) !== null){
+        const c = String(mShort[1] || &quot;&quot;).trim();
+        let p = String(mShort[2] || &quot;&quot;)
+          .replace(/[\[\]{}]+/g, &quot; &quot;)
+          .replace(/\s+/g, &quot; &quot;)
+          .trim();
+
+        p = p.replace(/^&quot;+|&quot;+$/g, &quot;&quot;).trim();
+
+        if(c &amp;&amp; p){
+          itemsShort.push({ c, p });
+        }
+      }
+      if(itemsShort.length) return itemsShort;
+
+      let t = s
+        .replace(/\*/g, &#x27;}&#x27;)
+        .replace(/\+/g, &#x27;]&#x27;);
+
+      try{
+        return JSON.parse(t);
+      }catch(e){
+        console.error(&quot;Texto original:&quot;, raw);
+        console.error(&quot;Texto saneado:&quot;, t);
+        throw new Error(&quot;No pude convertir el texto escaneado a datos válidos.&quot;);
+      }
+    }
+
+    function normalizePayload(raw, decodedText){
+      const mapLine = (x) =&gt; {
+        const producto = String(
+          x.producto ??
+          x.p ??
+          x.sku ??
+          &quot;&quot;
+        ).trim();
+
+        const qty = Number(
+          x.cantidad ??
+          x.c ??
+          x.kg ??
+          0
+        );
+
+        if(!producto) return null;
+        if(isIgnorableItem(producto)) return null;
+        if(!Number.isFinite(qty) || qty &lt;= 0) return null;
+
+        const sku = canonSku(producto);
+        const { kgForDb } = applyBoxRules(producto, qty);
+
+        if(!Number.isFinite(kgForDb) || kgForDb &lt;= 0) return null;
+
+        const productoCatalogo = resolverProductoCatalogo(producto, sku);
+
+        return {
+          producto: productoCatalogo,
+          sku,
+          kg: kgForDb
+        };
+      };
+
+      if(Array.isArray(raw)){
+        const itemsUi = raw.map(mapLine).filter(Boolean);
+        return {
+          qr_id: hashQr(decodedText),
+          items: itemsUi.map(x =&gt; ({ sku:x.sku, producto:x.producto, kg:x.kg })),
+          _itemsUi: itemsUi
+        };
+      }
+
+      if(raw &amp;&amp; typeof raw === &quot;object&quot;){
+        let items = raw.items;
+        if(!Array.isArray(items) &amp;&amp; Array.isArray(raw.productos)) items = raw.productos;
+        if(!Array.isArray(items) &amp;&amp; Array.isArray(raw.data)) items = raw.data;
+
+        if(!Array.isArray(items) &amp;&amp; (raw.c || raw.cantidad) &amp;&amp; (raw.p || raw.producto)){
+          items = [raw];
+        }
+
+        const itemsUi = (items || []).map(mapLine).filter(Boolean);
+
+        return {
+          qr_id: String(raw.qr_id || hashQr(decodedText)),
+          items: itemsUi.map(x =&gt; ({ sku:x.sku, producto:x.producto, kg:x.kg })),
+          _itemsUi: itemsUi
+        };
+      }
+
+      return null;
+    }
+
+    function groupTicketBySku(itemsUi){
+      const map = new Map();
+      for(const it of (itemsUi || [])){
+        const sku = String(it.sku || &quot;&quot;).trim();
+        if(!sku) continue;
+
+        const kg = Number(it.kg || 0);
+        if(!Number.isFinite(kg) || kg &lt;= 0) continue;
+
+        const prev = map.get(sku);
+        if(prev){
+          prev.kgTotal += kg;
+          prev.lines += 1;
+        }else{
+          map.set(sku, {
+            sku,
+            producto: productoBonito(String(it.producto || sku)),
+            kgTotal: kg,
+            lines: 1
+          });
+        }
+      }
+      return Array.from(map.values()).sort((a,b)=&gt;a.producto.localeCompare(b.producto, &#x27;es&#x27;));
+    }
+
+    function buildAutoObsFromDetalle(det){
+      if(!det || !det.length) return &#x27;&#x27;;
+      const grupos = {};
+
+      det.forEach(d=&gt;{
+        const prod = productoBonito(d.producto || &#x27;Sin producto&#x27;);
+        if(!grupos[prod]){
+          grupos[prod] = { kg:0, pzas:0, tienePzas:false };
+        }
+        grupos[prod].kg += Number(d.cantidad || 0);
+
+        if(d.piezas != null){
+          grupos[prod].pzas += Number(d.piezas || 0);
+          grupos[prod].tienePzas = true;
+        }
+      });
+
+      const lineas = Object.entries(grupos).map(([prod, g])=&gt;{
+        const kgTxt = to2(g.kg);
+        const pzasTxt = g.tienePzas ? ` / ${Math.round(g.pzas)} pzas` : &#x27;&#x27;;
+        return `TOTAL ${prod} = ${kgTxt} kg${pzasTxt}`;
+      });
+
+      return lineas.join(&#x27;\n&#x27;);
+    }
+
+    let CLIENTES = [], PRODUCTOS = [], PRECIOS = {};
+    let slotActive = &#x27;A&#x27;;
+    let notaA = null, notaB = null;
+    let chA = null, chB = null;
+
+    const slotState = {
+      A:{cliente_id:null, telefono:null},
+      B:{cliente_id:null, telefono:null}
+    };
+
+    let exitGuardEnabled = JSON.parse(localStorage.getItem(&#x27;exitGuardEnabled&#x27;) || &#x27;true&#x27;);
+    let isDirty = false;
+    function markDirty(){ if(exitGuardEnabled) isDirty = true; }
+    function clearDirty(){ isDirty = false; }
+
+    const exitGuardToggle = $(&#x27;#exitGuardToggle&#x27;);
+    const slotABtn = $(&#x27;#slotA&#x27;), slotBBtn = $(&#x27;#slotB&#x27;);
+    const slotALabel = $(&#x27;#slotALabel&#x27;), slotBLabel = $(&#x27;#slotBLabel&#x27;);
+
+    const cliSelect = $(&#x27;#cliSelect&#x27;);
+    const cliTelefono = $(&#x27;#cliTelefono&#x27;);
+
+    const notaFolio = $(&#x27;#notaFolio&#x27;);
+    const notaFecha = $(&#x27;#notaFecha&#x27;);
+    const notaDias = $(&#x27;#notaDias&#x27;);
+    const notaVence = $(&#x27;#notaVence&#x27;);
+    const notaInfo = $(&#x27;#notaInfo&#x27;);
+
+    const capNormal = $(&#x27;#capNormal&#x27;);
+    const capVentaBodega = $(&#x27;#capVentaBodega&#x27;);
+    const pProducto = $(&#x27;#pProducto&#x27;);
+    const pKg = $(&#x27;#pKg&#x27;);
+    const pPzas = $(&#x27;#pPzas&#x27;);
+    const pPrecio = $(&#x27;#pPrecio&#x27;);
+    const subtotalBox = $(&#x27;#subtotalBox&#x27;);
+
+    const vbProcesarManual = $(&#x27;#vbProcesarManual&#x27;);
+    const vbLimpiar = $(&#x27;#vbLimpiar&#x27;);
+    const vbPayload = $(&#x27;#vbPayload&#x27;);
+    const vbStatus = $(&#x27;#vbStatus&#x27;);
+    const vbFile = $(&#x27;#vbFile&#x27;);
+
+    const capPG = $(&#x27;#capPG&#x27;);
+    const seboKg = $(&#x27;#seboKg&#x27;);
+    const seboPzas = $(&#x27;#seboPzas&#x27;);
+    const huesoKg = $(&#x27;#huesoKg&#x27;);
+    const huesoPzas = $(&#x27;#huesoPzas&#x27;);
+    const subtotalBox2 = $(&#x27;#subtotalBox2&#x27;);
+
+    const vFolio = $(&#x27;#vFolio&#x27;);
+    const vEstado = $(&#x27;#vEstado&#x27;);
+    const vSaldo = $(&#x27;#vSaldo&#x27;);
+    const vistaBody = $(&#x27;#vistaBody&#x27;);
+    const vistaTotal = $(&#x27;#vistaTotal&#x27;);
+
+    const bandejaFecha = $(&#x27;#bandejaFecha&#x27;);
+    const bandejaBuscar = $(&#x27;#bandejaBuscar&#x27;);
+    const bandejaBody = $(&#x27;#bandejaBody&#x27;);
+
+    const diaFecha = $(&#x27;#diaFecha&#x27;);
+    const diaResumen = $(&#x27;#diaResumen&#x27;);
+
+    const notaObs = $(&#x27;#notaObs&#x27;);
+
+    let vbBusy = false;
+
+    notaFecha.value = todayISO();
+    notaVence.value = addDays(notaFecha.value, notaDias.value);
+    bandejaFecha.value = todayISO();
+    diaFecha.value = todayISO();
+
+    exitGuardToggle.checked = exitGuardEnabled;
+    exitGuardToggle.addEventListener(&#x27;change&#x27;, ()=&gt;{
+      exitGuardEnabled = exitGuardToggle.checked;
+      localStorage.setItem(&#x27;exitGuardEnabled&#x27;, JSON.stringify(exitGuardEnabled));
+      if(!exitGuardEnabled) clearDirty();
+    });
+
+    window.addEventListener(&#x27;beforeunload&#x27;, (e)=&gt;{
+      if(exitGuardEnabled &amp;&amp; isDirty){
+        e.preventDefault();
+        e.returnValue = &#x27;&#x27;;
+      }
+    });
+
+    notaDias.addEventListener(&#x27;change&#x27;, ()=&gt;{ notaVence.value = addDays(notaFecha.value, notaDias.value); });
+    notaFecha.addEventListener(&#x27;change&#x27;, ()=&gt;{ notaVence.value = addDays(notaFecha.value, notaDias.value); });
+
+    [&#x27;keyup&#x27;,&#x27;change&#x27;].forEach(ev=&gt; pProducto.addEventListener(ev, ()=&gt;{
+      prefPrecio();
+      autoKgFromCaja();
+      markDirty();
+    }));
+    [&#x27;keyup&#x27;,&#x27;change&#x27;,&#x27;blur&#x27;].forEach(ev=&gt; pPzas.addEventListener(ev, ()=&gt;{
+      autoKgFromCaja();
+      markDirty();
+    }));
+
+    [&#x27;keyup&#x27;,&#x27;change&#x27;].forEach(ev=&gt; pKg.addEventListener(ev, markDirty));
+    [&#x27;keyup&#x27;,&#x27;change&#x27;].forEach(ev=&gt; pPrecio.addEventListener(ev, markDirty));
+    [&#x27;keyup&#x27;,&#x27;change&#x27;].forEach(ev=&gt; notaObs.addEventListener(ev, markDirty));
+
+    notaObs.addEventListener(&#x27;blur&#x27;, saveNotaObs);
+
+  $(&#x27;#btnContinuar&#x27;)?.addEventListener(&#x27;click&#x27;, continuarNota);
+$(&#x27;#btnAgregar&#x27;)?.addEventListener(&#x27;click&#x27;, addPartida);
+
+$(&#x27;#btnAgregarSebo&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; addFixedPartidaPG(&#x27;Sebo&#x27;, seboKg.value, seboPzas.value));
+$(&#x27;#btnAgregarHueso&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; addFixedPartidaPG(&#x27;Hueso&#x27;, huesoKg.value, huesoPzas.value));
+
+$(&#x27;#btnWA&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; activeNota() &amp;&amp; waNota(activeNota().id));
+$(&#x27;#btnImprimir&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; activeNota() &amp;&amp; imprimirNotaA4(activeNota().id));
+$(&#x27;#btnImprimir80&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; activeNota() &amp;&amp; imprimirNota80mm(activeNota().id));
+$(&#x27;#btnCSV&#x27;)?.addEventListener(&#x27;click&#x27;, ()=&gt; activeNota() &amp;&amp; exportNotaCSV(activeNota().id));
+$(&#x27;#btnCerrar&#x27;)?.addEventListener(&#x27;click&#x27;, cerrarNota);
+
+$(&#x27;#btnNuevoCliente&#x27;)?.addEventListener(&#x27;click&#x27;, addCliente);
+$(&#x27;#btnAbrirVentaBodega&#x27;)?.addEventListener(&#x27;click&#x27;, abrirVentaBodegaDirecto);
+$(&#x27;#btnBandeja&#x27;)?.addEventListener(&#x27;click&#x27;, loadBandeja);
+$(&#x27;#btnDiaA4&#x27;)?.addEventListener(&#x27;click&#x27;, imprimirDiaA4);
+$(&#x27;#btnDiaCSV&#x27;)?.addEventListener(&#x27;click&#x27;, exportDiaCSV);
+
+    vbProcesarManual?.addEventListener(&#x27;click&#x27;, async ()=&gt;{
+      await processVentaBodegaText(vbPayload.value || &#x27;&#x27;);
+    });
+
+    vbLimpiar?.addEventListener(&#x27;click&#x27;, ()=&gt;{
+      vbPayload.value = &#x27;&#x27;;
+      setVBStatus(&#x27;Esperando ticket QR.&#x27;, true);
+    });
+
+    vbFile?.addEventListener(&#x27;change&#x27;, async (e)=&gt;{
+      const file = e.target.files?.[0];
+      if(!file) return;
+
+      try{
+        vbPayload.value = &#x27;&#x27;;
+        setVBStatus(&#x27;Leyendo foto del QR…&#x27;, true);
+
+        const tmpScanner = new Html5Qrcode(&quot;tempQrReaderHidden&quot;);
+        const decodedText = await tmpScanner.scanFile(file, true);
+        await tmpScanner.clear();
+
+        vbPayload.value = &#x27;&#x27;;
+        vbPayload.value = decodedText || &#x27;&#x27;;
+
+        await processVentaBodegaText(decodedText);
+      }catch(err){
+        console.error(err);
+        setVBStatus(&#x27;No pude leer la foto del QR.&#x27;, false);
+        alert(&#x27;No se pudo leer la foto del QR.&#x27;);
+      }finally{
+        vbFile.value = &#x27;&#x27;;
+      }
+    });
+
+    bandejaBuscar?.addEventListener(&#x27;input&#x27;, ()=&gt; loadBandeja());
+
+    document.addEventListener(&#x27;click&#x27;, (e)=&gt;{
+      const inside = e.target.closest?.(&#x27;details.actionMenu&#x27;);
+      if(!inside) cerrarTodosLosMenus();
+    });
+
+    cliSelect.addEventListener(&#x27;change&#x27;, ()=&gt;{
+      slotState[slotActive].cliente_id = cliSelect.value || null;
+      const c = getClient(slotState[slotActive].cliente_id);
+      cliTelefono.value = c ? (c.telefono || &#x27;&#x27;) : &#x27;&#x27;;
+      slotState[slotActive].telefono = cliTelefono.value || null;
+
+      updateCaptureMode();
+    });
+
+    cliTelefono.addEventListener(&#x27;blur&#x27;, async ()=&gt;{ await saveClientPhone(); });
+
+    slotABtn.onclick = ()=&gt; setActiveSlot(&#x27;A&#x27;);
+    slotBBtn.onclick = ()=&gt; setActiveSlot(&#x27;B&#x27;);
+
+    document.addEventListener(&#x27;keydown&#x27;, (e)=&gt;{
+      if(e.key !== &#x27;Enter&#x27;) return;
+
+      const id = document.activeElement?.id || &#x27;&#x27;;
+
+      if(isPielesYGrasasSelected()){
+        if([&#x27;seboKg&#x27;,&#x27;seboPzas&#x27;].includes(id)){
+          e.preventDefault();
+          addFixedPartidaPG(&#x27;Sebo&#x27;, seboKg.value, seboPzas.value);
+          return;
+        }
+        if([&#x27;huesoKg&#x27;,&#x27;huesoPzas&#x27;].includes(id)){
+          e.preventDefault();
+          addFixedPartidaPG(&#x27;Hueso&#x27;, huesoKg.value, huesoPzas.value);
+          return;
+        }
+        return;
+      }
+
+      if(isVentaBodegaSelected()){
+        if(id === &#x27;vbPayload&#x27;){
+          e.preventDefault();
+          processVentaBodegaText(vbPayload.value || &#x27;&#x27;);
+        }
+        return;
+      }
+
+      if([&#x27;pProducto&#x27;,&#x27;pKg&#x27;,&#x27;pPzas&#x27;,&#x27;pPrecio&#x27;].includes(id)){
+        e.preventDefault();
+        addPartida();
+      }
+    });
+
+    window.addEventListener(&#x27;load&#x27;, async ()=&gt;{
+      const hiddenDiv = document.createElement(&#x27;div&#x27;);
+      hiddenDiv.id = &#x27;tempQrReaderHidden&#x27;;
+      hiddenDiv.style.display = &#x27;none&#x27;;
+      document.body.appendChild(hiddenDiv);
+
+      await Promise.all([loadClientes(), loadProductos()]);
+      notaFolio.value = genFolio();
+      await loadBandeja();
+
+      if(CLIENTES[0]){
+        slotState.A.cliente_id = CLIENTES[0].id;
+        slotState.A.telefono = CLIENTES[0].telefono || null;
+        applySlotUI(&#x27;A&#x27;);
+      }
+
+      updateCaptureMode();
+    });
+
+    function getClient(id){ return (CLIENTES||[]).find(c=&gt; String(c.id)===String(id)); }
+    function getClientName(id){ return getClient(id)?.nombre || &#x27;&#x27;; }
+
+    function activeNota(){ return slotActive===&#x27;A&#x27; ? notaA : notaB; }
+
+    function setActiveSlot(s){
+      slotActive = s;
+      slotABtn.classList.toggle(&#x27;active&#x27;, s===&#x27;A&#x27;);
+      slotBBtn.classList.toggle(&#x27;active&#x27;, s===&#x27;B&#x27;);
+      applySlotUI(s);
+      renderVista();
+      refreshNotaInfo();
+      updateCaptureMode();
+    }
+
+    function setSlotNota(s, nota){
+      if(s===&#x27;A&#x27;){ notaA = nota; subRealtime(&#x27;A&#x27;); }
+      else { notaB = nota; subRealtime(&#x27;B&#x27;); }
+
+      slotState[s].cliente_id = nota.cliente_id || slotState[s].cliente_id;
+      const c = getClient(slotState[s].cliente_id);
+      slotState[s].telefono = c ? (c.telefono || null) : slotState[s].telefono;
+
+      if(slotActive===s){
+        applySlotUI(s);
+        renderVista();
+      }
+      refreshNotaInfo();
+      updateCaptureMode();
+    }
+
+    function refreshNotaInfo(){
+      slotALabel.textContent = notaA ? `${notaA.folio}` : &#x27;—&#x27;;
+      slotBLabel.textContent = notaB ? `${notaB.folio}` : &#x27;—&#x27;;
+      const n = activeNota();
+      notaInfo.textContent = n ? `Nota: ${n.folio}` : &#x27;Sin nota en slot&#x27;;
+    }
+
+    function applySlotUI(s){
+      const n = (s===&#x27;A&#x27;) ? notaA : notaB;
+      const cid = (n?.cliente_id) || slotState[s].cliente_id || (CLIENTES[0]?.id || &#x27;&#x27;);
+      cliSelect.value = cid;
+      const c = getClient(cid);
+      cliTelefono.value = (n &amp;&amp; c) ? (c.telefono || &#x27;&#x27;) : (slotState[s].telefono || c?.telefono || &#x27;&#x27;);
+      updateCaptureMode();
+    }
+
+    function isPielesYGrasasSelected(){
+      const cid = cliSelect.value;
+      const c = getClient(cid);
+      const nombre = c?.nombre || &#x27;&#x27;;
+      return normalizeName(nombre) === normalizeName(&#x27;Pieles y Grasas&#x27;);
+    }
+
+    function isVentaBodegaSelected(){
+      const cid = cliSelect.value;
+      const c = getClient(cid);
+      const nombre = c?.nombre || &#x27;&#x27;;
+      return normalizeName(nombre) === normalizeName(VENTA_BODEGA_NOMBRE);
+    }
+
+    function setVBStatus(msg, ok=true){
+      if(!vbStatus) return;
+      vbStatus.textContent = msg || &#x27;Esperando ticket QR.&#x27;;
+      vbStatus.className = ok ? &#x27;okBox&#x27; : &#x27;warnBox&#x27;;
+    }
+
+    function updateCaptureMode(){
+      const pg = isPielesYGrasasSelected();
+      const vb = isVentaBodegaSelected();
+
+      capPG.style.display = pg ? &#x27;block&#x27; : &#x27;none&#x27;;
+      capVentaBodega.style.display = vb ? &#x27;block&#x27; : &#x27;none&#x27;;
+      capNormal.style.display = (!pg &amp;&amp; !vb) ? &#x27;block&#x27; : &#x27;none&#x27;;
+
+      if(pg){
+        setTimeout(()=&gt;{ seboKg?.focus(); seboKg?.select(); }, 0);
+      }else if(vb){
+        setTimeout(()=&gt;{ vbPayload?.focus(); }, 0);
+      }else{
+        setTimeout(()=&gt;{ pProducto?.focus(); }, 0);
+      }
+    }
+
+    async function loadClientes(){
+      const { data, error } = await sb
+        .from(&#x27;clientes&#x27;)
+        .select(&#x27;id, nombre, telefono&#x27;)
+        .order(&#x27;nombre&#x27;);
+
+      if(error){
+        console.error(error);
+        alert(&#x27;No se pudieron cargar CLIENTES&#x27;);
+        return;
+      }
+
+      CLIENTES = data || [];
+      cliSelect.innerHTML = (CLIENTES||[])
+        .map(c=&gt; `&lt;option value=&quot;${c.id}&quot;&gt;${c.nombre}&lt;/option&gt;`)
+        .join(&#x27;&#x27;);
+    }
+
+    async function loadProductos(){
+      let { data, error } = await sb
+        .from(&#x27;productos&#x27;)
+        .select(&#x27;id,nombre,precio_kg,activo&#x27;)
+        .eq(&#x27;activo&#x27;, true)
+        .order(&#x27;nombre&#x27;);
+
+      if(error){
+        ({ data } = await sb
+          .from(&#x27;productos&#x27;)
+          .select(&#x27;id,nombre,precio_kg&#x27;)
+          .order(&#x27;nombre&#x27;));
+      }
+
+      PRODUCTOS = data || [];
+      PRECIOS = Object.fromEntries(PRODUCTOS.map(p=&gt;[productoBonito(p.nombre), Number(p.precio_kg||0).toFixed(2)]));
+
+      $(&#x27;#catProductos&#x27;).innerHTML = PRODUCTOS
+        .map(p=&gt; `&lt;option value=&quot;${productoBonito(p.nombre)}&quot;&gt;&lt;/option&gt;`)
+        .join(&#x27;&#x27;);
+    }
+
+    function prefPrecio(){
+      const n = productoBonito((pProducto.value||&#x27;&#x27;).trim());
+      if(PRECIOS[n]) pPrecio.value = PRECIOS[n];
+    }
+
+    function isCajaMenudoTarget(prodName){
+      const n = normalizeName(prodName);
+      return (
+        n === normalizeName(&#x27;Caja Menudo National&#x27;) ||
+        n === normalizeName(&#x27;Caja Menudo Canadian&#x27;)
+      );
+    }
+
+    function autoKgFromCaja(){
+      if(capNormal.style.display === &#x27;none&#x27;) return;
+
+      const prod = (pProducto.value||&#x27;&#x27;).trim();
+      if(!isCajaMenudoTarget(prod)) return;
+
+      const pz = Number(pPzas.value || 0);
+      if(!pz || pz &lt;= 0) return;
+
+      const kg = pz * CAJA_KG;
+      pKg.value = to2(kg);
+    }
+
+    async function saveClientPhone(){
+      const cid = slotState[slotActive].cliente_id || activeNota()?.cliente_id;
+      if(!cid) return;
+
+      const val = (cliTelefono.value||&#x27;&#x27;).trim() || null;
+      try{
+        await sb.from(&#x27;clientes&#x27;).update({ telefono: val }).eq(&#x27;id&#x27;, cid);
+        const c = getClient(cid);
+        if(c) c.telefono = val;
+        slotState[slotActive].telefono = val;
+      }catch(e){
+        console.error(e);
+      }
+    }
+
+    async function saveNotaObs(){
+      const n = activeNota();
+      if(!n) return;
+      const val = (notaObs.value||&#x27;&#x27;).trim() || null;
+      try{
+        await sb.from(&#x27;notas_credito&#x27;).update({ observaciones: val }).eq(&#x27;id&#x27;, n.id);
+        clearDirty();
+      }catch(e){
+        console.error(e);
+      }
+    }
+
+    async function abrirVentaBodegaDirecto(){
+      let cliente = CLIENTES.find(c =&gt; normalizeName(c.nombre) === normalizeName(VENTA_BODEGA_NOMBRE));
+
+      if(!cliente){
+        const row = {
+          id: crypto.randomUUID(),
+          nombre: VENTA_BODEGA_NOMBRE,
+          telefono: null
+        };
+
+        const { error } = await sb.from(&#x27;clientes&#x27;).insert(row);
+        if(error){
+          console.error(error);
+          return alert(&#x27;No se pudo crear el cliente Venta Bodega&#x27;);
+        }
+
+        await loadClientes();
+        cliente = CLIENTES.find(c =&gt; normalizeName(c.nombre) === normalizeName(VENTA_BODEGA_NOMBRE));
+      }
+
+      if(!cliente){
+        return alert(&#x27;No encontré el cliente Venta Bodega&#x27;);
+      }
+
+      slotState[slotActive].cliente_id = cliente.id;
+      slotState[slotActive].telefono = cliente.telefono || null;
+
+      cliSelect.value = cliente.id;
+      cliTelefono.value = cliente.telefono || &#x27;&#x27;;
+
+      updateCaptureMode();
+      await continuarNota();
+
+      setTimeout(()=&gt;{
+        vbPayload.value = &#x27;&#x27;;
+        vbPayload?.focus();
+      }, 100);
+    }
+
+    async function continuarNota(){
+      const cliente_id = slotState[slotActive].cliente_id || cliSelect.value;
+      if(!cliente_id) return alert(&#x27;Selecciona cliente&#x27;);
+
+      const fecha = notaFecha.value || todayISO();
+
+      let { data: nota } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;cliente_id&#x27;, cliente_id)
+        .eq(&#x27;fecha&#x27;, fecha)
+        .eq(&#x27;estado&#x27;,&#x27;abierta&#x27;)
+        .order(&#x27;created_at&#x27;, {ascending:false})
+        .limit(1)
+        .maybeSingle();
+
+      if(!nota){
+        const payload = {
+          id: crypto.randomUUID(),
+          folio: genFolio(),
+          fecha,
+          vence: (notaVence.value || addDays(fecha, notaDias.value)),
+          cliente_id,
+          total: 0,
+          saldo: 0,
+          observaciones: (notaObs.value || null)
+        };
+
+        const { error } = await sb.from(&#x27;notas_credito&#x27;).insert(payload);
+        if(error){
+          console.error(error);
+          return alert(&#x27;No se pudo crear la nota&#x27;);
+        }
+        nota = payload;
+      }
+
+      setSlotNota(slotActive, nota);
+      notaFolio.value = nota.folio;
+      notaObs.value = nota.observaciones || &#x27;&#x27;;
+
+      updateCaptureMode();
+    }
+
+    async function addCliente(){
+      const nombre = prompt(&#x27;Nombre del cliente:&#x27;);
+      if(!nombre || !nombre.trim()) return;
+
+      const telefono = prompt(&#x27;Teléfono (WhatsApp, opcional):&#x27;) || null;
+
+      const row = {
+        id: crypto.randomUUID(),
+        nombre: nombre.trim(),
+        telefono: telefono || null
+      };
+
+      const { error } = await sb.from(&#x27;clientes&#x27;).insert(row);
+      if(error){
+        console.error(error);
+        return alert(&#x27;No se pudo crear el cliente (RLS/SQL)&#x27;);
+      }
+
+      await loadClientes();
+
+      const c = CLIENTES.find(x=&gt;x.nombre===nombre.trim());
+      if(c){
+        slotState[slotActive].cliente_id = c.id;
+        slotState[slotActive].telefono = c.telefono || null;
+        applySlotUI(slotActive);
+      }
+
+      updateCaptureMode();
+      alert(&#x27;✅ Cliente creado&#x27;);
+    }
+
+    async function addPartida(){
+      const nota = activeNota();
+      if(!nota) return alert(&#x27;Primero crea/continúa una nota en el slot activo&#x27;);
+
+      const prod = productoBonito((pProducto.value||&#x27;&#x27;).trim());
+      const cant = Number(pKg.value||0);
+      const piezas = (pPzas.value !== &#x27;&#x27; &amp;&amp; pPzas.value != null) ? Number(pPzas.value||0) : null;
+      const precio = Number(pPrecio.value||0);
+
+      if(!prod || cant&lt;=0) return alert(&#x27;Producto y kilos son obligatorios&#x27;);
+
+      const { error } = await sb.from(&#x27;notas_detalle&#x27;).insert({
+        id: crypto.randomUUID(),
+        nota_id: nota.id,
+        producto: prod,
+        cantidad: cant,
+        piezas: (piezas != null &amp;&amp; piezas &gt; 0 ? Math.round(piezas) : null),
+        precio,
+        importe: cant * precio
+      });
+
+      if(error){
+        console.error(error);
+        return alert(&#x27;No se pudo agregar la partida&#x27;);
+      }
+
+      pProducto.value = &#x27;&#x27;;
+      if(!rtBascula?.checked) pKg.value = &#x27;1&#x27;;
+      pPzas.value = &#x27;&#x27;;
+      prefPrecio();
+      clearDirty();
+
+      await recalcNota(nota.id);
+      pProducto.focus();
+    }
+
+    async function addFixedPartidaPG(productoNombre, kgVal, pzasVal){
+      const nota = activeNota();
+      if(!nota) return alert(&#x27;Primero crea/continúa una nota en el slot activo&#x27;);
+
+      const prod = productoBonito((productoNombre || &#x27;&#x27;).trim());
+      const cant = Number(kgVal || 0);
+      const piezas = (pzasVal !== &#x27;&#x27; &amp;&amp; pzasVal != null) ? Number(pzasVal || 0) : null;
+
+      if(!prod || cant &lt;= 0) return alert(&#x27;Kilos deben ser mayor a 0&#x27;);
+
+      const precio = Number(PRECIOS[prod] || 0);
+
+      const { error } = await sb.from(&#x27;notas_detalle&#x27;).insert({
+        id: crypto.randomUUID(),
+        nota_id: nota.id,
+        producto: prod,
+        cantidad: cant,
+        piezas: (piezas != null &amp;&amp; piezas &gt; 0 ? Math.round(piezas) : null),
+        precio,
+        importe: cant * precio
+      });
+
+      if(error){
+        console.error(error);
+        return alert(&#x27;No se pudo agregar la partida&#x27;);
+      }
+
+      if(normalizeName(prod) === normalizeName(&#x27;sebo&#x27;)){
+        seboKg.value = &#x27;0&#x27;;
+        seboPzas.value = &#x27;&#x27;;
+        seboKg.focus(); seboKg.select();
+      } else {
+        huesoKg.value = &#x27;0&#x27;;
+        huesoPzas.value = &#x27;&#x27;;
+        huesoKg.focus(); huesoKg.select();
+      }
+
+      clearDirty();
+      await recalcNota(nota.id);
+    }
+
+    async function processVentaBodegaText(text){
+      const nota = activeNota();
+      if(!nota) return alert(&#x27;Primero crea o continúa una nota en el slot activo.&#x27;);
+
+      const rawText = String(text || &#x27;&#x27;).trim();
+      if(!rawText) return alert(&#x27;Pega o escanea primero el contenido del QR.&#x27;);
+
+      if(vbBusy) return;
+      vbBusy = true;
+
+      try{
+        vbPayload.value = rawText;
+        setVBStatus(&#x27;Procesando ticket QR…&#x27;, true);
+
+        const raw = safeParseJson(rawText);
+        const payload = normalizePayload(raw, rawText);
+
+        if(!payload || !Array.isArray(payload._itemsUi) || !payload._itemsUi.length){
+          throw new Error(&#x27;El QR no trae productos válidos.&#x27;);
+        }
+
+        const grouped = groupTicketBySku(payload._itemsUi || []);
+        if(!grouped.length){
+          throw new Error(&#x27;No encontré productos para agregar.&#x27;);
+        }
+
+        const rows = grouped
+          .map(item=&gt;{
+            const producto = resolverProductoCatalogo(item.producto || item.sku || &#x27;&#x27;, item.sku || &#x27;&#x27;);
+            const cantidad = Number(item.kgTotal || 0);
+            const precio = Number(PRECIOS[producto] || 0);
+
+            if(!producto || !Number.isFinite(cantidad) || cantidad &lt;= 0) return null;
+
+            return {
+              id: crypto.randomUUID(),
+              nota_id: nota.id,
+              producto,
+              cantidad,
+              piezas: null,
+              precio,
+              importe: cantidad * precio
+            };
+          })
+          .filter(Boolean);
+
+        if(!rows.length){
+          throw new Error(&#x27;El QR fue leído, pero ningún producto pudo convertirse en partida.&#x27;);
+        }
+
+        const { error } = await sb.from(&#x27;notas_detalle&#x27;).insert(rows);
+        if(error) throw error;
+
+        const resumen = rows
+          .map(g =&gt; `${productoBonito(g.producto)}: ${to2(g.cantidad)} kg`)
+          .join(&#x27; | &#x27;);
+
+        setVBStatus(`Ticket agregado correctamente. ${rows.length} productos cargados. ${resumen}`, true);
+
+        vbPayload.value = &#x27;&#x27;;
+        clearDirty();
+        await recalcNota(nota.id);
+      }catch(err){
+        console.error(err);
+        setVBStatus(`Error: ${err?.message || String(err)}`, false);
+        alert(err?.message || &#x27;No se pudo procesar el QR.&#x27;);
+      }finally{
+        vbBusy = false;
+      }
+    }
+
+    async function recalcNota(nota_id){
+      let total = 0;
+
+      const rpcResp = await sb.rpc(&#x27;sum_importe_nota&#x27;, { p_nota_id: nota_id });
+
+      if(!rpcResp.error &amp;&amp; rpcResp.data != null){
+        if(typeof rpcResp.data === &#x27;number&#x27;){
+          total = Number(rpcResp.data || 0);
+        }else{
+          total = Number(rpcResp.data?.total || 0);
+        }
+      }else{
+        console.warn(&#x27;RPC sum_importe_nota no disponible, usando fallback.&#x27;, rpcResp.error);
+
+        const { data, error } = await sb
+          .from(&#x27;notas_detalle&#x27;)
+          .select(&#x27;importe&#x27;)
+          .eq(&#x27;nota_id&#x27;, nota_id);
+
+        if(error){
+          console.error(error);
+          alert(&#x27;No se pudo recalcular la nota.&#x27;);
+          return;
+        }
+
+        total = (data || []).reduce((a, b) =&gt; a + Number(b.importe || 0), 0);
+      }
+
+      const { error: updError } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .update({ total, saldo: total })
+        .eq(&#x27;id&#x27;, nota_id);
+
+      if(updError){
+        console.error(updError);
+        alert(&#x27;No se pudo actualizar el total de la nota.&#x27;);
+        return;
+      }
+
+      await renderVista();
+      await loadBandeja();
+    }
+
+    async function renderVista(){
+      const n = activeNota();
+
+      if(!n){
+        vFolio.textContent=&#x27;—&#x27;;
+        vEstado.textContent=&#x27;—&#x27;;
+        vSaldo.textContent=&#x27;0.00&#x27;;
+        vistaBody.innerHTML=&#x27;&#x27;;
+        vistaTotal.textContent=&#x27;$0.00&#x27;;
+        subtotalBox.textContent=&#x27;Subtotal: $0.00&#x27;;
+        if(subtotalBox2) subtotalBox2.textContent=&#x27;Subtotal: $0.00&#x27;;
+        notaObs.value=&#x27;&#x27;;
+        refreshNotaInfo();
+        return;
+      }
+
+      const { data: nota } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;id&#x27;, n.id)
+        .single();
+
+      const { data: det } = await sb
+        .from(&#x27;notas_detalle&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;nota_id&#x27;, n.id)
+        .order(&#x27;created_at&#x27;);
+
+      if(slotActive===&#x27;A&#x27;) notaA = nota; else notaB = nota;
+
+      slotState[slotActive].cliente_id = nota.cliente_id;
+      const c = getClient(nota.cliente_id);
+      slotState[slotActive].telefono = c ? (c.telefono || null) : slotState[slotActive].telefono;
+      applySlotUI(slotActive);
+
+      vFolio.textContent = nota.folio;
+      vEstado.textContent = nota.estado || &#x27;abierta&#x27;;
+      vSaldo.textContent = to2(nota.saldo || 0);
+
+      const autoObs = buildAutoObsFromDetalle(det || []);
+      notaObs.value = autoObs;
+
+      try{
+        await sb.from(&#x27;notas_credito&#x27;).update({ observaciones: autoObs || null }).eq(&#x27;id&#x27;, nota.id);
+      }catch(e){
+        console.error(e);
+      }
+
+      vistaBody.innerHTML = (det||[]).map(d=&gt; `
+        &lt;tr data-id=&quot;${d.id}&quot;&gt;
+          &lt;td&gt;${new Date(d.created_at).toLocaleString()}&lt;/td&gt;
+          &lt;td&gt;${productoBonito(d.producto)}&lt;/td&gt;
+          &lt;td class=&quot;editable&quot; data-field=&quot;cantidad&quot;&gt;${to2(d.cantidad)}&lt;/td&gt;
+          &lt;td class=&quot;editable&quot; data-field=&quot;piezas&quot;&gt;${d.piezas != null ? d.piezas : &#x27;&#x27;}&lt;/td&gt;
+          &lt;td class=&quot;editable&quot; data-field=&quot;precio&quot;&gt;$${to2(d.precio)}&lt;/td&gt;
+          &lt;td&gt;$${to2(d.importe)}&lt;/td&gt;
+          &lt;td&gt;&lt;button class=&quot;btn btn-ghost btn-sm&quot; data-del=&quot;${d.id}&quot; title=&quot;Borrar&quot; type=&quot;button&quot;&gt;🗑️&lt;/button&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+      `).join(&#x27;&#x27;);
+
+      const tot = (det||[]).reduce((a,b)=&gt;a+Number(b.importe||0),0);
+      vistaTotal.textContent = `$${to2(tot)}`;
+      subtotalBox.textContent = `Subtotal: $${to2(tot)}`;
+      if(subtotalBox2) subtotalBox2.textContent = `Subtotal: $${to2(tot)}`;
+
+      vistaBody.querySelectorAll(&#x27;[data-del]&#x27;).forEach(b=&gt;{
+        b.onclick = ()=&gt; deleteDetalle(b.dataset.del);
+      });
+
+      vistaBody.querySelectorAll(&#x27;.editable&#x27;).forEach(td=&gt;{
+        td.addEventListener(&#x27;click&#x27;, ()=&gt; makeCellEditable(td, n.id));
+      });
+
+      refreshNotaInfo();
+      updateCaptureMode();
+    }
+
+    function makeCellEditable(td, nota_id){
+      if(td.classList.contains(&#x27;cell-editing&#x27;)) return;
+
+      const field = td.dataset.field;
+      const row = td.closest(&#x27;tr&#x27;);
+      const detId = row.dataset.id;
+      const raw = td.textContent.replace(&#x27;$&#x27;,&#x27;&#x27;).trim();
+
+      let oldV = raw ? Number(raw.replace(&#x27;,&#x27;, &#x27;.&#x27;)) : null;
+
+      td.classList.add(&#x27;cell-editing&#x27;);
+      const input = document.createElement(&#x27;input&#x27;);
+      input.type = &#x27;number&#x27;;
+      input.step = (field===&#x27;piezas&#x27;) ? &#x27;1&#x27; : &#x27;0.01&#x27;;
+      input.min = &#x27;0&#x27;;
+      input.value = (oldV != null ? oldV : 0);
+
+      td.innerHTML = &#x27;&#x27;;
+      td.appendChild(input);
+      input.focus();
+      input.select();
+
+      markDirty();
+
+      const commit = async(save)=&gt;{
+        const newV = Number(input.value||&#x27;&#x27;);
+
+        let displayV;
+        if(field===&#x27;precio&#x27;){
+          const val = save ? newV : (oldV ?? 0);
+          displayV = `$${to2(val)}`;
+        } else if(field===&#x27;cantidad&#x27;){
+          const val = save ? newV : (oldV ?? 0);
+          displayV = to2(val);
+        } else if(field===&#x27;piezas&#x27;){
+          const val = save ? newV : (oldV ?? null);
+          displayV = (val == null || isNaN(val) || val === 0) ? &#x27;&#x27; : String(Math.round(val));
+        } else {
+          displayV = input.value;
+        }
+
+        td.classList.remove(&#x27;cell-editing&#x27;);
+        td.innerHTML = displayV;
+
+        if(!save){
+          clearDirty();
+          return;
+        }
+
+        if(field === &#x27;piezas&#x27;){
+          const newVal = (isNaN(newV) || newV &lt;= 0) ? null : Math.round(newV);
+          await sb.from(&#x27;notas_detalle&#x27;).update({ piezas: newVal }).eq(&#x27;id&#x27;, detId);
+          clearDirty();
+          await renderVista();
+          return;
+        }
+
+        const { data: cur } = await sb
+          .from(&#x27;notas_detalle&#x27;)
+          .select(&#x27;cantidad, precio&#x27;)
+          .eq(&#x27;id&#x27;, detId)
+          .single();
+
+        const cantidad = field===&#x27;cantidad&#x27; ? newV : Number(cur?.cantidad||0);
+        const precio = field===&#x27;precio&#x27; ? newV : Number(cur?.precio||0);
+        const importe = cantidad * precio;
+
+        await sb.from(&#x27;notas_detalle&#x27;).update({ cantidad, precio, importe }).eq(&#x27;id&#x27;, detId);
+        clearDirty();
+        await recalcNota(nota_id);
+      };
+
+      input.addEventListener(&#x27;keydown&#x27;, e=&gt;{
+        if(e.key===&#x27;Enter&#x27;) commit(true);
+        if(e.key===&#x27;Escape&#x27;) commit(false);
+      });
+      input.addEventListener(&#x27;blur&#x27;, ()=&gt; commit(true));
+    }
+
+    async function deleteDetalle(detId){
+      if(!confirm(&#x27;¿Borrar esta partida?&#x27;)) return;
+      const n = activeNota();
+      if(!n) return;
+      await sb.from(&#x27;notas_detalle&#x27;).delete().eq(&#x27;id&#x27;, detId);
+      await recalcNota(n.id);
+    }
+
+    function subRealtime(slot){
+      const nota = slot===&#x27;A&#x27; ? notaA : notaB;
+      if(!nota) return;
+
+      if(slot===&#x27;A&#x27; &amp;&amp; chA){ sb.removeChannel(chA); chA=null; }
+      if(slot===&#x27;B&#x27; &amp;&amp; chB){ sb.removeChannel(chB); chB=null; }
+
+      const ch = sb
+        .channel(`rt-${slot}-${nota.id}`)
+        .on(&#x27;postgres_changes&#x27;,
+          {event:&#x27;*&#x27;,schema:&#x27;public&#x27;,table:&#x27;notas_detalle&#x27;,filter:`nota_id=eq.${nota.id}`},
+          ()=&gt;{ if(slot===slotActive) renderVista(); }
+        )
+        .on(&#x27;postgres_changes&#x27;,
+          {event:&#x27;update&#x27;,schema:&#x27;public&#x27;,table:&#x27;notas_credito&#x27;,filter:`id=eq.${nota.id}`},
+          ()=&gt;{ if(slot===slotActive) renderVista(); }
+        )
+        .subscribe();
+
+      if(slot===&#x27;A&#x27;) chA=ch; else chB=ch;
+    }
+
+    function cerrarTodosLosMenus(){
+      document.querySelectorAll(&#x27;details.actionMenu[open]&#x27;).forEach(d=&gt; d.open = false);
+    }
+
+    async function loadBandeja(){
+      const f = bandejaFecha.value || todayISO();
+      const q = (bandejaBuscar?.value || &#x27;&#x27;).trim().toLowerCase();
+
+      const { data, error } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;id,folio,saldo,estado,clientes(nombre),cliente_id,created_at&#x27;)
+        .eq(&#x27;fecha&#x27;, f)
+        .eq(&#x27;estado&#x27;,&#x27;abierta&#x27;)
+        .order(&#x27;created_at&#x27;, { ascending:false });
+
+      if(error){
+        console.error(error);
+        bandejaBody.innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;5&quot; class=&quot;muted&quot;&gt;Error cargando bandeja&lt;/td&gt;&lt;/tr&gt;`;
+        return;
+      }
+
+      let rows = data || [];
+
+      if(q){
+        rows = rows.filter(r=&gt;{
+          const fol = (r.folio||&#x27;&#x27;).toLowerCase();
+          const cli = (r.clientes?.nombre||&#x27;&#x27;).toLowerCase();
+          return fol.includes(q) || cli.includes(q);
+        });
+      }
+
+      bandejaBody.innerHTML = rows.map(r=&gt; `
+        &lt;tr&gt;
+          &lt;td&gt;${r.folio}&lt;/td&gt;
+          &lt;td&gt;${productoBonito(r.clientes?.nombre||&#x27;&#x27;)}&lt;/td&gt;
+          &lt;td&gt;$${to2(r.saldo||0)}&lt;/td&gt;
+          &lt;td&gt;${r.estado||&#x27;abierta&#x27;}&lt;/td&gt;
+          &lt;td style=&quot;text-align:right&quot;&gt;
+            &lt;details class=&quot;actionMenu&quot;&gt;
+              &lt;summary&gt;Acciones ▾&lt;/summary&gt;
+              &lt;div class=&quot;menuPanel&quot;&gt;
+                &lt;button type=&quot;button&quot; data-usea=&quot;${r.id}&quot; data-cid=&quot;${r.cliente_id}&quot;&gt;Usar en A&lt;/button&gt;
+                &lt;button type=&quot;button&quot; data-useb=&quot;${r.id}&quot; data-cid=&quot;${r.cliente_id}&quot;&gt;Usar en B&lt;/button&gt;
+                &lt;button type=&quot;button&quot; data-a4=&quot;${r.id}&quot;&gt;Imprimir A4&lt;/button&gt;
+                &lt;button type=&quot;button&quot; data-id80=&quot;${r.id}&quot;&gt;Imprimir 80mm&lt;/button&gt;
+                &lt;button type=&quot;button&quot; data-wa=&quot;${r.id}&quot;&gt;Enviar WA&lt;/button&gt;
+                &lt;button type=&quot;button&quot; class=&quot;danger&quot; data-close=&quot;${r.id}&quot;&gt;Cerrar&lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/details&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      `).join(&#x27;&#x27;);
+
+      bandejaBody.querySelectorAll(&#x27;[data-usea]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        cargarEnSlot(&#x27;A&#x27;, b.dataset.usea, b.dataset.cid);
+      });
+      bandejaBody.querySelectorAll(&#x27;[data-useb]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        cargarEnSlot(&#x27;B&#x27;, b.dataset.useb, b.dataset.cid);
+      });
+      bandejaBody.querySelectorAll(&#x27;[data-a4]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        imprimirNotaA4(b.dataset.a4);
+      });
+      bandejaBody.querySelectorAll(&#x27;[data-id80]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        imprimirNota80mm(b.dataset.id80);
+      });
+      bandejaBody.querySelectorAll(&#x27;[data-wa]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        waNota(b.dataset.wa);
+      });
+      bandejaBody.querySelectorAll(&#x27;[data-close]&#x27;).forEach(b=&gt; b.onclick = ()=&gt;{
+        cerrarTodosLosMenus();
+        cerrarNotaById(b.dataset.close);
+      });
+    }
+
+    async function cargarEnSlot(slot, nota_id, cliente_id){
+      const { data: nota } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;id&#x27;, nota_id)
+        .single();
+
+      if(!nota) return;
+
+      setSlotNota(slot, nota);
+      slotState[slot].cliente_id = cliente_id || nota.cliente_id;
+
+      const c = getClient(slotState[slot].cliente_id);
+      slotState[slot].telefono = c ? (c.telefono || null) : null;
+
+      setActiveSlot(slot);
+    }
+
+    function plantillaWA(nota, det, clienteNombre){
+      const items = (det||[]).map(d=&gt;{
+        const piezasTxt = d.piezas ? ` (${d.piezas} pzas)` : &#x27;&#x27;;
+        return `• ${productoBonito(d.producto)} ${to2(d.cantidad)}kg${piezasTxt}`;
+      }).join(&#x27;\n&#x27;);
+
+      return [
+        `Hola *${clienteNombre}*,`,
+        `te compartimos el detalle de tu cuenta del día:\n`,
+        `*Folio:* ${nota.folio}`,
+        `*Fecha:* ${nota.fecha}`,
+        &#x27;&#x27;,
+        items,
+        &#x27;&#x27;,
+        (nota.observaciones ? `*Notas:* ${nota.observaciones}` : &#x27;&#x27;),
+        &#x27;&#x27;,
+        `¡Gracias por tu preferencia! — ${STORE_NAME}`
+      ].join(&#x27;\n&#x27;);
+    }
+
+    function normalizeMxPhoneToWhatsAppDigits(phoneRaw){
+      const digits = (phoneRaw || &#x27;&#x27;).replace(/[^\d]/g,&#x27;&#x27;);
+      if(!digits) return &#x27;&#x27;;
+      if(digits.length === 10) return &#x27;52&#x27; + digits;
+      return digits;
+    }
+
+    async function waNota(nota_id){
+      const { data: nota } = await sb.from(&#x27;notas_credito&#x27;).select(&#x27;*&#x27;).eq(&#x27;id&#x27;, nota_id).single();
+      const { data: det } = await sb.from(&#x27;notas_detalle&#x27;).select(&#x27;*&#x27;).eq(&#x27;nota_id&#x27;, nota_id).order(&#x27;created_at&#x27;);
+
+      const nombre = getClientName(nota.cliente_id);
+
+      let phone = slotState[slotActive].telefono;
+      if(!phone || (activeNota()?.cliente_id !== nota.cliente_id)){
+        const c = getClient(nota.cliente_id);
+        phone = c ? (c.telefono||&#x27;&#x27;) : &#x27;&#x27;;
+      }
+
+      const phoneRaw = (phone || &#x27;&#x27;).trim();
+      if(!phoneRaw){
+        alert(&#x27;El cliente no tiene teléfono guardado. Captura el número en &quot;Teléfono (WhatsApp)&quot; y vuelve a intentar.&#x27;);
+        return;
+      }
+
+      const digits = normalizeMxPhoneToWhatsAppDigits(phoneRaw);
+      if(!digits){
+        alert(&#x27;El teléfono del cliente no es válido.&#x27;);
+        return;
+      }
+
+      const msg = plantillaWA(nota, det||[], productoBonito(nombre));
+      const u = `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
+      const u2 = `https://api.whatsapp.com/send?phone=${digits}&amp;text=${encodeURIComponent(msg)}`;
+
+      const w = window.open(u,&quot;_blank&quot;);
+      setTimeout(()=&gt;{
+        if(!w || w.closed) window.open(u2,&quot;_blank&quot;);
+      }, 600);
+    }
+
+    async function imprimirNotaA4(nota_id){
+      const { data: nota } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;*, clientes(nombre)&#x27;)
+        .eq(&#x27;id&#x27;, nota_id)
+        .single();
+
+      const { data: det } = await sb
+        .from(&#x27;notas_detalle&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;nota_id&#x27;, nota_id)
+        .order(&#x27;created_at&#x27;);
+
+      const el = $(&#x27;#printArea&#x27;);
+      el.style.display=&#x27;block&#x27;;
+      el.classList.remove(&#x27;ticket80&#x27;);
+
+      el.innerHTML = `
+        &lt;h3&gt;Nota — ${productoBonito(nota.clientes?.nombre||&#x27;&#x27;)}&lt;/h3&gt;
+        &lt;div&gt;&lt;b&gt;Folio:&lt;/b&gt; ${nota.folio} &amp;nbsp; &lt;b&gt;Fecha:&lt;/b&gt; ${nota.fecha} &amp;nbsp; &lt;b&gt;Vence:&lt;/b&gt; ${nota.vence||&#x27;&#x27;}&lt;/div&gt;
+        &lt;div&gt;&lt;b&gt;Total:&lt;/b&gt; $${to2(nota.total)} &amp;nbsp; &lt;b&gt;Saldo:&lt;/b&gt; $${to2(nota.saldo)}&lt;/div&gt;
+
+        ${nota.observaciones ? `
+          &lt;div style=&quot;margin-top:6mm&quot;&gt;
+            &lt;b&gt;Notas del cliente:&lt;/b&gt;&lt;br&gt;${(nota.observaciones||&#x27;&#x27;).replace(/\n/g,&#x27;&lt;br&gt;&#x27;)}
+          &lt;/div&gt;
+        ` : &#x27;&#x27;}
+
+        &lt;br/&gt;
+
+        &lt;table&gt;
+          &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Fecha/Hora&lt;/th&gt;&lt;th&gt;Producto&lt;/th&gt;&lt;th&gt;Kg&lt;/th&gt;&lt;th&gt;Pzas&lt;/th&gt;&lt;th&gt;P.Unit&lt;/th&gt;&lt;th&gt;Importe&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+          &lt;tbody&gt;
+            ${(det||[]).map(d=&gt;`
+              &lt;tr&gt;
+                &lt;td&gt;${new Date(d.created_at).toLocaleString()}&lt;/td&gt;
+                &lt;td&gt;${productoBonito(d.producto)}&lt;/td&gt;
+                &lt;td&gt;${to2(d.cantidad)}&lt;/td&gt;
+                &lt;td&gt;${d.piezas != null ? d.piezas : &#x27;&#x27;}&lt;/td&gt;
+                &lt;td&gt;$${to2(d.precio)}&lt;/td&gt;
+                &lt;td&gt;$${to2(d.importe)}&lt;/td&gt;
+              &lt;/tr&gt;
+            `).join(&#x27;&#x27;)}
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      `;
+
+      window.print();
+      setTimeout(()=&gt;{ el.style.display=&#x27;none&#x27;; el.innerHTML=&#x27;&#x27;; }, 500);
+    }
+async function imprimirNota80mm(nota_id){
+  await saveNotaObs();
+
+  const { data: nota } = await sb
+    .from(&#x27;notas_credito&#x27;)
+    .select(&#x27;*, clientes(nombre)&#x27;)
+    .eq(&#x27;id&#x27;, nota_id)
+    .single();
+
+  const { data: det } = await sb
+    .from(&#x27;notas_detalle&#x27;)
+    .select(&#x27;*&#x27;)
+    .eq(&#x27;nota_id&#x27;, nota_id)
+    .order(&#x27;created_at&#x27;);
+
+  const cliente = productoBonito(nota.clientes?.nombre || &#x27;(sin nombre)&#x27;);
+  const obs = nota.observaciones || &#x27;—&#x27;;
+
+  const filas = (det || []).map(d=&gt;{
+    const cantidadTexto = d.piezas ? `${to2(d.cantidad)} (${d.piezas}pz)` : to2(d.cantidad);
+    return `
+      &lt;tr&gt;
+        &lt;td class=&quot;prod&quot;&gt;${productoBonito(d.producto)}&lt;/td&gt;
+        &lt;td class=&quot;right cant&quot;&gt;${cantidadTexto}&lt;/td&gt;
+      &lt;/tr&gt;
+    `;
+  }).join(&#x27;&#x27;);
+
+  const html = `
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;Ticket 80mm&lt;/title&gt;
+&lt;style&gt;
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:#fff;
+    color:#000;
+    font-family:Arial, Helvetica, sans-serif;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  #ticket{
+    background:#fff;
+    width:80mm;
+    max-width:80mm;
+    margin:0;
+    padding:3mm;
+  }
+
+  .logo{
+    text-align:center;
+    margin-bottom:4px;
+  }
+
+  .logo img{
+      width:66mm;
+  max-width:100%;
+  height:auto;
+  }
+
+  h3{
+    margin:0 0 6px;
+    text-align:center;
+    font-size:16px;
+    font-weight:700;
+  }
+
+  .meta{
+    font-size:15px;
+    line-height:1.22;
+    margin-bottom:6px;
+    font-weight:700;
+  }
+
+  .obs-block{
+    margin-top:4px;
+    white-space:pre-wrap;
+    font-weight:700;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:10px;
+    table-layout:fixed;
+  }
+
+  thead th{
+    font-weight:700;
+    border-bottom:2px solid #000;
+    padding:5px 2px;
+  }
+
+  th,td{
+    padding:5px 2px;
+    word-wrap:break-word;
+    vertical-align:top;
+  }
+
+  tbody tr{
+    border-bottom:2px solid #000;
+  }
+
+  td.prod{
+    font-weight:700;
+    font-size:16px;
+  }
+
+  td.cant{
+    font-weight:700;
+    font-size:16px;
+  }
+
+  .right{text-align:right}
+
+  .thanks{
+    margin-top:10px;
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    line-height:1.3;
+  }
+
+  @media print{
+    @page{ size:80mm auto; margin:0mm; }
+    body{ margin:0; }
+    #ticket{
+      width:73mm;
+      max-width:80mm;
+      margin:0;
+      padding:3mm;
+    }
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id=&quot;ticket&quot;&gt;
+    &lt;div class=&quot;logo&quot;&gt;
+      &lt;img src=&quot;file:///C:/bascula/logo.png&quot; alt=&quot;Logo&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;${STORE_NAME}&lt;/h3&gt;
+
+    &lt;div class=&quot;meta&quot;&gt;
+      NOTA A CRÉDITO&lt;br/&gt;
+      Cliente: ${cliente}&lt;br/&gt;
+      Folio: ${nota.folio}&lt;br/&gt;
+      Fecha: ${nota.fecha}&lt;br/&gt;
+      &lt;div class=&quot;obs-block&quot;&gt;${obs}&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;PROD&lt;/th&gt;
+          &lt;th class=&quot;right&quot;&gt;KG/PZAS&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;${filas}&lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;thanks&quot;&gt;
+      ¡Gracias por su preferencia!&lt;br/&gt;
+      ¡Carnes y Vísceras del Centro tu mejor aliado!
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+`;
+
+if(USAR_IMPRESION_SILENCIOSA){
+  try{
+    for(let i = 0; i &lt; 2; i++){ // 👈 imprime 2 veces
+      const res = await fetch(IMPRESION_SILENCIOSA_URL, {
+        method: &quot;POST&quot;,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+        body: JSON.stringify({ html })
+      });
+
+      const data = await res.json();
+
+      if(!data.ok){
+        throw new Error(data.error || &quot;Error desconocido&quot;);
+      }
+    }
+
+    return;
+
+  }catch(err){
+    console.error(err);
+    alert(&quot;No se pudo imprimir silenciosamente.&quot;);
+  }
+}
+
+  const win = window.open(&#x27;&#x27;, &#x27;_blank&#x27;, &#x27;width=420,height=700&#x27;);
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+
+  setTimeout(()=&gt;{ win.print(); }, 300);
+}
+    async function imprimirDiaA4(){
+      const f = diaFecha.value || todayISO();
+
+      const { data: notas } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;id, folio, fecha, clientes(nombre)&#x27;)
+        .eq(&#x27;fecha&#x27;, f)
+        .order(&#x27;created_at&#x27;);
+
+      const ids = (notas || []).map(n =&gt; n.id);
+      if(!ids.length){
+        alert(&#x27;No hay notas ese día&#x27;);
+        return;
+      }
+
+      const { data: det } = await sb
+        .from(&#x27;notas_detalle&#x27;)
+        .select(&#x27;nota_id, producto, cantidad, piezas, precio, importe, created_at&#x27;)
+        .in(&#x27;nota_id&#x27;, ids)
+        .order(&#x27;created_at&#x27;);
+
+      const detalles = det || [];
+
+      const byClient = {};
+      (notas || []).forEach(n=&gt;{
+        const c = productoBonito(n.clientes?.nombre || &#x27;—&#x27;);
+        if(!byClient[c]) byClient[c] = { items: [], totalImporte: 0 };
+      });
+
+      detalles.forEach(d=&gt;{
+        const nota = (notas || []).find(x =&gt; x.id === d.nota_id);
+        const cliente = productoBonito(nota?.clientes?.nombre || &#x27;—&#x27;);
+
+        if(!byClient[cliente]) byClient[cliente] = { items: [], totalImporte: 0 };
+
+        byClient[cliente].items.push({
+          folio: nota?.folio || &#x27;&#x27;,
+          created_at: d.created_at,
+          producto: productoBonito(d.producto),
+          cantidad: Number(d.cantidad || 0),
+          piezas: d.piezas,
+          importe: Number(d.importe || 0)
+        });
+
+        byClient[cliente].totalImporte += Number(d.importe || 0);
+      });
+
+      const resumenProductos = {};
+
+      detalles.forEach(d=&gt;{
+        const prod = productoBonito(d.producto || &#x27;Sin producto&#x27;);
+
+        if(!resumenProductos[prod]){
+          resumenProductos[prod] = {
+            kg: 0,
+            pzas: 0,
+            tienePzas: false,
+            importe: 0
+          };
+        }
+
+        resumenProductos[prod].kg += Number(d.cantidad || 0);
+        resumenProductos[prod].importe += Number(d.importe || 0);
+
+        if(d.piezas != null &amp;&amp; d.piezas !== &#x27;&#x27;){
+          resumenProductos[prod].pzas += Number(d.piezas || 0);
+          resumenProductos[prod].tienePzas = true;
+        }
+      });
+
+      const resumenOrdenado = Object.entries(resumenProductos)
+        .sort((a,b)=&gt; a[0].localeCompare(b[0], &#x27;es&#x27;));
+
+      const totalDia = detalles.reduce((a, b) =&gt; a + Number(b.importe || 0), 0);
+      const totalKgDia = detalles.reduce((a, b) =&gt; a + Number(b.cantidad || 0), 0);
+
+      diaResumen.textContent =
+        `Clientes: ${Object.keys(byClient).length} · Kg totales: ${to2(totalKgDia)} · Total día: $${to2(totalDia)}`;
+
+      let html = `
+        &lt;!DOCTYPE html&gt;
+        &lt;html lang=&quot;es&quot;&gt;
+        &lt;head&gt;
+          &lt;meta charset=&quot;utf-8&quot; /&gt;
+          &lt;title&gt;Reporte diario&lt;/title&gt;
+          &lt;style&gt;
+            @page { size: letter landscape; margin: 8mm; }
+
+            body {
+              font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, sans-serif;
+              font-size: 11px;
+              margin: 0;
+              color: #111;
+            }
+
+            h3 {
+              margin: 0 0 3mm 0;
+              font-size: 15px;
+            }
+
+            h4 {
+              margin: 3mm 0 1.5mm 0;
+              font-size: 11px;
+            }
+
+            .subinfo {
+              font-size: 10px;
+              margin-bottom: 3mm;
+            }
+
+            .section {
+              margin-bottom: 5mm;
+            }
+
+            .summary-box {
+              border: 1px solid #bbb;
+              padding: 3mm;
+              border-radius: 3mm;
+              margin-bottom: 4mm;
+              background: #fafafa;
+            }
+
+            #columns {
+              column-count: 2;
+              column-gap: 5mm;
+            }
+
+            .client-group {
+              break-inside: avoid;
+              page-break-inside: avoid;
+              margin-bottom: 3mm;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+
+            th, td {
+              border: 1px solid #ccc;
+              padding: 2px 3px;
+              font-size: 9.5px;
+              text-align: left;
+              vertical-align: top;
+            }
+
+            th {
+              background: #f3f3f3;
+            }
+
+            .ta-right {
+              text-align: right;
+            }
+
+            .small {
+              font-size: 9px;
+              color: #555;
+            }
+          &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+          &lt;h3&gt;Reporte diario — ${f}&lt;/h3&gt;
+
+          &lt;div class=&quot;subinfo&quot;&gt;
+            Clientes: ${Object.keys(byClient).length}
+            &amp;nbsp; · &amp;nbsp;
+            Kg totales del día: ${to2(totalKgDia)}
+            &amp;nbsp; · &amp;nbsp;
+            Total día: $${to2(totalDia)}
+          &lt;/div&gt;
+
+          &lt;div class=&quot;section summary-box&quot;&gt;
+            &lt;h4&gt;Resumen general por producto&lt;/h4&gt;
+            &lt;table&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Producto&lt;/th&gt;
+                  &lt;th class=&quot;ta-right&quot;&gt;Kg totales&lt;/th&gt;
+                  &lt;th class=&quot;ta-right&quot;&gt;Pzas totales&lt;/th&gt;
+                  &lt;th class=&quot;ta-right&quot;&gt;Importe total&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+                ${resumenOrdenado.map(([prod, r])=&gt;`
+                  &lt;tr&gt;
+                    &lt;td&gt;${productoBonito(prod)}&lt;/td&gt;
+                    &lt;td class=&quot;ta-right&quot;&gt;${to2(r.kg)}&lt;/td&gt;
+                    &lt;td class=&quot;ta-right&quot;&gt;${r.tienePzas ? Math.round(r.pzas) : &#x27;&#x27;}&lt;/td&gt;
+                    &lt;td class=&quot;ta-right&quot;&gt;$${to2(r.importe)}&lt;/td&gt;
+                  &lt;/tr&gt;
+                `).join(&#x27;&#x27;)}
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;section&quot;&gt;
+            &lt;h4&gt;Detalle por cliente&lt;/h4&gt;
+            &lt;div id=&quot;columns&quot;&gt;
+      `;
+
+      Object.entries(byClient).forEach(([cliente, pack])=&gt;{
+        const resumenCliente = {};
+        const nombreOriginal = {};
+
+        (pack.items || []).forEach(d=&gt;{
+          const prodOriginal = productoBonito((d.producto || &#x27;Sin producto&#x27;).trim());
+          const prodKey = prodOriginal.toLowerCase();
+
+          if(!resumenCliente[prodKey]){
+            resumenCliente[prodKey] = 0;
+            nombreOriginal[prodKey] = prodOriginal;
+          }
+
+          resumenCliente[prodKey] += Number(d.cantidad || 0);
+        });
+
+        const resumenClienteOrdenado = Object.entries(resumenCliente)
+          .sort((a,b)=&gt; nombreOriginal[a[0]].localeCompare(nombreOriginal[b[0]], &#x27;es&#x27;));
+
+        const kgTotalCliente = (pack.items || []).reduce((acc, d)=&gt; acc + Number(d.cantidad || 0), 0);
+
+        html += `
+          &lt;div class=&quot;client-group&quot;&gt;
+            &lt;h4&gt;${cliente} — Total: $${to2(pack.totalImporte)}&lt;/h4&gt;
+
+            &lt;div class=&quot;small&quot; style=&quot;margin-bottom:2mm;&quot;&gt;
+              Kg totales del cliente: &lt;b&gt;${to2(kgTotalCliente)}&lt;/b&gt;
+            &lt;/div&gt;
+
+            &lt;div style=&quot;margin-bottom:2mm; padding:2mm; border:1px solid #ccc; background:#fafafa;&quot;&gt;
+              &lt;div style=&quot;font-weight:700; margin-bottom:1.5mm;&quot;&gt;Totales por producto&lt;/div&gt;
+              ${resumenClienteOrdenado.map(([prodKey, totalKg])=&gt;`
+                &lt;div&gt;&lt;b&gt;Total ${nombreOriginal[prodKey]}&lt;/b&gt; = ${to2(totalKg)} kg&lt;/div&gt;
+              `).join(&#x27;&#x27;)}
+            &lt;/div&gt;
+
+            &lt;table&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Folio&lt;/th&gt;
+                  &lt;th&gt;Hora&lt;/th&gt;
+                  &lt;th&gt;Producto&lt;/th&gt;
+                  &lt;th class=&quot;ta-right&quot;&gt;Kg&lt;/th&gt;
+                  &lt;th class=&quot;ta-right&quot;&gt;Pzas&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+                ${(pack.items || []).map(d =&gt; `
+                  &lt;tr&gt;
+                    &lt;td&gt;${d.folio}&lt;/td&gt;
+                    &lt;td&gt;${new Date(d.created_at).toLocaleTimeString()}&lt;/td&gt;
+                    &lt;td&gt;${productoBonito(d.producto)}&lt;/td&gt;
+                    &lt;td class=&quot;ta-right&quot;&gt;${to2(d.cantidad)}&lt;/td&gt;
+                    &lt;td class=&quot;ta-right&quot;&gt;${d.piezas != null ? d.piezas : &#x27;&#x27;}&lt;/td&gt;
+                  &lt;/tr&gt;
+                `).join(&#x27;&#x27;)}
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/div&gt;
+        `;
+      });
+
+      html += `
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+      `;
+
+      const win = window.open(&#x27;&#x27;, &#x27;_blank&#x27;, &#x27;width=1200,height=800&#x27;);
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+      win.focus();
+
+      setTimeout(() =&gt; { win.print(); }, 400);
+    }
+
+    async function exportDiaCSV(){
+      const f = diaFecha.value || todayISO();
+
+      const { data: notas } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;id, folio, fecha, clientes(nombre)&#x27;)
+        .eq(&#x27;fecha&#x27;, f);
+
+      const ids = (notas||[]).map(n=&gt;n.id);
+      if(!ids.length) return alert(&#x27;No hay notas ese día&#x27;);
+
+      const { data: det } = await sb
+        .from(&#x27;notas_detalle&#x27;)
+        .select(&#x27;nota_id, producto, cantidad, piezas, precio, importe, created_at&#x27;)
+        .in(&#x27;nota_id&#x27;, ids);
+
+      const head = [&#x27;Cliente&#x27;,&#x27;Folio&#x27;,&#x27;Fecha&#x27;,&#x27;Hora&#x27;,&#x27;Producto&#x27;,&#x27;Kg&#x27;,&#x27;Piezas&#x27;,&#x27;Precio&#x27;,&#x27;Importe&#x27;];
+
+      const rows = (det||[]).map(d=&gt;{
+        const n = (notas||[]).find(x=&gt;x.id===d.nota_id) || {};
+        return [
+          productoBonito(n.clientes?.nombre||&#x27;&#x27;),
+          n.folio,
+          f,
+          new Date(d.created_at).toLocaleTimeString(),
+          productoBonito(d.producto),
+          to2(d.cantidad),
+          (d.piezas != null ? d.piezas : &#x27;&#x27;),
+          to2(d.precio),
+          to2(d.importe)
+        ];
+      });
+
+      const csv = [head, ...rows].map(r=&gt; r.map(csvEscape).join(&#x27;,&#x27;)).join(&#x27;\n&#x27;);
+      const blob = new Blob([csv],{type:&#x27;text/csv;charset=utf-8&#x27;});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement(&#x27;a&#x27;);
+      a.href = url;
+      a.download = `reporte_${f}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function exportNotaCSV(nota_id){
+      const { data: nota } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .select(&#x27;folio, fecha, clientes(nombre), cliente_id&#x27;)
+        .eq(&#x27;id&#x27;, nota_id)
+        .single();
+
+      const { data: det } = await sb
+        .from(&#x27;notas_detalle&#x27;)
+        .select(&#x27;*&#x27;)
+        .eq(&#x27;nota_id&#x27;, nota_id)
+        .order(&#x27;created_at&#x27;);
+
+      const head = [&#x27;Cliente&#x27;,&#x27;Folio&#x27;,&#x27;Fecha&#x27;,&#x27;Hora&#x27;,&#x27;Producto&#x27;,&#x27;Kg&#x27;,&#x27;Piezas&#x27;,&#x27;Precio&#x27;,&#x27;Importe&#x27;];
+      const rows = (det||[]).map(d =&gt; ([
+        productoBonito(nota?.clientes?.nombre || &#x27;&#x27;),
+        nota?.folio || &#x27;&#x27;,
+        nota?.fecha || &#x27;&#x27;,
+        new Date(d.created_at).toLocaleTimeString(),
+        productoBonito(d.producto),
+        to2(d.cantidad),
+        (d.piezas != null ? d.piezas : &#x27;&#x27;),
+        to2(d.precio),
+        to2(d.importe)
+      ]));
+
+      const csv = [head, ...rows].map(r=&gt; r.map(csvEscape).join(&#x27;,&#x27;)).join(&#x27;\n&#x27;);
+      const blob = new Blob([csv],{type:&#x27;text/csv;charset=utf-8&#x27;});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement(&#x27;a&#x27;);
+      a.href = url;
+      a.download = `nota_${nota?.folio || &#x27;sin_folio&#x27;}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function cerrarNotaById(nota_id){
+      if(!nota_id) return;
+      if(!confirm(&#x27;¿Cerrar esta nota?&#x27;)) return;
+
+      const { error } = await sb
+        .from(&#x27;notas_credito&#x27;)
+        .update({estado:&#x27;cerrada&#x27;})
+        .eq(&#x27;id&#x27;, nota_id);
+
+      if(error){
+        console.error(error);
+        alert(&#x27;No se pudo cerrar la nota&#x27;);
+        return;
+      }
+
+      if(notaA?.id === nota_id) notaA = null;
+      if(notaB?.id === nota_id) notaB = null;
+
+      await renderVista();
+      await loadBandeja();
+      alert(&#x27;✅ Nota cerrada&#x27;);
+    }
+
+    async function cerrarNota(){
+      const n = activeNota();
+      if(!n) return alert(&#x27;Sin nota&#x27;);
+
+      await sb.from(&#x27;notas_credito&#x27;).update({estado:&#x27;cerrada&#x27;}).eq(&#x27;id&#x27;, n.id);
+      await renderVista();
+      await loadBandeja();
+      alert(&#x27;✅ Nota cerrada&#x27;);
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+</div>
+</section>
 <section id="clientes" class="module"><div class="empty">Aquí vamos a integrar Clientes.</div></section>
 <section id="reportes" class="module"><div class="empty">Aquí vamos a integrar Reportes.</div></section>
 </main>
