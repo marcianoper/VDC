@@ -547,9 +547,7 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
 &lt;/head&gt;
 
 &lt;body&gt;
-  &lt;a class=&quot;back-central&quot; href=&quot;https://marcianoper.github.io/vdc-central/&quot;&gt;← VDC Central&lt;/a&gt;
-
-  &lt;div class=&quot;topbar&quot;&gt;
+&lt;div class=&quot;topbar&quot;&gt;
     &lt;div class=&quot;topbar-inner&quot;&gt;
       &lt;div class=&quot;brand&quot;&gt;
         &lt;div class=&quot;badge&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; VDC360°&lt;/div&gt;
@@ -1894,24 +1892,7 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
 &lt;/head&gt;
 
 &lt;body&gt;
-  &lt;a href=&quot;https://marcianoper.github.io/vdc-central/&quot;
-   style=&quot;
-     position:fixed;
-     top:12px;
-     left:12px;
-     background:#0a7a3b;
-     color:#fff;
-     padding:10px 14px;
-     border-radius:12px;
-     text-decoration:none;
-     font-weight:900;
-     z-index:9999;
-     box-shadow:0 10px 20px rgba(0,0,0,.15);
-   &quot;&gt;
-  ← VDC Central
-&lt;/a&gt;
-
-  &lt;div class=&quot;container&quot;&gt;
+&lt;div class=&quot;container&quot;&gt;
     &lt;h1&gt;Hoja de pesos y sebo&lt;/h1&gt;
 
     &lt;div class=&quot;draftbar&quot;&gt;
@@ -2677,7 +2658,1707 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
 &lt;/html&gt;"></iframe>
 </div>
 </section>
-<section id="limpiezaPanza" class="module"><div class="empty">Aquí vamos a integrar Limpieza de Panza.</div></section>
+<section id="limpiezaPanza" class="module">
+<div class="card" style="padding:0; overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff;">
+    <div>
+      <h3 style="margin:0;font-size:18px;">🧼 Limpieza de Panza</h3>
+      <p style="margin:4px 0 0;color:var(--muted);font-weight:700;font-size:13px;">Módulo integrado sin abrir otra página.</p>
+    </div>
+    <button class="btn light" onclick="document.getElementById('limpiezaPanzaFrame').contentWindow.location.reload()">🔄 Recargar módulo</button>
+  </div>
+  <iframe id="limpiezaPanzaFrame" title="Limpieza de Panza VDC" style="width:100%;height:82vh;border:0;background:#f6f7f8;display:block;" srcdoc="
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+  &lt;title&gt;VDC 360° — Proceso de Limpieza&lt;/title&gt;
+
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2&quot;&gt;&lt;/script&gt;
+
+  &lt;style&gt;
+    :root{
+      --brand:#0a7a3b;
+      --brand2:#0f9a52;
+      --bg:#f6f7f8;
+      --card:#ffffff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --shadow:0 18px 50px rgba(2,6,23,.10);
+      --shadow2:0 10px 24px rgba(2,6,23,.08);
+      --danger:#b91c1c;
+      --warn:#b45309;
+      --ok:#166534;
+      --yellow:#fff59d;
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 520px at 18% -10%, rgba(15,154,82,.16), transparent 45%),
+        linear-gradient(180deg, #f9fbfa 0%, var(--bg) 100%);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:30;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .header-wrap{
+      max-width:1500px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      box-shadow:var(--shadow2);
+    }
+
+    .title h1{
+      margin:0;
+      font-size:20px;
+      line-height:1.1;
+    }
+
+    .title p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .badge{
+      border:1px solid rgba(10,122,59,.18);
+      background:rgba(10,122,59,.08);
+      color:var(--brand);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    main{
+      max-width:1500px;
+      margin:0 auto;
+      padding:22px 18px 40px;
+      display:grid;
+      gap:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid rgba(15,23,42,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-head{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .card-head h2,
+    .card-head h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .card-head p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .card-body{
+      padding:18px;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+    }
+
+    .field label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    input, select, button, textarea{
+      font:inherit;
+    }
+
+    input, select, textarea{
+      width:100%;
+      border:1px solid #dbe2ea;
+      background:#fff;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 14px;
+      outline:none;
+      transition:.18s ease;
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color:rgba(10,122,59,.45);
+      box-shadow:0 0 0 4px rgba(10,122,59,.10);
+    }
+
+    textarea{
+      min-height:92px;
+      resize:vertical;
+    }
+
+    .readonly-input{
+      background:#f8fafc !important;
+      color:var(--ink);
+      font-weight:800;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:800;
+      transition:.18s ease;
+    }
+
+    .btn{
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      color:#fff;
+      box-shadow:var(--shadow2);
+    }
+
+    .btn:hover{ transform:translateY(-1px); }
+
+    .btn-soft{
+      background:#eef7f1;
+      color:var(--brand);
+      border:1px solid rgba(10,122,59,.14);
+    }
+
+    .btn-danger{
+      background:#fff1f2;
+      color:var(--danger);
+      border:1px solid rgba(185,28,28,.16);
+    }
+
+    .btn-dark{
+      background:#0f172a;
+      color:#fff;
+    }
+
+    .capture-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .subcard{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .subhead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .subhead h4{
+      margin:0;
+      font-size:16px;
+    }
+
+    .subbody{
+      padding:14px;
+      display:grid;
+      gap:12px;
+    }
+
+    .row-form{
+      display:grid;
+      grid-template-columns: 1fr 1fr .8fr .8fr auto;
+      gap:10px;
+      align-items:end;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th, td{
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+      text-align:left;
+      font-size:14px;
+      vertical-align:middle;
+    }
+
+    th{
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-weight:800;
+      background:#fafbfc;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
+    .num{
+      text-align:right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:var(--ink);
+    }
+
+    .pill.ok{
+      background:#eefaf2;
+      color:var(--ok);
+      border-color:#ccefd8;
+    }
+
+    .pill.warn{
+      background:#fff8eb;
+      color:var(--warn);
+      border-color:#f6ddb6;
+    }
+
+    .pill.danger{
+      background:#fff1f2;
+      color:var(--danger);
+      border-color:#fecdd3;
+    }
+
+    .pill.info{
+      background:#eff6ff;
+      color:#1d4ed8;
+      border-color:#bfdbfe;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+    }
+
+    .kpi{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fbfcfd);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:var(--shadow2);
+    }
+
+    .kpi .label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:8px;
+    }
+
+    .kpi .value{
+      font-size:28px;
+      font-weight:900;
+      line-height:1;
+      margin-bottom:6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi .meta{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .hl{
+      background:var(--yellow);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+
+    .summary-table td:first-child{
+      font-weight:800;
+    }
+
+    .summary-table td:last-child{
+      text-align:right;
+      font-variant-numeric: tabular-nums;
+      font-weight:800;
+    }
+
+    .summary-table .auto{
+      background:#fffef1;
+    }
+
+    .empty{
+      padding:20px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .statusbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .history-wrap{
+      overflow:auto;
+      max-height:500px;
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+    .section-gap{
+      margin-top:18px;
+    }
+
+    @media (max-width: 1200px){
+      .grid{ grid-template-columns:1fr; }
+      .capture-grid{ grid-template-columns:1fr; }
+      .toolbar{ grid-template-columns:repeat(2,1fr); }
+    }
+
+    @media (max-width: 760px){
+      .toolbar,
+      .row-form,
+      .kpis{
+        grid-template-columns:1fr;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;div class=&quot;header-wrap&quot;&gt;
+      &lt;div class=&quot;brand&quot;&gt;
+        &lt;div class=&quot;logo&quot;&gt;VDC&lt;/div&gt;
+        &lt;div class=&quot;title&quot;&gt;
+          &lt;h1&gt;Proceso de Limpieza — VDC 360&lt;/h1&gt;
+          &lt;p&gt;Registro de producto sucio, producto limpio, merma y costo final.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;badge&quot;&gt;Supabase conectado&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;div class=&quot;card-head&quot;&gt;
+        &lt;div&gt;
+          &lt;h2&gt;Configuración y datos del proceso&lt;/h2&gt;
+          &lt;p&gt;Captura el producto y observaciones del proceso. El precio se toma automáticamente del viaje aplicable.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;pill&quot; id=&quot;pillConexion&quot;&gt;Conectando...&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card-body&quot;&gt;
+        &lt;div class=&quot;toolbar&quot;&gt;
+          &lt;div class=&quot;field&quot;&gt;
+            &lt;label for=&quot;fecha&quot;&gt;Fecha&lt;/label&gt;
+            &lt;input type=&quot;date&quot; id=&quot;fecha&quot; /&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;field&quot;&gt;
+            &lt;label for=&quot;producto&quot;&gt;Producto&lt;/label&gt;
+            &lt;select id=&quot;producto&quot;&gt;
+              &lt;option value=&quot;Menudo&quot;&gt;Menudo&lt;/option&gt;
+              &lt;option value=&quot;Libro&quot;&gt;Libro&lt;/option&gt;
+              &lt;option value=&quot;Pata&quot;&gt;Pata&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;field&quot;&gt;
+            &lt;label for=&quot;precioSucio&quot;&gt;Precio por kg del producto sucio&lt;/label&gt;
+            &lt;input class=&quot;readonly-input&quot; type=&quot;text&quot; id=&quot;precioSucio&quot; readonly /&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;field&quot;&gt;
+            &lt;label for=&quot;buscarFecha&quot;&gt;Consultar fecha&lt;/label&gt;
+            &lt;input type=&quot;date&quot; id=&quot;buscarFecha&quot; /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;statusbar&quot; style=&quot;margin-bottom:12px&quot;&gt;
+          &lt;span class=&quot;pill&quot; id=&quot;pillPrecioFuente&quot;&gt;Esperando cargar precio...&lt;/span&gt;
+          &lt;span class=&quot;pill warn&quot; id=&quot;pillPrecioProducto&quot;&gt;Base: — | Viaje aplicado: —&lt;/span&gt;
+          &lt;span class=&quot;pill info&quot; id=&quot;pillAutoSave&quot;&gt;Borrador: esperando...&lt;/span&gt;
+          &lt;span class=&quot;pill info&quot; id=&quot;pillRealtime&quot;&gt;Realtime: esperando...&lt;/span&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;field&quot;&gt;
+          &lt;label for=&quot;observaciones&quot;&gt;Observaciones&lt;/label&gt;
+          &lt;textarea id=&quot;observaciones&quot; placeholder=&quot;Ej. lote con olor fuerte, regresó al día siguiente, limpieza especial, etc.&quot;&gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;statusbar&quot;&gt;
+          &lt;button class=&quot;btn&quot; type=&quot;button&quot; id=&quot;btnGuardarSupabase&quot;&gt;Guardar proceso final&lt;/button&gt;
+          &lt;button class=&quot;btn-soft&quot; type=&quot;button&quot; id=&quot;btnGuardarBorrador&quot;&gt;Guardar borrador ahora&lt;/button&gt;
+          &lt;button class=&quot;btn-soft&quot; type=&quot;button&quot; id=&quot;btnNuevo&quot;&gt;Nuevo proceso&lt;/button&gt;
+          &lt;button class=&quot;btn-dark&quot; type=&quot;button&quot; id=&quot;btnCargarHoy&quot;&gt;Cargar hoy&lt;/button&gt;
+          &lt;button class=&quot;btn-soft&quot; type=&quot;button&quot; id=&quot;btnBuscarFecha&quot;&gt;Buscar por fecha&lt;/button&gt;
+          &lt;button class=&quot;btn-dark&quot; type=&quot;button&quot; id=&quot;btnWhatsappResumen&quot;&gt;Enviar resumen WhatsApp&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;card&quot;&gt;
+      &lt;div class=&quot;card-head&quot;&gt;
+        &lt;div&gt;
+          &lt;h2&gt;Captura del proceso&lt;/h2&gt;
+          &lt;p&gt;Registra tandas enviadas a limpieza y tandas recibidas ya limpias.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;statusbar&quot; style=&quot;padding:14px 18px 0;&quot;&gt;
+        &lt;span class=&quot;pill info&quot; id=&quot;pillProductoActual&quot;&gt;Producto actual: Menudo&lt;/span&gt;
+        &lt;span class=&quot;pill warn&quot; id=&quot;pillOrigenCount&quot;&gt;Origen capturado: 0 tandas&lt;/span&gt;
+        &lt;span class=&quot;pill warn&quot; id=&quot;pillProcesadoCount&quot;&gt;Procesado capturado: 0 tandas&lt;/span&gt;
+        &lt;span class=&quot;pill warn&quot; id=&quot;pillEstadoCaptura&quot;&gt;Estado: Sin capturas&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card-body&quot;&gt;
+        &lt;div class=&quot;capture-grid&quot;&gt;
+          &lt;div class=&quot;subcard&quot;&gt;
+            &lt;div class=&quot;subhead&quot;&gt;
+              &lt;h4&gt;Origen — producto sucio&lt;/h4&gt;
+              &lt;span class=&quot;pill&quot; id=&quot;labelOrigen&quot;&gt;Menudo sucio&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;subbody&quot;&gt;
+              &lt;div class=&quot;row-form&quot;&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Producto&lt;/label&gt;
+                  &lt;input class=&quot;readonly-input&quot; type=&quot;text&quot; id=&quot;productoOrigenView&quot; readonly /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Origen&lt;/label&gt;
+                  &lt;select id=&quot;descOrigen&quot;&gt;
+                    &lt;option value=&quot;Rastro&quot;&gt;Rastro&lt;/option&gt;
+                    &lt;option value=&quot;Viaje&quot;&gt;Viaje&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Kg&lt;/label&gt;
+                  &lt;input type=&quot;number&quot; id=&quot;kgOrigen&quot; min=&quot;0&quot; step=&quot;0.01&quot; placeholder=&quot;0&quot; /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Piezas&lt;/label&gt;
+                  &lt;input type=&quot;number&quot; id=&quot;pzsOrigen&quot; min=&quot;0&quot; step=&quot;1&quot; placeholder=&quot;0&quot; /&gt;
+                &lt;/div&gt;
+                &lt;button class=&quot;btn&quot; type=&quot;button&quot; id=&quot;btnAgregarOrigen&quot;&gt;+ Agregar&lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;div class=&quot;table-wrap&quot;&gt;
+                &lt;table&gt;
+                  &lt;thead&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Producto&lt;/th&gt;
+                      &lt;th&gt;Origen&lt;/th&gt;
+                      &lt;th class=&quot;num&quot;&gt;Kg&lt;/th&gt;
+                      &lt;th class=&quot;num&quot;&gt;Pzs&lt;/th&gt;
+                      &lt;th&gt;Acción&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody id=&quot;tbodyOrigen&quot;&gt;
+                    &lt;tr&gt;&lt;td colspan=&quot;5&quot; class=&quot;empty&quot;&gt;Aún no hay capturas de origen.&lt;/td&gt;&lt;/tr&gt;
+                  &lt;/tbody&gt;
+                  &lt;tfoot&gt;
+                    &lt;tr&gt;
+                      &lt;th colspan=&quot;2&quot;&gt;Total&lt;/th&gt;
+                      &lt;th class=&quot;num&quot; id=&quot;totalKgOrigen&quot;&gt;0.00&lt;/th&gt;
+                      &lt;th class=&quot;num&quot; id=&quot;totalPzsOrigen&quot;&gt;0&lt;/th&gt;
+                      &lt;th&gt;&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/tfoot&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;subcard&quot;&gt;
+            &lt;div class=&quot;subhead&quot;&gt;
+              &lt;h4&gt;Ya procesado — producto limpio&lt;/h4&gt;
+              &lt;span class=&quot;pill&quot; id=&quot;labelProcesado&quot;&gt;Menudo limpio&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;subbody&quot;&gt;
+              &lt;div class=&quot;row-form&quot;&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Producto&lt;/label&gt;
+                  &lt;input class=&quot;readonly-input&quot; type=&quot;text&quot; id=&quot;productoProcesadoView&quot; readonly /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Origen&lt;/label&gt;
+                  &lt;select id=&quot;descProcesado&quot;&gt;
+                    &lt;option value=&quot;Rastro&quot;&gt;Rastro&lt;/option&gt;
+                    &lt;option value=&quot;Viaje&quot;&gt;Viaje&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Kg&lt;/label&gt;
+                  &lt;input type=&quot;number&quot; id=&quot;kgProcesado&quot; min=&quot;0&quot; step=&quot;0.01&quot; placeholder=&quot;0&quot; /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Piezas&lt;/label&gt;
+                  &lt;input type=&quot;number&quot; id=&quot;pzsProcesado&quot; min=&quot;0&quot; step=&quot;1&quot; placeholder=&quot;0&quot; /&gt;
+                &lt;/div&gt;
+                &lt;button class=&quot;btn&quot; type=&quot;button&quot; id=&quot;btnAgregarProcesado&quot;&gt;+ Agregar&lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;div class=&quot;table-wrap&quot;&gt;
+                &lt;table&gt;
+                  &lt;thead&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Producto&lt;/th&gt;
+                      &lt;th&gt;Origen&lt;/th&gt;
+                      &lt;th class=&quot;num&quot;&gt;Kg&lt;/th&gt;
+                      &lt;th class=&quot;num&quot;&gt;Pzs&lt;/th&gt;
+                      &lt;th&gt;Acción&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody id=&quot;tbodyProcesado&quot;&gt;
+                    &lt;tr&gt;&lt;td colspan=&quot;5&quot; class=&quot;empty&quot;&gt;Aún no hay capturas procesadas.&lt;/td&gt;&lt;/tr&gt;
+                  &lt;/tbody&gt;
+                  &lt;tfoot&gt;
+                    &lt;tr&gt;
+                      &lt;th colspan=&quot;2&quot;&gt;Total&lt;/th&gt;
+                      &lt;th class=&quot;num&quot; id=&quot;totalKgProcesado&quot;&gt;0.00&lt;/th&gt;
+                      &lt;th class=&quot;num&quot; id=&quot;totalPzsProcesado&quot;&gt;0&lt;/th&gt;
+                      &lt;th&gt;&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/tfoot&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;section-gap table-wrap&quot;&gt;
+          &lt;table class=&quot;summary-table&quot;&gt;
+            &lt;tbody&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Producto&lt;/td&gt;
+                &lt;td id=&quot;resProducto&quot;&gt;Menudo&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Fecha&lt;/td&gt;
+                &lt;td id=&quot;resFecha&quot;&gt;—&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Precio por kg del producto sucio&lt;/td&gt;
+                &lt;td id=&quot;resPrecioSucio&quot;&gt;$0.00&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr class=&quot;auto&quot;&gt;
+                &lt;td&gt;&lt;span class=&quot;hl&quot;&gt;Diferencia en kg&lt;/span&gt;&lt;/td&gt;
+                &lt;td id=&quot;resDiferenciaKg&quot;&gt;0.00 kg&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Precio de compra total&lt;/td&gt;
+                &lt;td id=&quot;resPrecioCompra&quot;&gt;$0.00&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr class=&quot;auto&quot;&gt;
+                &lt;td&gt;&lt;span class=&quot;hl&quot;&gt;Costo de merma&lt;/span&gt;&lt;/td&gt;
+                &lt;td id=&quot;resCostoMerma&quot;&gt;$0.00&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr class=&quot;auto&quot;&gt;
+                &lt;td&gt;&lt;span class=&quot;hl&quot;&gt;Porcentaje de merma&lt;/span&gt;&lt;/td&gt;
+                &lt;td id=&quot;resPorcentajeMerma&quot;&gt;0.00%&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr class=&quot;auto&quot;&gt;
+                &lt;td&gt;&lt;span class=&quot;hl&quot;&gt;Precio final del producto limpio por kg&lt;/span&gt;&lt;/td&gt;
+                &lt;td id=&quot;resPrecioFinalLimpio&quot;&gt;$0.00&lt;/td&gt;
+              &lt;/tr&gt;
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;section-gap kpis&quot;&gt;
+          &lt;div class=&quot;kpi&quot;&gt;
+            &lt;div class=&quot;label&quot;&gt;Kg origen&lt;/div&gt;
+            &lt;div class=&quot;value&quot; id=&quot;kpiKgOrigen&quot;&gt;0.00&lt;/div&gt;
+            &lt;div class=&quot;meta&quot;&gt;Producto sucio enviado a limpieza&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kpi&quot;&gt;
+            &lt;div class=&quot;label&quot;&gt;Kg procesado&lt;/div&gt;
+            &lt;div class=&quot;value&quot; id=&quot;kpiKgProcesado&quot;&gt;0.00&lt;/div&gt;
+            &lt;div class=&quot;meta&quot;&gt;Producto limpio recibido&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kpi&quot;&gt;
+            &lt;div class=&quot;label&quot;&gt;Piezas origen&lt;/div&gt;
+            &lt;div class=&quot;value&quot; id=&quot;kpiPzsOrigen&quot;&gt;0&lt;/div&gt;
+            &lt;div class=&quot;meta&quot;&gt;Antes del proceso&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;kpi&quot;&gt;
+            &lt;div class=&quot;label&quot;&gt;Piezas procesadas&lt;/div&gt;
+            &lt;div class=&quot;value&quot; id=&quot;kpiPzsProcesado&quot;&gt;0&lt;/div&gt;
+            &lt;div class=&quot;meta&quot;&gt;Después del proceso&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class=&quot;grid&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;
+        &lt;div class=&quot;card-head&quot;&gt;
+          &lt;div&gt;
+            &lt;h3&gt;Historial reciente&lt;/h3&gt;
+            &lt;p&gt;Últimos procesos guardados en Supabase.&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;pill&quot; id=&quot;countHistorial&quot;&gt;0 registros&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card-body&quot;&gt;
+          &lt;div class=&quot;history-wrap&quot;&gt;
+            &lt;table&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Fecha&lt;/th&gt;
+                  &lt;th&gt;Producto&lt;/th&gt;
+                  &lt;th class=&quot;num&quot;&gt;Kg origen&lt;/th&gt;
+                  &lt;th class=&quot;num&quot;&gt;Kg limpio&lt;/th&gt;
+                  &lt;th class=&quot;num&quot;&gt;% merma&lt;/th&gt;
+                  &lt;th class=&quot;num&quot;&gt;Precio limpio&lt;/th&gt;
+                  &lt;th&gt;Acción&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody id=&quot;tbodyHistorial&quot;&gt;
+                &lt;tr&gt;&lt;td colspan=&quot;7&quot; class=&quot;empty&quot;&gt;Sin registros todavía.&lt;/td&gt;&lt;/tr&gt;
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card&quot;&gt;
+        &lt;div class=&quot;card-head&quot;&gt;
+          &lt;div&gt;
+            &lt;h3&gt;Ayuda de cálculo&lt;/h3&gt;
+            &lt;p&gt;Esto es lo que el sistema calcula automáticamente.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card-body&quot;&gt;
+          &lt;div class=&quot;table-wrap&quot;&gt;
+            &lt;table&gt;
+              &lt;tbody&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;strong&gt;Precio compra total&lt;/strong&gt;&lt;/td&gt;
+                  &lt;td&gt;kg origen × precio sucio&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;strong&gt;Diferencia de kg&lt;/strong&gt;&lt;/td&gt;
+                  &lt;td&gt;kg origen − kg procesado&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;strong&gt;Costo merma&lt;/strong&gt;&lt;/td&gt;
+                  &lt;td&gt;diferencia kg × precio sucio&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;strong&gt;% merma&lt;/strong&gt;&lt;/td&gt;
+                  &lt;td&gt;(diferencia ÷ kg origen) × 100&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;&lt;strong&gt;Precio limpio final&lt;/strong&gt;&lt;/td&gt;
+                  &lt;td&gt;precio compra total ÷ kg procesado&lt;/td&gt;
+                &lt;/tr&gt;
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;section-gap&quot;&gt;
+            &lt;div class=&quot;pill warn&quot;&gt;Tip: la merma se calcula de manera independiente por Menudo, Libro y Pata.&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;script&gt;
+    const SUPABASE_URL = &quot;https://lujroedkbgffobyblbie.supabase.co&quot;;
+    const SUPABASE_ANON_KEY = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1anJvZWRrYmdmZm9ieWJsYmllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxODkzNDgsImV4cCI6MjA3MDc2NTM0OH0.bSbBZeS59aPSEGPj1YGcmZCyQTfgf3fz9pNDuR2ID7c&quot;;
+
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      },
+      realtime: {
+        params: {
+          eventsPerSecond: 10
+        }
+      }
+    });
+
+    const sbCostos = sb;
+
+    const COSTOS_FINALES_TABLE = &#x27;costos_finales_por_producto&#x27;;
+    const BORRADORES_TABLE = &#x27;procesos_limpieza_borradores&#x27;;
+    const PROCESOS_TABLE = &#x27;procesos_limpieza&#x27;;
+
+    const $ = (id) =&gt; document.getElementById(id);
+    const CLIENT_ID = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
+
+    const state = {
+      capturas: {
+        Menudo: { origen: [], procesado: [] },
+        Libro: { origen: [], procesado: [] },
+        Pata: { origen: [], procesado: [] }
+      },
+      historial: [],
+      editId: null,
+      autosaveTimer: null,
+      realtimeChannel: null,
+      cargandoRemoto: false,
+      cargandoInicial: true
+    };
+
+    function hoyISO(){
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,&#x27;0&#x27;);
+      const day = String(d.getDate()).padStart(2,&#x27;0&#x27;);
+      return `${y}-${m}-${day}`;
+    }
+
+    function fmtNum(n, dec=2){
+      const v = Number(n || 0);
+      return v.toLocaleString(&#x27;es-MX&#x27;, {
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec
+      });
+    }
+
+    function fmtMoney(n){
+      const v = Number(n || 0);
+      return v.toLocaleString(&#x27;es-MX&#x27;, {
+        style:&#x27;currency&#x27;,
+        currency:&#x27;MXN&#x27;,
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      });
+    }
+
+    function safeNum(v){
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function productoActual(){
+      return $(&#x27;producto&#x27;).value;
+    }
+
+    function origenActual(){
+      return state.capturas[productoActual()].origen;
+    }
+
+    function procesadoActual(){
+      return state.capturas[productoActual()].procesado;
+    }
+
+    function setConexion(ok, txt){
+      const el = $(&#x27;pillConexion&#x27;);
+      el.textContent = txt;
+      el.className = ok ? &#x27;pill ok&#x27; : &#x27;pill warn&#x27;;
+    }
+
+    function setPrecioStatus(kind, txt){
+      const el = $(&#x27;pillPrecioFuente&#x27;);
+      el.textContent = txt;
+      el.className = `pill ${kind || &#x27;&#x27;}`.trim();
+    }
+
+    function setAutoSave(txt, tipo=&#x27;info&#x27;){
+      const el = $(&#x27;pillAutoSave&#x27;);
+      el.textContent = txt;
+      el.className = `pill ${tipo}`.trim();
+    }
+
+    function setRealtime(txt, tipo=&#x27;info&#x27;){
+      const el = $(&#x27;pillRealtime&#x27;);
+      el.textContent = txt;
+      el.className = `pill ${tipo}`.trim();
+    }
+
+    function getLabels(producto){
+      if(producto === &#x27;Menudo&#x27;) return { origen:&#x27;Menudo sucio&#x27;, procesado:&#x27;Menudo limpio&#x27; };
+      if(producto === &#x27;Libro&#x27;) return { origen:&#x27;Libro sucio&#x27;, procesado:&#x27;Libro limpio&#x27; };
+      if(producto === &#x27;Pata&#x27;) return { origen:&#x27;Pata sucia&#x27;, procesado:&#x27;Pata limpia&#x27; };
+      return { origen:&#x27;Producto sucio&#x27;, procesado:&#x27;Producto limpio&#x27; };
+    }
+
+    function getCostoBaseProducto(producto){
+      if(producto === &#x27;Menudo&#x27;) return &#x27;Panza&#x27;;
+      if(producto === &#x27;Libro&#x27;) return &#x27;Libro&#x27;;
+      if(producto === &#x27;Pata&#x27;) return &#x27;Pata&#x27;;
+      return &#x27;&#x27;;
+    }
+
+    function toLocalDateParts(dateStr){
+      const [y, m, d] = String(dateStr).split(&#x27;-&#x27;).map(Number);
+      return new Date(y, (m || 1) - 1, d || 1);
+    }
+
+    function formatDateLocal(date){
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, &#x27;0&#x27;);
+      const d = String(date.getDate()).padStart(2, &#x27;0&#x27;);
+      return `${y}-${m}-${d}`;
+    }
+
+    function addDays(date, days){
+      const copy = new Date(date);
+      copy.setDate(copy.getDate() + days);
+      return copy;
+    }
+
+    function getFechaViajeAplicable(fechaSeleccionada){
+      const date = toLocalDateParts(fechaSeleccionada);
+      const day = date.getDay();
+      let viajeDate;
+
+      if(day === 1){
+        viajeDate = addDays(date, -3);
+      } else if(day === 2){
+        viajeDate = addDays(date, -4);
+      } else if(day === 3){
+        viajeDate = addDays(date, -1);
+      } else if(day === 4){
+        viajeDate = addDays(date, -2);
+      } else if(day === 5){
+        viajeDate = addDays(date, -1);
+      } else if(day === 6){
+        viajeDate = addDays(date, -1);
+      } else {
+        viajeDate = addDays(date, -2);
+      }
+
+      return formatDateLocal(viajeDate);
+    }
+
+    async function cargarPrecioAutomatico(){
+      const fecha = $(&#x27;fecha&#x27;).value;
+      const producto = productoActual();
+      const productoBase = getCostoBaseProducto(producto);
+
+      $(&#x27;pillPrecioProducto&#x27;).textContent = `Base: ${productoBase || &#x27;—&#x27;} | Viaje aplicado: ${fecha ? getFechaViajeAplicable(fecha) : &#x27;—&#x27;}`;
+
+      if(!fecha || !productoBase){
+        $(&#x27;precioSucio&#x27;).value = &#x27;&#x27;;
+        setPrecioStatus(&#x27;warn&#x27;, &#x27;Falta fecha o producto&#x27;);
+        calcularResumen(false);
+        return;
+      }
+
+      const fechaViajeAplicable = getFechaViajeAplicable(fecha);
+
+      try{
+        const { data, error } = await sbCostos
+          .from(COSTOS_FINALES_TABLE)
+          .select(&#x27;fecha, producto, costo_final&#x27;)
+          .eq(&#x27;fecha&#x27;, fechaViajeAplicable)
+          .eq(&#x27;producto&#x27;, productoBase)
+          .order(&#x27;updated_at&#x27;, { ascending: false })
+          .limit(1);
+
+        if(error) throw error;
+
+        const row = Array.isArray(data) &amp;&amp; data.length ? data[0] : null;
+
+        if(!row){
+          $(&#x27;precioSucio&#x27;).value = &#x27;&#x27;;
+          setPrecioStatus(&#x27;danger&#x27;, `No hay precio para ${productoBase} del viaje ${fechaViajeAplicable}`);
+          calcularResumen();
+          return;
+        }
+
+        const precio = Number(row.costo_final || 0);
+        $(&#x27;precioSucio&#x27;).value = precio &gt; 0 ? String(precio) : &#x27;&#x27;;
+        setPrecioStatus(&#x27;ok&#x27;, `Precio de ${productoBase} tomado del viaje ${fechaViajeAplicable}`);
+        calcularResumen();
+      }catch(err){
+        console.error(err);
+        $(&#x27;precioSucio&#x27;).value = &#x27;&#x27;;
+        setPrecioStatus(&#x27;danger&#x27;, &#x27;Error al cargar el precio automático&#x27;);
+        calcularResumen();
+      }
+    }
+
+    function totalKg(arr){
+      return arr.reduce((acc, it) =&gt; acc + safeNum(it.kg), 0);
+    }
+
+    function totalPzs(arr){
+      return arr.reduce((acc, it) =&gt; acc + safeNum(it.pzs), 0);
+    }
+
+    function actualizarEstadoCaptura(){
+      const producto = productoActual();
+      const origenCount = state.capturas[producto].origen.length;
+      const procesadoCount = state.capturas[producto].procesado.length;
+
+      $(&#x27;pillProductoActual&#x27;).textContent = `Producto actual: ${producto}`;
+      $(&#x27;pillOrigenCount&#x27;).textContent = `Origen capturado: ${origenCount} tanda${origenCount === 1 ? &#x27;&#x27; : &#x27;s&#x27;}`;
+      $(&#x27;pillProcesadoCount&#x27;).textContent = `Procesado capturado: ${procesadoCount} tanda${procesadoCount === 1 ? &#x27;&#x27; : &#x27;s&#x27;}`;
+
+      if(origenCount === 0 &amp;&amp; procesadoCount === 0){
+        $(&#x27;pillEstadoCaptura&#x27;).textContent = &#x27;Estado: Sin capturas&#x27;;
+        $(&#x27;pillEstadoCaptura&#x27;).className = &#x27;pill warn&#x27;;
+      } else if(origenCount &gt; 0 &amp;&amp; procesadoCount === 0){
+        $(&#x27;pillEstadoCaptura&#x27;).textContent = &#x27;Estado: Falta capturar limpio&#x27;;
+        $(&#x27;pillEstadoCaptura&#x27;).className = &#x27;pill danger&#x27;;
+      } else if(origenCount &gt; 0 &amp;&amp; procesadoCount &gt; 0){
+        $(&#x27;pillEstadoCaptura&#x27;).textContent = &#x27;Estado: Captura en proceso&#x27;;
+        $(&#x27;pillEstadoCaptura&#x27;).className = &#x27;pill ok&#x27;;
+      } else {
+        $(&#x27;pillEstadoCaptura&#x27;).textContent = &#x27;Estado: Revisar captura&#x27;;
+        $(&#x27;pillEstadoCaptura&#x27;).className = &#x27;pill info&#x27;;
+      }
+    }
+
+    function updateProductLabels(){
+      const producto = productoActual();
+      const labels = getLabels(producto);
+
+      $(&#x27;labelOrigen&#x27;).textContent = labels.origen;
+      $(&#x27;labelProcesado&#x27;).textContent = labels.procesado;
+      $(&#x27;productoOrigenView&#x27;).value = producto;
+      $(&#x27;productoProcesadoView&#x27;).value = producto;
+
+      renderOrigen();
+      renderProcesado();
+      actualizarEstadoCaptura();
+      calcularResumen(false);
+    }
+
+    function renderOrigen(){
+      const tbody = $(&#x27;tbodyOrigen&#x27;);
+      const arr = origenActual();
+
+      if(!arr.length){
+        tbody.innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;5&quot; class=&quot;empty&quot;&gt;Aún no hay capturas de origen.&lt;/td&gt;&lt;/tr&gt;`;
+      } else {
+        tbody.innerHTML = arr.map((it, idx) =&gt; `
+          &lt;tr&gt;
+            &lt;td&gt;${it.producto || &#x27;-&#x27;}&lt;/td&gt;
+            &lt;td&gt;${it.desc || &#x27;Sin origen&#x27;}&lt;/td&gt;
+            &lt;td class=&quot;num&quot;&gt;${fmtNum(it.kg)}&lt;/td&gt;
+            &lt;td class=&quot;num&quot;&gt;${fmtNum(it.pzs,0)}&lt;/td&gt;
+            &lt;td&gt;&lt;button class=&quot;btn-danger&quot; type=&quot;button&quot; onclick=&quot;eliminarOrigen(${idx})&quot;&gt;Eliminar&lt;/button&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        `).join(&#x27;&#x27;);
+      }
+
+      $(&#x27;totalKgOrigen&#x27;).textContent = fmtNum(totalKg(arr));
+      $(&#x27;totalPzsOrigen&#x27;).textContent = fmtNum(totalPzs(arr),0);
+      actualizarEstadoCaptura();
+    }
+
+    function renderProcesado(){
+      const tbody = $(&#x27;tbodyProcesado&#x27;);
+      const arr = procesadoActual();
+
+      if(!arr.length){
+        tbody.innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;5&quot; class=&quot;empty&quot;&gt;Aún no hay capturas procesadas.&lt;/td&gt;&lt;/tr&gt;`;
+      } else {
+        tbody.innerHTML = arr.map((it, idx) =&gt; `
+          &lt;tr&gt;
+            &lt;td&gt;${it.producto || &#x27;-&#x27;}&lt;/td&gt;
+            &lt;td&gt;${it.desc || &#x27;Sin origen&#x27;}&lt;/td&gt;
+            &lt;td class=&quot;num&quot;&gt;${fmtNum(it.kg)}&lt;/td&gt;
+            &lt;td class=&quot;num&quot;&gt;${fmtNum(it.pzs,0)}&lt;/td&gt;
+            &lt;td&gt;&lt;button class=&quot;btn-danger&quot; type=&quot;button&quot; onclick=&quot;eliminarProcesado(${idx})&quot;&gt;Eliminar&lt;/button&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        `).join(&#x27;&#x27;);
+      }
+
+      $(&#x27;totalKgProcesado&#x27;).textContent = fmtNum(totalKg(arr));
+      $(&#x27;totalPzsProcesado&#x27;).textContent = fmtNum(totalPzs(arr),0);
+      actualizarEstadoCaptura();
+    }
+
+    function calcularResumen(guardar=true){
+      const producto = productoActual();
+      const fecha = $(&#x27;fecha&#x27;).value || null;
+      const precioSucio = safeNum($(&#x27;precioSucio&#x27;).value);
+
+      const origen = origenActual();
+      const procesado = procesadoActual();
+
+      const kgOrigen = totalKg(origen);
+      const pzsOrigen = totalPzs(origen);
+      const kgProcesado = totalKg(procesado);
+      const pzsProcesado = totalPzs(procesado);
+
+      const diferenciaKg = Math.max(kgOrigen - kgProcesado, 0);
+      const precioCompra = kgOrigen * precioSucio;
+      const costoMerma = diferenciaKg * precioSucio;
+      const porcentajeMerma = kgOrigen &gt; 0 ? (diferenciaKg / kgOrigen) * 100 : 0;
+      const precioFinalLimpio = kgProcesado &gt; 0 ? (precioCompra / kgProcesado) : 0;
+
+      $(&#x27;resProducto&#x27;).textContent = producto;
+      $(&#x27;resFecha&#x27;).textContent = fecha || &#x27;—&#x27;;
+      $(&#x27;resPrecioSucio&#x27;).textContent = fmtMoney(precioSucio);
+      $(&#x27;resDiferenciaKg&#x27;).textContent = `${fmtNum(diferenciaKg)} kg`;
+      $(&#x27;resPrecioCompra&#x27;).textContent = fmtMoney(precioCompra);
+      $(&#x27;resCostoMerma&#x27;).textContent = fmtMoney(costoMerma);
+      $(&#x27;resPorcentajeMerma&#x27;).textContent = `${fmtNum(porcentajeMerma)}%`;
+      $(&#x27;resPrecioFinalLimpio&#x27;).textContent = fmtMoney(precioFinalLimpio);
+
+      $(&#x27;kpiKgOrigen&#x27;).textContent = fmtNum(kgOrigen);
+      $(&#x27;kpiKgProcesado&#x27;).textContent = fmtNum(kgProcesado);
+      $(&#x27;kpiPzsOrigen&#x27;).textContent = fmtNum(pzsOrigen,0);
+      $(&#x27;kpiPzsProcesado&#x27;).textContent = fmtNum(pzsProcesado,0);
+
+      const data = {
+        fecha,
+        producto,
+        precio_sucio_kg: precioSucio,
+        kg_origen: kgOrigen,
+        pzs_origen: pzsOrigen,
+        kg_procesado: kgProcesado,
+        pzs_procesado: pzsProcesado,
+        diferencia_kg: diferenciaKg,
+        precio_compra_total: precioCompra,
+        costo_merma: costoMerma,
+        porcentaje_merma: porcentajeMerma,
+        precio_final_limpio_kg: precioFinalLimpio,
+        origen_detalle: [...origen],
+        procesado_detalle: [...procesado],
+        observaciones: $(&#x27;observaciones&#x27;).value.trim()
+      };
+
+      if(guardar) programarAutosave();
+
+      return data;
+    }
+
+    function getPayloadBorrador(){
+      return {
+        client_id: CLIENT_ID,
+        fecha: $(&#x27;fecha&#x27;).value,
+        producto_actual: $(&#x27;producto&#x27;).value,
+        precio_sucio: $(&#x27;precioSucio&#x27;).value,
+        observaciones: $(&#x27;observaciones&#x27;).value,
+        capturas: state.capturas,
+        editId: state.editId,
+        updated_at_local: new Date().toISOString()
+      };
+    }
+
+    function programarAutosave(){
+      if(state.cargandoRemoto || state.cargandoInicial) return;
+
+      clearTimeout(state.autosaveTimer);
+      setAutoSave(&#x27;Borrador: guardando...&#x27;, &#x27;warn&#x27;);
+
+      state.autosaveTimer = setTimeout(() =&gt; {
+        guardarBorradorSupabase(false);
+      }, 700);
+    }
+
+    async function guardarBorradorSupabase(showAlert=false){
+      const fecha = $(&#x27;fecha&#x27;).value;
+      if(!fecha) return;
+
+      const payload = getPayloadBorrador();
+
+      try{
+        const { error } = await sb
+          .from(BORRADORES_TABLE)
+          .upsert({
+            fecha,
+            payload,
+            updated_at: new Date().toISOString()
+          }, { onConflict: &#x27;fecha&#x27; });
+
+        if(error) throw error;
+
+        setAutoSave(&#x27;Borrador guardado en Supabase&#x27;, &#x27;ok&#x27;);
+        if(showAlert) alert(&#x27;Borrador guardado correctamente.&#x27;);
+      }catch(err){
+        console.error(err);
+        setAutoSave(&#x27;Borrador: error al guardar&#x27;, &#x27;danger&#x27;);
+        if(showAlert) alert(&#x27;Error al guardar borrador: &#x27; + (err.message || err));
+      }
+    }
+
+    async function cargarBorradorFecha(fecha){
+      if(!fecha) return;
+
+      try{
+        const { data, error } = await sb
+          .from(BORRADORES_TABLE)
+          .select(&#x27;*&#x27;)
+          .eq(&#x27;fecha&#x27;, fecha)
+          .maybeSingle();
+
+        if(error) throw error;
+
+        if(!data || !data.payload){
+          setAutoSave(&#x27;Borrador: sin captura previa&#x27;, &#x27;info&#x27;);
+          return;
+        }
+
+        aplicarPayloadBorrador(data.payload, true);
+        setAutoSave(&#x27;Borrador cargado&#x27;, &#x27;ok&#x27;);
+      }catch(err){
+        console.error(err);
+        setAutoSave(&#x27;Borrador: error al cargar&#x27;, &#x27;danger&#x27;);
+      }
+    }
+
+    function aplicarPayloadBorrador(payload, forzar=false){
+      if(!payload) return;
+      if(!forzar &amp;&amp; payload.client_id === CLIENT_ID) return;
+
+      state.cargandoRemoto = true;
+
+      if(payload.capturas){
+        state.capturas = {
+          Menudo: payload.capturas.Menudo || { origen: [], procesado: [] },
+          Libro: payload.capturas.Libro || { origen: [], procesado: [] },
+          Pata: payload.capturas.Pata || { origen: [], procesado: [] }
+        };
+      }
+
+      if(payload.producto_actual &amp;&amp; [&#x27;Menudo&#x27;,&#x27;Libro&#x27;,&#x27;Pata&#x27;].includes(payload.producto_actual)){
+        $(&#x27;producto&#x27;).value = payload.producto_actual;
+      }
+
+      if(payload.observaciones !== undefined){
+        $(&#x27;observaciones&#x27;).value = payload.observaciones;
+      }
+
+      if(payload.editId !== undefined){
+        state.editId = payload.editId;
+      }
+
+      updateProductLabels();
+      renderOrigen();
+      renderProcesado();
+      actualizarEstadoCaptura();
+      calcularResumen(false);
+
+      state.cargandoRemoto = false;
+    }
+
+    function activarRealtimeBorrador(fecha){
+      if(state.realtimeChannel){
+        sb.removeChannel(state.realtimeChannel);
+        state.realtimeChannel = null;
+      }
+
+      if(!fecha){
+        setRealtime(&#x27;Realtime: sin fecha&#x27;, &#x27;warn&#x27;);
+        return;
+      }
+
+      setRealtime(&#x27;Realtime: conectando...&#x27;, &#x27;warn&#x27;);
+
+      state.realtimeChannel = sb
+        .channel(`limpieza-borrador-${fecha}`)
+        .on(
+          &#x27;postgres_changes&#x27;,
+          {
+            event: &#x27;*&#x27;,
+            schema: &#x27;public&#x27;,
+            table: BORRADORES_TABLE,
+            filter: `fecha=eq.${fecha}`
+          },
+          (payload) =&gt; {
+            if(payload.new &amp;&amp; payload.new.payload){
+              aplicarPayloadBorrador(payload.new.payload, false);
+              setAutoSave(&#x27;Borrador actualizado en tiempo real&#x27;, &#x27;ok&#x27;);
+            }
+          }
+        )
+        .subscribe((status) =&gt; {
+          if(status === &#x27;SUBSCRIBED&#x27;){
+            setRealtime(&#x27;Realtime: activo&#x27;, &#x27;ok&#x27;);
+          } else if(status === &#x27;CHANNEL_ERROR&#x27;){
+            setRealtime(&#x27;Realtime: error&#x27;, &#x27;danger&#x27;);
+          } else {
+            setRealtime(`Realtime: ${status}`, &#x27;info&#x27;);
+          }
+        });
+    }
+
+    function limpiarInputsOrigen(){
+      $(&#x27;descOrigen&#x27;).value = &#x27;Rastro&#x27;;
+      $(&#x27;kgOrigen&#x27;).value = &#x27;&#x27;;
+      $(&#x27;pzsOrigen&#x27;).value = &#x27;&#x27;;
+      $(&#x27;kgOrigen&#x27;).focus();
+    }
+
+    function limpiarInputsProcesado(){
+      $(&#x27;descProcesado&#x27;).value = &#x27;Rastro&#x27;;
+      $(&#x27;kgProcesado&#x27;).value = &#x27;&#x27;;
+      $(&#x27;pzsProcesado&#x27;).value = &#x27;&#x27;;
+      $(&#x27;kgProcesado&#x27;).focus();
+    }
+
+    async function nuevoLote(){
+      if(!confirm(&#x27;¿Quieres limpiar la captura actual y empezar un nuevo proceso?&#x27;)) return;
+
+      state.editId = null;
+      state.capturas = {
+        Menudo: { origen: [], procesado: [] },
+        Libro: { origen: [], procesado: [] },
+        Pata: { origen: [], procesado: [] }
+      };
+
+      $(&#x27;fecha&#x27;).value = hoyISO();
+      $(&#x27;buscarFecha&#x27;).value = hoyISO();
+      $(&#x27;producto&#x27;).value = &#x27;Menudo&#x27;;
+      $(&#x27;precioSucio&#x27;).value = &#x27;&#x27;;
+      $(&#x27;observaciones&#x27;).value = &#x27;&#x27;;
+      $(&#x27;descOrigen&#x27;).value = &#x27;Rastro&#x27;;
+      $(&#x27;descProcesado&#x27;).value = &#x27;Rastro&#x27;;
+
+      activarRealtimeBorrador($(&#x27;fecha&#x27;).value);
+      updateProductLabels();
+      renderOrigen();
+      renderProcesado();
+      actualizarEstadoCaptura();
+      calcularResumen(false);
+      await cargarPrecioAutomatico();
+      await guardarBorradorSupabase(false);
+    }
+
+    async function probarConexion(){
+      try{
+        const [{ error: errorLimpieza }, { error: errorCostos }, { error: errorBorradores }] = await Promise.all([
+          sb.from(PROCESOS_TABLE).select(&#x27;id&#x27;).limit(1),
+          sbCostos.from(COSTOS_FINALES_TABLE).select(&#x27;fecha&#x27;).limit(1),
+          sb.from(BORRADORES_TABLE).select(&#x27;fecha&#x27;).limit(1)
+        ]);
+
+        if(errorLimpieza) throw errorLimpieza;
+        if(errorCostos) throw errorCostos;
+        if(errorBorradores) throw errorBorradores;
+
+        setConexion(true, &#x27;Supabase conectado&#x27;);
+      }catch(err){
+        console.error(err);
+        setConexion(false, &#x27;Error de conexión&#x27;);
+      }
+    }
+
+    async function guardarEnSupabase(){
+      const data = calcularResumen(false);
+
+      if(!data.fecha){
+        alert(&#x27;Captura la fecha.&#x27;);
+        return;
+      }
+
+      if(!data.producto){
+        alert(&#x27;Selecciona un producto.&#x27;);
+        return;
+      }
+
+      if(data.precio_sucio_kg &lt;= 0){
+        alert(&#x27;No hay precio automático cargado para este producto y fecha.&#x27;);
+        return;
+      }
+
+      if(data.kg_origen &lt;= 0){
+        alert(&#x27;Debes capturar kilos de origen.&#x27;);
+        return;
+      }
+
+      if(data.kg_procesado &lt;= 0){
+        alert(&#x27;Debes capturar kilos procesados.&#x27;);
+        return;
+      }
+
+      try{
+        let res;
+
+        if(state.editId){
+          res = await sb
+            .from(PROCESOS_TABLE)
+            .update(data)
+            .eq(&#x27;id&#x27;, state.editId)
+            .select()
+            .single();
+        } else {
+          res = await sb
+            .from(PROCESOS_TABLE)
+            .insert(data)
+            .select()
+            .single();
+        }
+
+        if(res.error) throw res.error;
+
+        state.editId = res.data?.id || null;
+
+        await guardarBorradorSupabase(false);
+        alert(&#x27;Proceso guardado correctamente.&#x27;);
+        await cargarHistorial();
+      }catch(err){
+        console.error(err);
+        alert(&#x27;Error al guardar en Supabase: &#x27; + (err.message || err));
+      }
+    }
+
+    async function cargarHistorial(){
+      try{
+        const { data, error } = await sb
+          .from(PROCESOS_TABLE)
+          .select(&#x27;*&#x27;)
+          .order(&#x27;fecha&#x27;, { ascending:false })
+          .order(&#x27;id&#x27;, { ascending:false })
+          .limit(50);
+
+        if(error) throw error;
+
+        state.historial = data || [];
+        renderHistorial();
+      }catch(err){
+        console.error(err);
+        $(&#x27;tbodyHistorial&#x27;).innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;7&quot; class=&quot;empty&quot;&gt;No se pudo cargar el historial.&lt;/td&gt;&lt;/tr&gt;`;
+      }
+    }
+
+    async function buscarPorFecha(){
+      const fecha = $(&#x27;buscarFecha&#x27;).value;
+      if(!fecha){
+        alert(&#x27;Selecciona una fecha para buscar.&#x27;);
+        return;
+      }
+
+      try{
+        const { data, error } = await sb
+          .from(PROCESOS_TABLE)
+          .select(&#x27;*&#x27;)
+          .eq(&#x27;fecha&#x27;, fecha)
+          .order(&#x27;id&#x27;, { ascending:false });
+
+        if(error) throw error;
+
+        state.historial = data || [];
+        renderHistorial();
+
+        $(&#x27;fecha&#x27;).value = fecha;
+        activarRealtimeBorrador(fecha);
+        await cargarBorradorFecha(fecha);
+        await cargarPrecioAutomatico();
+      }catch(err){
+        console.error(err);
+        alert(&#x27;Error al buscar por fecha: &#x27; + (err.message || err));
+      }
+    }
+
+    async function cargarHoy(){
+      $(&#x27;buscarFecha&#x27;).value = hoyISO();
+      await buscarPorFecha();
+    }
+
+    function renderHistorial(){
+      $(&#x27;countHistorial&#x27;).textContent = `${state.historial.length} registro${state.historial.length===1?&#x27;&#x27;:&#x27;s&#x27;}`;
+
+      if(!state.historial.length){
+        $(&#x27;tbodyHistorial&#x27;).innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;7&quot; class=&quot;empty&quot;&gt;Sin registros todavía.&lt;/td&gt;&lt;/tr&gt;`;
+        return;
+      }
+
+      $(&#x27;tbodyHistorial&#x27;).innerHTML = state.historial.map(row =&gt; `
+        &lt;tr&gt;
+          &lt;td&gt;${row.fecha || &#x27;—&#x27;}&lt;/td&gt;
+          &lt;td&gt;${row.producto || &#x27;—&#x27;}&lt;/td&gt;
+          &lt;td class=&quot;num&quot;&gt;${fmtNum(row.kg_origen)}&lt;/td&gt;
+          &lt;td class=&quot;num&quot;&gt;${fmtNum(row.kg_procesado)}&lt;/td&gt;
+          &lt;td class=&quot;num&quot;&gt;${fmtNum(row.porcentaje_merma)}%&lt;/td&gt;
+          &lt;td class=&quot;num&quot;&gt;${fmtMoney(row.precio_final_limpio_kg)}&lt;/td&gt;
+          &lt;td&gt;&lt;button class=&quot;btn-soft&quot; type=&quot;button&quot; onclick=&quot;cargarRegistro(${row.id})&quot;&gt;Abrir&lt;/button&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+      `).join(&#x27;&#x27;);
+    }
+
+    function generarResumenWhatsapp(){
+  const fecha = $(&#x27;fecha&#x27;).value || &#x27;—&#x27;;
+  const producto = productoActual();
+
+  const origen = state.capturas[producto]?.origen || [];
+  const procesado = state.capturas[producto]?.procesado || [];
+
+  const kgOrigen = totalKg(origen);
+  const pzsOrigen = totalPzs(origen);
+  const kgProcesado = totalKg(procesado);
+  const pzsProcesado = totalPzs(procesado);
+
+  const precioSucio = safeNum($(&#x27;precioSucio&#x27;).value);
+
+  const diferenciaKg = Math.max(kgOrigen - kgProcesado, 0);
+  const precioCompra = kgOrigen * precioSucio;
+  const costoMerma = diferenciaKg * precioSucio;
+  const porcentajeMerma = kgOrigen &gt; 0 ? (diferenciaKg / kgOrigen) * 100 : 0;
+  const precioFinalLimpio = kgProcesado &gt; 0 ? (precioCompra / kgProcesado) : 0;
+
+  let mensaje = `*RESUMEN INDIVIDUAL DE LIMPIEZA — VDC 360°*\n`;
+  mensaje += `Fecha: ${fecha}\n`;
+  mensaje += `Producto: *${producto}*\n\n`;
+
+  mensaje += `*SUCIO ENVIADO A LIMPIEZA*\n`;
+  mensaje += `Piezas: ${fmtNum(pzsOrigen,0)} pzas\n`;
+  mensaje += `Peso: ${fmtNum(kgOrigen)} kg\n\n`;
+
+  mensaje += `*LIMPIO RECIBIDO*\n`;
+  mensaje += `Piezas: ${fmtNum(pzsProcesado,0)} pzas\n`;
+  mensaje += `Peso: ${fmtNum(kgProcesado)} kg\n\n`;
+
+  mensaje += `*CÁLCULO DEL PROCESO*\n`;
+  mensaje += `Precio kg sucio: ${precioSucio &gt; 0 ? fmtMoney(precioSucio) : &#x27;Pendiente&#x27;}\n`;
+  mensaje += `Diferencia / merma: ${fmtNum(diferenciaKg)} kg\n`;
+  mensaje += `Precio compra total: ${precioSucio &gt; 0 ? fmtMoney(precioCompra) : &#x27;Pendiente&#x27;}\n`;
+  mensaje += `Costo de merma: ${precioSucio &gt; 0 ? fmtMoney(costoMerma) : &#x27;Pendiente&#x27;}\n`;
+  mensaje += `% merma: ${fmtNum(porcentajeMerma)}%\n`;
+  mensaje += `Precio final limpio por kg: ${precioSucio &gt; 0 &amp;&amp; kgProcesado &gt; 0 ? fmtMoney(precioFinalLimpio) : &#x27;Pendiente&#x27;}\n\n`;
+
+  const obs = $(&#x27;observaciones&#x27;).value.trim();
+  if(obs){
+    mensaje += `*Observaciones:*\n${obs}\n\n`;
+  }
+
+  mensaje += `— Carnes y Vísceras del Centro`;
+
+  return mensaje;
+}
+
+   function enviarResumenWhatsapp(){
+  const producto = productoActual();
+  const origen = state.capturas[producto]?.origen || [];
+  const procesado = state.capturas[producto]?.procesado || [];
+
+  if(!origen.length &amp;&amp; !procesado.length){
+    alert(`No hay capturas para enviar de ${producto}.`);
+    return;
+  }
+
+  const mensaje = generarResumenWhatsapp();
+  const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, &#x27;_blank&#x27;);
+}
+
+    window.eliminarOrigen = function(index){
+      origenActual().splice(index, 1);
+      renderOrigen();
+      calcularResumen();
+    };
+
+    window.eliminarProcesado = function(index){
+      procesadoActual().splice(index, 1);
+      renderProcesado();
+      calcularResumen();
+    };
+
+    $(&#x27;btnAgregarOrigen&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+      const desc = $(&#x27;descOrigen&#x27;).value;
+      const kg = safeNum($(&#x27;kgOrigen&#x27;).value);
+      const pzs = safeNum($(&#x27;pzsOrigen&#x27;).value);
+      const producto = productoActual();
+
+      if(kg &lt;= 0 &amp;&amp; pzs &lt;= 0){
+        alert(&#x27;Captura kilos o piezas en origen.&#x27;);
+        return;
+      }
+
+      state.capturas[producto].origen.push({
+        producto,
+        desc: desc || &#x27;Rastro&#x27;,
+        kg,
+        pzs
+      });
+
+      renderOrigen();
+      calcularResumen();
+      limpiarInputsOrigen();
+    });
+
+    $(&#x27;btnAgregarProcesado&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+      const desc = $(&#x27;descProcesado&#x27;).value;
+      const kg = safeNum($(&#x27;kgProcesado&#x27;).value);
+      const pzs = safeNum($(&#x27;pzsProcesado&#x27;).value);
+      const producto = productoActual();
+
+      if(kg &lt;= 0 &amp;&amp; pzs &lt;= 0){
+        alert(&#x27;Captura kilos o piezas en procesado.&#x27;);
+        return;
+      }
+
+      state.capturas[producto].procesado.push({
+        producto,
+        desc: desc || &#x27;Rastro&#x27;,
+        kg,
+        pzs
+      });
+
+      renderProcesado();
+      calcularResumen();
+      limpiarInputsProcesado();
+    });
+
+    $(&#x27;btnGuardarSupabase&#x27;).addEventListener(&#x27;click&#x27;, guardarEnSupabase);
+    $(&#x27;btnGuardarBorrador&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; guardarBorradorSupabase(true));
+    $(&#x27;btnNuevo&#x27;).addEventListener(&#x27;click&#x27;, nuevoLote);
+    $(&#x27;btnBuscarFecha&#x27;).addEventListener(&#x27;click&#x27;, buscarPorFecha);
+    $(&#x27;btnCargarHoy&#x27;).addEventListener(&#x27;click&#x27;, cargarHoy);
+    $(&#x27;btnWhatsappResumen&#x27;).addEventListener(&#x27;click&#x27;, enviarResumenWhatsapp);
+
+    $(&#x27;producto&#x27;).addEventListener(&#x27;change&#x27;, async () =&gt; {
+      updateProductLabels();
+      await cargarPrecioAutomatico();
+      calcularResumen();
+    });
+
+    $(&#x27;fecha&#x27;).addEventListener(&#x27;change&#x27;, async () =&gt; {
+      const fecha = $(&#x27;fecha&#x27;).value;
+      $(&#x27;buscarFecha&#x27;).value = fecha;
+      activarRealtimeBorrador(fecha);
+      await cargarBorradorFecha(fecha);
+      await cargarPrecioAutomatico();
+      calcularResumen();
+    });
+
+    $(&#x27;observaciones&#x27;).addEventListener(&#x27;input&#x27;, () =&gt; calcularResumen());
+
+    [&#x27;kgOrigen&#x27;,&#x27;pzsOrigen&#x27;].forEach(id =&gt; {
+      $(id).addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+        if(e.key === &#x27;Enter&#x27;){
+          e.preventDefault();
+          $(&#x27;btnAgregarOrigen&#x27;).click();
+        }
+      });
+    });
+
+    [&#x27;kgProcesado&#x27;,&#x27;pzsProcesado&#x27;].forEach(id =&gt; {
+      $(id).addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+        if(e.key === &#x27;Enter&#x27;){
+          e.preventDefault();
+          $(&#x27;btnAgregarProcesado&#x27;).click();
+        }
+      });
+    });
+
+    window.addEventListener(&#x27;beforeunload&#x27;, () =&gt; {
+      if(!state.cargandoInicial){
+        const payload = getPayloadBorrador();
+        const fecha = $(&#x27;fecha&#x27;).value;
+        if(fecha){
+          navigator.sendBeacon?.(
+            `${SUPABASE_URL}/rest/v1/${BORRADORES_TABLE}`,
+            JSON.stringify({
+              fecha,
+              payload,
+              updated_at: new Date().toISOString()
+            })
+          );
+        }
+      }
+    });
+
+    window.addEventListener(&#x27;load&#x27;, async () =&gt; {
+      $(&#x27;fecha&#x27;).value = hoyISO();
+      $(&#x27;buscarFecha&#x27;).value = hoyISO();
+      $(&#x27;descOrigen&#x27;).value = &#x27;Rastro&#x27;;
+      $(&#x27;descProcesado&#x27;).value = &#x27;Rastro&#x27;;
+
+      updateProductLabels();
+      renderOrigen();
+      renderProcesado();
+      actualizarEstadoCaptura();
+      calcularResumen(false);
+
+      await probarConexion();
+      activarRealtimeBorrador($(&#x27;fecha&#x27;).value);
+      await cargarBorradorFecha($(&#x27;fecha&#x27;).value);
+      await cargarPrecioAutomatico();
+      await cargarHistorial();
+
+      state.cargandoInicial = false;
+      setAutoSave(&#x27;Borrador listo&#x27;, &#x27;ok&#x27;);
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+</div>
+</section>
 
 <section id="enviosMostrador" class="module">
   <div class="em-actions" style="justify-content:space-between;margin-bottom:14px;align-items:center;">
