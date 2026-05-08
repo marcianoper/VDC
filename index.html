@@ -1,860 +1,203 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VDC 360° — Central</title>
-
-  <style>
-    :root{
-      --brand:#0a7a3b;
-      --brand2:#0f9a52;
-      --bg:#f4f6f8;
-      --card:#ffffff;
-      --ink:#0f172a;
-      --muted:#64748b;
-      --line:#e5e7eb;
-      --danger:#b91c1c;
-      --shadow:0 14px 34px rgba(2,6,23,.10);
-      --radius:20px;
-      --sidebar:280px;
-    }
-
-    *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    }
-
-    .app{
-      display:grid;
-      grid-template-columns:var(--sidebar) 1fr;
-      min-height:100vh;
-    }
-
-    aside{
-      background:white;
-      border-right:1px solid var(--line);
-      padding:22px 16px;
-      position:sticky;
-      top:0;
-      height:100vh;
-      box-shadow:8px 0 28px rgba(15,23,42,.04);
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:8px 10px 24px;
-      border-bottom:1px solid var(--line);
-      margin-bottom:18px;
-    }
-
-    .logo{
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      background:linear-gradient(135deg,var(--brand),var(--brand2));
-      display:grid;
-      place-items:center;
-      color:white;
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .brand h1{
-      margin:0;
-      font-size:20px;
-      line-height:1.05;
-    }
-
-    .brand span{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:700;
-    }
-
-    .nav{
-      display:grid;
-      gap:8px;
-    }
-
-    .nav button{
-      width:100%;
-      border:0;
-      background:transparent;
-      color:var(--ink);
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 14px;
-      border-radius:16px;
-      cursor:pointer;
-      font-size:15px;
-      font-weight:850;
-      text-align:left;
-    }
-
-    .nav button:hover{
-      background:#f1f5f9;
-    }
-
-    .nav button.active{
-      background:#e8f5ee;
-      color:var(--brand);
-    }
-
-    .content{
-      padding:24px;
-    }
-
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:20px;
-    }
-
-    .topbar h2{
-      margin:0;
-      font-size:28px;
-      font-weight:950;
-    }
-
-    .topbar p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-weight:650;
-    }
-
-    .user-pill{
-      background:white;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:900;
-      color:var(--brand);
-    }
-
-    .module{
-      display:none;
-    }
-
-    .module.active{
-      display:block;
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-      margin-bottom:18px;
-    }
-
-    .stat{
-      background:white;
-      border-radius:18px;
-      border:1px solid var(--line);
-      padding:18px;
-      box-shadow:0 8px 24px rgba(15,23,42,.05);
-    }
-
-    .stat span{
-      display:block;
-      color:var(--muted);
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .stat strong{
-      display:block;
-      margin-top:8px;
-      font-size:28px;
-      color:var(--brand);
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:22px;
-      box-shadow:0 8px 24px rgba(15,23,42,.06);
-      margin-bottom:18px;
-    }
-
-    .card h3{
-      margin:0 0 18px;
-      font-size:22px;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
-    }
-
-    label{
-      display:block;
-      margin-bottom:8px;
-      font-size:14px;
-      font-weight:850;
-      color:var(--muted);
-    }
-
-    input,select{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px;
-      font-size:18px;
-      background:white;
-      color:var(--ink);
-      outline:none;
-    }
-
-    input:focus,select:focus{
-      border-color:var(--brand);
-      box-shadow:0 0 0 4px rgba(10,122,59,.10);
-    }
-
-    .machine-grid{
-      display:grid;
-      gap:14px;
-    }
-
-    .machine{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr .8fr;
-      gap:12px;
-      align-items:end;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px;
-    }
-
-    .machine-title{
-      font-weight:950;
-      color:var(--brand);
-      padding-bottom:14px;
-      font-size:17px;
-    }
-
-    .actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-
-    .btn{
-      border:0;
-      border-radius:16px;
-      padding:14px 18px;
-      font-size:15px;
-      font-weight:950;
-      cursor:pointer;
-      background:var(--brand);
-      color:white;
-      box-shadow:0 10px 22px rgba(10,122,59,.18);
-    }
-
-    .btn.secondary{
-      background:#0f172a;
-      box-shadow:0 10px 22px rgba(15,23,42,.16);
-    }
-
-    .btn.light{
-      background:#e9f6ee;
-      color:var(--brand);
-      box-shadow:none;
-      border:1px solid rgba(10,122,59,.14);
-    }
-
-    .btn.danger{
-      background:var(--danger);
-      box-shadow:0 10px 22px rgba(185,28,28,.18);
-    }
-
-    .message{
-      background:#0f172a;
-      color:white;
-      border-radius:20px;
-      padding:18px;
-      min-height:280px;
-      white-space:pre-wrap;
-      line-height:1.6;
-      font-size:15px;
-      margin-top:16px;
-    }
-
-    .empty{
-      background:white;
-      border:1px dashed #cbd5e1;
-      border-radius:24px;
-      padding:40px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    @media(max-width:1000px){
-      .app{
-        grid-template-columns:1fr;
-      }
-
-      aside{
-        position:relative;
-        height:auto;
-      }
-
-      .nav{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .stats{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .form-grid{
-        grid-template-columns:1fr;
-      }
-
-      .machine{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media(max-width:600px){
-      .content{
-        padding:14px;
-      }
-
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .nav{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VDC 360° — Central</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --brand:#0a7a3b;--brand2:#0f9a52;--bg:#f4f6f8;--card:#fff;--ink:#0f172a;--muted:#64748b;
+  --line:#e5e7eb;--danger:#b91c1c;--navy:#0b1b44;--shadow:0 14px 34px rgba(2,6,23,.10);
+  --radius:20px;--sidebar:280px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.app{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh}
+aside{background:white;border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh;box-shadow:8px 0 28px rgba(15,23,42,.04)}
+.side-brand{display:flex;align-items:center;gap:12px;padding:8px 10px 24px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:white;font-size:22px;font-weight:900}
+.side-brand h1{margin:0;font-size:20px;line-height:1.05}.side-brand span{color:var(--muted);font-size:13px;font-weight:800}
+.nav{display:grid;gap:8px}.nav button{width:100%;border:0;background:transparent;color:var(--ink);display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;cursor:pointer;font-size:15px;font-weight:850;text-align:left}
+.nav button:hover{background:#f1f5f9}.nav button.active{background:#e8f5ee;color:var(--brand)}
+.content{padding:24px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:14px}
+.topbar h2{margin:0;font-size:28px;font-weight:950}.topbar p{margin:4px 0 0;color:var(--muted);font-weight:650}
+.user-pill{background:white;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font-weight:900;color:var(--brand)}
+.module{display:none}.module.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:white;border-radius:18px;border:1px solid var(--line);padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:800}.stat strong{display:block;margin-top:8px;font-size:28px;color:var(--brand)}
+.card,.pc-bloque{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 8px 24px rgba(15,23,42,.06);margin-bottom:18px}
+.card h3,.pc-bloque h3{margin:0 0 18px;font-size:22px}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+label{display:block;margin-bottom:8px;font-size:14px;font-weight:850;color:var(--muted)}
+input,select{width:100%;border:1px solid var(--line);border-radius:18px;padding:18px;font-size:18px;background:white;color:var(--ink);outline:none}
+input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,122,59,.10)}
+.actions,.pc-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.btn{border:0;border-radius:16px;padding:14px 18px;font-size:15px;font-weight:950;cursor:pointer;background:var(--brand);color:white;box-shadow:0 10px 22px rgba(10,122,59,.18)}
+.btn.secondary{background:var(--brand2)}.btn.navy{background:var(--navy)}.btn.light{background:#e9f6ee;color:var(--brand);box-shadow:none;border:1px solid rgba(10,122,59,.14)}.btn.danger{background:var(--danger)}
+.message{background:#0f172a;color:white;border-radius:20px;padding:18px;min-height:260px;white-space:pre-wrap;line-height:1.6;font-size:15px;margin-top:16px}
+.empty{background:white;border:1px dashed #cbd5e1;border-radius:24px;padding:40px;text-align:center;color:var(--muted);font-weight:800}
+.machine-grid,.pc-grid{display:grid;gap:14px}
+.machine{display:grid;grid-template-columns:1fr 1fr 1fr .8fr;gap:12px;align-items:end;background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:14px}
+.machine-title{font-weight:950;color:var(--brand);padding-bottom:14px;font-size:17px}
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.pc-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 10px 18px rgba(0,0,0,.08);font-weight:1000}
+.pc-dot{width:10px;height:10px;border-radius:999px;background:var(--brand2);box-shadow:0 0 0 4px rgba(15,154,82,.16)}
+.pc-muted{color:var(--muted);font-size:12px;font-weight:800}
+.pc-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid rgba(0,0,0,.10);background:#fff;font-weight:1000}
+.pc-two,.pc-line-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+.pc-bloque-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}
+.pc-bloque-h h3{font-size:16px;margin:0}.pc-block-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}.pc-block-actions .btn{width:100%}
+@media(max-width:1000px){.app{grid-template-columns:1fr}aside{position:relative;height:auto}.nav{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:1fr 1fr}.form-grid,.machine,.pc-two,.pc-line-row{grid-template-columns:1fr}}
+@media(max-width:600px){.content{padding:14px}.stats,.nav{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
-
 <body>
-
 <div class="app">
+<aside>
+  <div class="side-brand"><div class="logo">V</div><div><h1>VDC 360°</h1><span>Central Operativa</span></div></div>
+  <div class="nav">
+    <button class="active" onclick="showModule('dashboard',this)">📊 Dashboard</button>
+    <button onclick="showModule('hojaViaje',this)">🚚 Hoja de viaje</button>
+    <button onclick="showModule('produccionCamion',this)">🏭 Producción camión</button>
+    <button onclick="showModule('lavadoPatas',this)">🐾 Lavado de patas</button>
+    <button onclick="showModule('limpiezaPanza',this)">🧼 Limpieza de panza</button>
+    <button onclick="showModule('enviosMostrador',this)">🥩 Envíos mostrador</button>
+    <button onclick="showModule('notasCredito',this)">🧾 Notas a crédito</button>
+    <button onclick="showModule('clientes',this)">👥 Clientes</button>
+    <button onclick="showModule('reportes',this)">📈 Reportes</button>
+  </div>
+</aside>
 
-  <aside>
-    <div class="brand">
-      <div class="logo">V</div>
-      <div>
-        <h1>VDC 360°</h1>
-        <span>Central Operativa</span>
-      </div>
+<main class="content">
+<div class="topbar"><div><h2 id="moduleTitle">Dashboard</h2><p id="moduleSubtitle">Vista general del Sistema VDC 360°</p></div><div class="user-pill">Marciano</div></div>
+
+<section id="dashboard" class="module active">
+  <div class="stats"><div class="stat"><span>Módulos activos</span><strong>9</strong></div><div class="stat"><span>Operación diaria</span><strong>VDC</strong></div><div class="stat"><span>Reportes</span><strong>360°</strong></div><div class="stat"><span>Estado</span><strong>OK</strong></div></div>
+  <div class="empty">Selecciona un módulo del menú izquierdo para operar dentro de esta misma página.</div>
+</section>
+
+<section id="produccionCamion" class="module">
+  <div class="pc-header">
+    <div>
+      <div class="pc-badge"><span class="pc-dot"></span> VDC360°</div>
+      <h3 style="margin:10px 0 4px;">Producción — Formulario Camión</h3>
+      <div class="pc-muted">Registro rápido por línea • Realtime entre equipos • Envío por WhatsApp</div>
+    </div>
+    <div class="pc-actions">
+      <button class="btn light" onclick="pcForzarGuardarBorrador()">💾 Guardar borrador</button>
+      <button class="btn light" onclick="pcForzarSincronizarLive()">🔄 Sincronizar ahora</button>
+      <button class="btn danger" onclick="pcLimpiarBorrador()">🧹 Limpiar borrador</button>
+      <span class="pc-pill"><span class="pc-muted" id="pcDraftStatus">Borrador: —</span></span>
+    </div>
+  </div>
+
+  <div class="pc-grid">
+    <div class="pc-bloque">
+      <div class="pc-bloque-h"><h3>Apertura de Camión</h3><span class="pc-muted">Marca el inicio de operación</span></div>
+      <label>Hora de apertura:</label><input type="time" id="pc_hora_apertura">
+      <div class="pc-block-actions"><button class="btn secondary" onclick="pcGuardarEventoGeneral('pc_hora_apertura','Apertura de Camión')">📤 Guardar y Enviar</button></div>
     </div>
 
-    <div class="nav">
-      <button class="active" data-module="dashboard" onclick="showModule('dashboard', this)">📊 Dashboard</button>
-      <button data-module="hojaViaje" onclick="showModule('hojaViaje', this)">🚚 Hoja de viaje</button>
-      <button data-module="produccionCamion" onclick="showModule('produccionCamion', this)">🏭 Producción camión</button>
-      <button data-module="lavadoPatas" onclick="showModule('lavadoPatas', this)">🐾 Lavado de patas</button>
-      <button data-module="limpiezaPanza" onclick="showModule('limpiezaPanza', this)">🧼 Limpieza de panza</button>
-      <button data-module="enviosMostrador" onclick="showModule('enviosMostrador', this)">🥩 Envíos mostrador</button>
-      <button data-module="notasCredito" onclick="showModule('notasCredito', this)">🧾 Notas a crédito</button>
-      <button data-module="clientes" onclick="showModule('clientes', this)">👥 Clientes</button>
-      <button data-module="reportes" onclick="showModule('reportes', this)">📈 Reportes</button>
-    </div>
-  </aside>
-
-  <main class="content">
-
-    <div class="topbar">
-      <div>
-        <h2 id="moduleTitle">Dashboard</h2>
-        <p id="moduleSubtitle">Vista general del Sistema VDC 360°</p>
+    <div class="pc-bloque">
+      <div class="pc-bloque-h"><h3>Registro de Patas</h3><span class="pc-muted">Control de envío y llegada</span></div>
+      <div class="pc-two">
+        <div><label>Hora de envío a limpieza:</label><input type="time" id="pc_hora_envio_patas"></div>
+        <div><label>Hora de llegada de limpieza:</label><input type="time" id="pc_hora_llegada_patas"></div>
       </div>
-      <div class="user-pill">Marciano</div>
+      <div class="pc-block-actions"><button class="btn secondary" onclick="pcGuardarPatas()">📤 Guardar y Enviar</button></div>
     </div>
 
-    <section id="dashboard" class="module active">
-      <div class="stats">
-        <div class="stat">
-          <span>Módulos activos</span>
-          <strong>9</strong>
-        </div>
-        <div class="stat">
-          <span>Operación diaria</span>
-          <strong>VDC</strong>
-        </div>
-        <div class="stat">
-          <span>Reportes</span>
-          <strong>360°</strong>
-        </div>
-        <div class="stat">
-          <span>Estado</span>
-          <strong>OK</strong>
-        </div>
-      </div>
+    <div id="pcLineas"></div>
 
-      <div class="empty">
-        Selecciona un módulo del menú izquierdo para operar dentro de esta misma página.
-      </div>
-    </section>
+    <div class="pc-actions">
+      <button class="btn navy" onclick="pcGuardarTodoYEnviarResumenCompleto()" style="width:100%;">📲 Guardar todo y enviar resumen completo</button>
+      <button class="btn navy" onclick="pcGenerarResumen()" style="width:100%;">📄 Generar Documento Resumen</button>
+      <div class="pc-muted">Los cambios se sincronizan en vivo entre equipos. Si estás escribiendo un nombre, el realtime no lo borra.</div>
+    </div>
+  </div>
+</section>
 
-    <section id="lavadoPatas" class="module">
+<section id="lavadoPatas" class="module">
+  <div class="stats">
+    <div class="stat"><span>Tiempo traslado</span><strong id="lpStatTraslado">0 min</strong></div>
+    <div class="stat"><span>Máquinas</span><strong id="lpStatMaquinas">0</strong></div>
+    <div class="stat"><span>Descarga total</span><strong id="lpStatDescarga">0 min</strong></div>
+    <div class="stat"><span>Duración general</span><strong id="lpStatGeneral">0 min</strong></div>
+  </div>
+  <div class="card"><h3>Datos generales</h3><div class="form-grid">
+    <div><label>Fecha</label><input type="date" id="lpFecha"></div>
+    <div><label>Operador</label><input type="text" id="lpOperador" placeholder="Tatán"></div>
+    <div><label>Tipo de registro</label><select id="lpTipoRegistro"><option value="Patas">Patas</option><option value="Pata blanca">Pata blanca</option><option value="Pata morena">Pata morena</option><option value="Mixto">Mixto</option></select></div>
+    <div><label>Salida de bodega</label><input type="time" id="lpSalidaBodega"></div>
+    <div><label>Llegada a granja</label><input type="time" id="lpLlegadaGranja"></div>
+    <div><label>Hora de descarga</label><input type="time" id="lpHoraDescarga"></div>
+  </div></div>
+  <div class="card"><h3>Descarga por máquina</h3><div class="machine-grid" id="lpMachines"></div><div class="actions"><button class="btn" onclick="lpAgregarMaquina()">+ Agregar máquina</button><button class="btn light" onclick="lpLlenarEjemplo()">Llenar ejemplo</button><button class="btn danger" onclick="lpLimpiarTodo()">Limpiar</button></div></div>
+  <div class="card"><h3>Reporte automático</h3><div class="actions"><button class="btn" onclick="lpGenerarReporte()">Generar mensaje</button><button class="btn secondary" onclick="lpCopiarMensaje()">Copiar WhatsApp</button><button class="btn light" onclick="lpAbrirWhatsApp()">Abrir WhatsApp</button></div><div class="message" id="lpMensaje">Aquí aparecerá el reporte.</div></div>
+</section>
 
-      <div class="stats">
-        <div class="stat">
-          <span>Tiempo traslado</span>
-          <strong id="lpStatTraslado">0 min</strong>
-        </div>
-
-        <div class="stat">
-          <span>Máquinas</span>
-          <strong id="lpStatMaquinas">0</strong>
-        </div>
-
-        <div class="stat">
-          <span>Descarga total</span>
-          <strong id="lpStatDescarga">0 min</strong>
-        </div>
-
-        <div class="stat">
-          <span>Duración general</span>
-          <strong id="lpStatGeneral">0 min</strong>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Datos generales</h3>
-
-        <div class="form-grid">
-          <div>
-            <label>Fecha</label>
-            <input type="date" id="lpFecha">
-          </div>
-
-          <div>
-            <label>Operador</label>
-            <input type="text" id="lpOperador" placeholder="Tatán">
-          </div>
-
-          <div>
-            <label>Tipo de registro</label>
-            <select id="lpTipoRegistro">
-              <option value="Patas">Patas</option>
-              <option value="Pata blanca">Pata blanca</option>
-              <option value="Pata morena">Pata morena</option>
-              <option value="Mixto">Mixto</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Salida de bodega</label>
-            <input type="time" id="lpSalidaBodega">
-          </div>
-
-          <div>
-            <label>Llegada a granja</label>
-            <input type="time" id="lpLlegadaGranja">
-          </div>
-
-          <div>
-            <label>Hora de descarga</label>
-            <input type="time" id="lpHoraDescarga">
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Descarga por máquina</h3>
-
-        <div class="machine-grid" id="lpMachines"></div>
-
-        <div class="actions">
-          <button class="btn" onclick="lpAgregarMaquina()">+ Agregar máquina</button>
-          <button class="btn light" onclick="lpLlenarEjemplo()">Llenar ejemplo</button>
-          <button class="btn danger" onclick="lpLimpiarTodo()">Limpiar</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Reporte automático</h3>
-
-        <div class="actions">
-          <button class="btn" onclick="lpGenerarReporte()">Generar mensaje</button>
-          <button class="btn secondary" onclick="lpCopiarMensaje()">Copiar WhatsApp</button>
-          <button class="btn light" onclick="lpAbrirWhatsApp()">Abrir WhatsApp</button>
-        </div>
-
-        <div class="message" id="lpMensaje">Aquí aparecerá el reporte.</div>
-      </div>
-
-    </section>
-
-    <section id="hojaViaje" class="module">
-      <div class="empty">Aquí vamos a integrar la Hoja de Viaje sin abrir otra página.</div>
-    </section>
-
-    <section id="produccionCamion" class="module">
-      <div class="empty">Aquí vamos a integrar Producción Camión.</div>
-    </section>
-
-    <section id="limpiezaPanza" class="module">
-      <div class="empty">Aquí vamos a integrar Limpieza de Panza.</div>
-    </section>
-
-    <section id="enviosMostrador" class="module">
-      <div class="empty">Aquí vamos a integrar Envíos a Mostrador.</div>
-    </section>
-
-    <section id="notasCredito" class="module">
-      <div class="empty">Aquí vamos a integrar Notas a Crédito.</div>
-    </section>
-
-    <section id="clientes" class="module">
-      <div class="empty">Aquí vamos a integrar Clientes.</div>
-    </section>
-
-    <section id="reportes" class="module">
-      <div class="empty">Aquí vamos a integrar Reportes.</div>
-    </section>
-
-  </main>
-
+<section id="hojaViaje" class="module"><div class="empty">Aquí vamos a integrar la Hoja de Viaje.</div></section>
+<section id="limpiezaPanza" class="module"><div class="empty">Aquí vamos a integrar Limpieza de Panza.</div></section>
+<section id="enviosMostrador" class="module"><div class="empty">Aquí vamos a integrar Envíos a Mostrador.</div></section>
+<section id="notasCredito" class="module"><div class="empty">Aquí vamos a integrar Notas a Crédito.</div></section>
+<section id="clientes" class="module"><div class="empty">Aquí vamos a integrar Clientes.</div></section>
+<section id="reportes" class="module"><div class="empty">Aquí vamos a integrar Reportes.</div></section>
+</main>
 </div>
 
 <script>
-  const MODULES = {
-    dashboard:{
-      title:'Dashboard',
-      subtitle:'Vista general del Sistema VDC 360°'
-    },
-    hojaViaje:{
-      title:'Hoja de viaje',
-      subtitle:'Registro de viajes, productos y pesadas'
-    },
-    produccionCamion:{
-      title:'Producción camión',
-      subtitle:'Control de líneas de producción'
-    },
-    lavadoPatas:{
-      title:'Lavado de patas',
-      subtitle:'Control de salida, llegada y descarga por máquina'
-    },
-    limpiezaPanza:{
-      title:'Limpieza de panza',
-      subtitle:'Control del proceso de limpieza'
-    },
-    enviosMostrador:{
-      title:'Envíos a mostrador',
-      subtitle:'Registro de enviados, devueltos y kilos netos'
-    },
-    notasCredito:{
-      title:'Notas a crédito',
-      subtitle:'Control de notas, clientes y productos'
-    },
-    clientes:{
-      title:'Clientes',
-      subtitle:'Base de clientes y datos comerciales'
-    },
-    reportes:{
-      title:'Reportes',
-      subtitle:'Análisis general del sistema'
-    }
-  };
-
-  function showModule(id, btn){
-    document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-
-    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    document.getElementById('moduleTitle').textContent = MODULES[id]?.title || 'VDC 360°';
-    document.getElementById('moduleSubtitle').textContent = MODULES[id]?.subtitle || '';
-  }
-
-  let lpMaquinas = 5;
-
-  const $ = id => document.getElementById(id);
-
-  function lpHoyISO(){
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  }
-
-  function lpFormatoFecha(fechaISO){
-    if(!fechaISO) return '';
-    const [y,m,d] = fechaISO.split('-');
-    return `${d}/${m}/${y}`;
-  }
-
-  function lpMinutosEntre(inicio,fin){
-    if(!inicio || !fin) return 0;
-
-    const [hi,mi] = inicio.split(':').map(Number);
-    const [hf,mf] = fin.split(':').map(Number);
-
-    let a = hi * 60 + mi;
-    let b = hf * 60 + mf;
-
-    if(b < a) b += 24 * 60;
-
-    return b - a;
-  }
-
-  function lpHoraBonita(hora){
-    if(!hora) return '';
-
-    let [h,m] = hora.split(':').map(Number);
-    const ampm = h >= 12 ? 'p.m.' : 'a.m.';
-    let h12 = h % 12;
-
-    if(h12 === 0) h12 = 12;
-
-    return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
-  }
-
-  function lpNombreMaquina(i){
-    const nombres = [
-      'Primera máquina',
-      'Segunda máquina',
-      'Tercera máquina',
-      'Cuarta máquina',
-      'Quinta máquina',
-      'Sexta máquina',
-      'Séptima máquina',
-      'Octava máquina',
-      'Novena máquina',
-      'Décima máquina'
-    ];
-
-    return nombres[i-1] || `Máquina ${i}`;
-  }
-
-  function lpCrearMaquinas(){
-    const cont = $('lpMachines');
-    cont.innerHTML = '';
-
-    for(let i=1;i<=lpMaquinas;i++){
-      const div = document.createElement('div');
-      div.className = 'machine';
-
-      div.innerHTML = `
-        <div class="machine-title">${lpNombreMaquina(i)}</div>
-
-        <div>
-          <label>Inicio</label>
-          <input type="time" id="lpMaq${i}Inicio" oninput="lpActualizarStats()">
-        </div>
-
-        <div>
-          <label>Fin</label>
-          <input type="time" id="lpMaq${i}Fin" oninput="lpActualizarStats()">
-        </div>
-
-        <div>
-          <label>Minutos</label>
-          <input type="text" id="lpMaq${i}Min" readonly value="0 min">
-        </div>
-      `;
-
-      cont.appendChild(div);
-    }
-  }
-
-  function lpAgregarMaquina(){
-    lpMaquinas++;
-    lpCrearMaquinas();
-    lpActualizarStats();
-  }
-
-  function lpActualizarStats(){
-    const traslado = lpMinutosEntre(
-      $('lpSalidaBodega').value,
-      $('lpLlegadaGranja').value
-    );
-
-    let totalDescarga = 0;
-    let registradas = 0;
-    let ultimoFin = '';
-
-    for(let i=1;i<=lpMaquinas;i++){
-      const inicio = $(`lpMaq${i}Inicio`)?.value;
-      const fin = $(`lpMaq${i}Fin`)?.value;
-
-      const min = lpMinutosEntre(inicio,fin);
-
-      if($(`lpMaq${i}Min`)){
-        $(`lpMaq${i}Min`).value = `${min} min`;
-      }
-
-      if(inicio && fin){
-        totalDescarga += min;
-        registradas++;
-        ultimoFin = fin;
-      }
-    }
-
-    const general = lpMinutosEntre(
-      $('lpSalidaBodega').value,
-      ultimoFin
-    );
-
-    $('lpStatTraslado').textContent = `${traslado} min`;
-    $('lpStatMaquinas').textContent = registradas;
-    $('lpStatDescarga').textContent = `${totalDescarga} min`;
-    $('lpStatGeneral').textContent = `${general} min`;
-  }
-
-  function lpGenerarReporte(){
-    lpActualizarStats();
-
-    const fecha = lpFormatoFecha($('lpFecha').value);
-    const operador = $('lpOperador').value.trim();
-    const tipo = $('lpTipoRegistro').value;
-    const salida = $('lpSalidaBodega').value;
-    const llegada = $('lpLlegadaGranja').value;
-    const descarga = $('lpHoraDescarga').value;
-
-    const traslado = lpMinutosEntre(salida,llegada);
-
-    let totalDescarga = 0;
-    let maquinasTexto = '';
-    let registradas = 0;
-    let primerInicio = '';
-    let ultimoFin = '';
-
-    for(let i=1;i<=lpMaquinas;i++){
-      const inicio = $(`lpMaq${i}Inicio`)?.value;
-      const fin = $(`lpMaq${i}Fin`)?.value;
-
-      if(inicio && fin){
-        const min = lpMinutosEntre(inicio,fin);
-
-        totalDescarga += min;
-        registradas++;
-
-        if(!primerInicio){
-          primerInicio = inicio;
-        }
-
-        ultimoFin = fin;
-
-        maquinasTexto += `
-${i}️⃣ *${lpNombreMaquina(i)}*
-${lpHoraBonita(inicio)} a ${lpHoraBonita(fin)}
-⏱️ ${min} minutos
-`;
-      }
-    }
-
-    const general = lpMinutosEntre(salida,ultimoFin);
-
-    const msg = `🐾 *REPORTE LAVADO DE PATAS*
-
-📅 *Fecha:* ${fecha}
-👤 *Operador:* ${operador}
-📦 *Producto:* ${tipo}
-
-🚚 *Salida de bodega:* ${lpHoraBonita(salida)}
-📍 *Llegada a granja:* ${lpHoraBonita(llegada)}
-⏱️ *Tiempo traslado:* ${traslado} min
-
-📥 *Hora de descarga:* ${lpHoraBonita(descarga)}
-
-🧼 *DESCARGA EN MÁQUINAS*
-${maquinasTexto}
-
-📊 *Resumen*
-• Máquinas cargadas: ${registradas}
-• Tiempo total descarga: ${totalDescarga} min
-• Inicio descarga: ${lpHoraBonita(primerInicio)}
-• Fin descarga: ${lpHoraBonita(ultimoFin)}
-• Duración general: ${general} min
-
-— *Sistema VDC 360°*`;
-
-    $('lpMensaje').textContent = msg;
-  }
-
-  async function lpCopiarMensaje(){
-    const texto = $('lpMensaje').textContent;
-
-    try{
-      await navigator.clipboard.writeText(texto);
-      alert('Mensaje copiado.');
-    }catch(e){
-      alert('No se pudo copiar automáticamente.');
-    }
-  }
-
-  function lpAbrirWhatsApp(){
-    const texto = $('lpMensaje').textContent;
-    const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-    window.open(url,'_blank');
-  }
-
-  function lpLimpiarTodo(){
-    document.querySelectorAll('#lavadoPatas input').forEach(el => {
-      if(el.type !== 'date'){
-        el.value = '';
-      }
-    });
-
-    $('lpMensaje').textContent = 'Aquí aparecerá el reporte.';
-    $('lpFecha').value = lpHoyISO();
-
-    lpActualizarStats();
-  }
-
-  function lpLlenarEjemplo(){
-    $('lpFecha').value = '2026-05-08';
-    $('lpOperador').value = 'Tatán';
-    $('lpTipoRegistro').value = 'Patas';
-
-    $('lpSalidaBodega').value = '07:16';
-    $('lpLlegadaGranja').value = '07:36';
-    $('lpHoraDescarga').value = '07:36';
-
-    $('lpMaq1Inicio').value = '07:39';
-    $('lpMaq1Fin').value = '07:44';
-
-    $('lpMaq2Inicio').value = '07:45';
-    $('lpMaq2Fin').value = '07:48';
-
-    $('lpMaq3Inicio').value = '07:49';
-    $('lpMaq3Fin').value = '07:52';
-
-    $('lpMaq4Inicio').value = '07:53';
-    $('lpMaq4Fin').value = '07:57';
-
-    $('lpMaq5Inicio').value = '07:59';
-    $('lpMaq5Fin').value = '08:04';
-
-    lpActualizarStats();
-    lpGenerarReporte();
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    $('lpFecha').value = lpHoyISO();
-    lpCrearMaquinas();
-
-    document.querySelectorAll('#lavadoPatas input,#lavadoPatas select').forEach(el => {
-      el.addEventListener('input',lpActualizarStats);
-      el.addEventListener('change',lpActualizarStats);
-    });
-  });
+const MODULES={dashboard:['Dashboard','Vista general del Sistema VDC 360°'],hojaViaje:['Hoja de viaje','Registro de viajes, productos y pesadas'],produccionCamion:['Producción camión','Control de líneas de producción'],lavadoPatas:['Lavado de patas','Control de salida, llegada y descarga por máquina'],limpiezaPanza:['Limpieza de panza','Control del proceso de limpieza'],enviosMostrador:['Envíos a mostrador','Registro de enviados, devueltos y kilos netos'],notasCredito:['Notas a crédito','Control de notas, clientes y productos'],clientes:['Clientes','Base de clientes y datos comerciales'],reportes:['Reportes','Análisis general del sistema']};
+function showModule(id,btn){document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('moduleTitle').textContent=MODULES[id]?.[0]||'VDC 360°';document.getElementById('moduleSubtitle').textContent=MODULES[id]?.[1]||'';}
+const $=id=>document.getElementById(id);
+function vdcHoyISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function vdcFormatoFecha(f){if(!f)return'';const[y,m,d]=f.split('-');return `${d}/${m}/${y}`;}
+function vdcMinutosEntre(i,f){if(!i||!f)return 0;const[hi,mi]=i.split(':').map(Number),[hf,mf]=f.split(':').map(Number);let a=hi*60+mi,b=hf*60+mf;if(b<a)b+=1440;return b-a;}
+function vdcHoraBonita(h){if(!h)return'';let[hr,m]=h.split(':').map(Number);const ampm=hr>=12?'p.m.':'a.m.';let h12=hr%12;if(h12===0)h12=12;return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;}
+
+/* LAVADO PATAS */
+let lpMaquinas=5;
+function lpNombreMaquina(i){return ['Primera máquina','Segunda máquina','Tercera máquina','Cuarta máquina','Quinta máquina','Sexta máquina','Séptima máquina','Octava máquina','Novena máquina','Décima máquina'][i-1]||`Máquina ${i}`;}
+function lpCrearMaquinas(){const c=$('lpMachines');c.innerHTML='';for(let i=1;i<=lpMaquinas;i++){const d=document.createElement('div');d.className='machine';d.innerHTML=`<div class="machine-title">${lpNombreMaquina(i)}</div><div><label>Inicio</label><input type="time" id="lpMaq${i}Inicio" oninput="lpActualizarStats()"></div><div><label>Fin</label><input type="time" id="lpMaq${i}Fin" oninput="lpActualizarStats()"></div><div><label>Minutos</label><input type="text" id="lpMaq${i}Min" readonly value="0 min"></div>`;c.appendChild(d);}}
+function lpAgregarMaquina(){lpMaquinas++;lpCrearMaquinas();lpActualizarStats();}
+function lpActualizarStats(){const traslado=vdcMinutosEntre($('lpSalidaBodega').value,$('lpLlegadaGranja').value);let total=0,regs=0,ultimo='';for(let i=1;i<=lpMaquinas;i++){const ini=$(`lpMaq${i}Inicio`)?.value,fin=$(`lpMaq${i}Fin`)?.value,min=vdcMinutosEntre(ini,fin);if($(`lpMaq${i}Min`))$(`lpMaq${i}Min`).value=`${min} min`;if(ini&&fin){total+=min;regs++;ultimo=fin;}}$('lpStatTraslado').textContent=`${traslado} min`;$('lpStatMaquinas').textContent=regs;$('lpStatDescarga').textContent=`${total} min`;$('lpStatGeneral').textContent=`${vdcMinutosEntre($('lpSalidaBodega').value,ultimo)} min`;}
+function lpGenerarReporte(){lpActualizarStats();const fecha=vdcFormatoFecha($('lpFecha').value),operador=$('lpOperador').value.trim(),tipo=$('lpTipoRegistro').value,salida=$('lpSalidaBodega').value,llegada=$('lpLlegadaGranja').value,descarga=$('lpHoraDescarga').value;let total=0,txt='',regs=0,primer='',ultimo='';for(let i=1;i<=lpMaquinas;i++){const ini=$(`lpMaq${i}Inicio`)?.value,fin=$(`lpMaq${i}Fin`)?.value;if(ini&&fin){const min=vdcMinutosEntre(ini,fin);total+=min;regs++;if(!primer)primer=ini;ultimo=fin;txt+=`\n${i}️⃣ *${lpNombreMaquina(i)}*\n${vdcHoraBonita(ini)} a ${vdcHoraBonita(fin)}\n⏱️ ${min} minutos\n`;}}$('lpMensaje').textContent=`🐾 *REPORTE LAVADO DE PATAS*\n\n📅 *Fecha:* ${fecha}\n👤 *Operador:* ${operador}\n📦 *Producto:* ${tipo}\n\n🚚 *Salida de bodega:* ${vdcHoraBonita(salida)}\n📍 *Llegada a granja:* ${vdcHoraBonita(llegada)}\n⏱️ *Tiempo traslado:* ${vdcMinutosEntre(salida,llegada)} min\n\n📥 *Hora de descarga:* ${vdcHoraBonita(descarga)}\n\n🧼 *DESCARGA EN MÁQUINAS*\n${txt}\n📊 *Resumen*\n• Máquinas cargadas: ${regs}\n• Tiempo total descarga: ${total} min\n• Inicio descarga: ${vdcHoraBonita(primer)}\n• Fin descarga: ${vdcHoraBonita(ultimo)}\n• Duración general: ${vdcMinutosEntre(salida,ultimo)} min\n\n— *Sistema VDC 360°*`;}
+async function lpCopiarMensaje(){await navigator.clipboard.writeText($('lpMensaje').textContent);alert('Mensaje copiado.');}
+function lpAbrirWhatsApp(){window.open(`https://wa.me/?text=${encodeURIComponent($('lpMensaje').textContent)}`,'_blank');}
+function lpLimpiarTodo(){document.querySelectorAll('#lavadoPatas input').forEach(el=>{if(el.type!=='date')el.value=''});$('lpMensaje').textContent='Aquí aparecerá el reporte.';$('lpFecha').value=vdcHoyISO();lpActualizarStats();}
+function lpLlenarEjemplo(){$('lpFecha').value='2026-05-08';$('lpOperador').value='Tatán';$('lpTipoRegistro').value='Patas';$('lpSalidaBodega').value='07:16';$('lpLlegadaGranja').value='07:36';$('lpHoraDescarga').value='07:36';[['07:39','07:44'],['07:45','07:48'],['07:49','07:52'],['07:53','07:57'],['07:59','08:04']].forEach((v,i)=>{$(`lpMaq${i+1}Inicio`).value=v[0];$(`lpMaq${i+1}Fin`).value=v[1];});lpActualizarStats();lpGenerarReporte();}
+
+/* PRODUCCION CAMION */
+const pcLineas=[{id:'l1',nombre:'Línea 1 - Bofe y Corazón'},{id:'l2',nombre:'Línea 2 - Teleco'},{id:'l3',nombre:'Línea 3 - Cuajo'},{id:'l4',nombre:'Línea 4 - Libro'},{id:'l5',nombre:'Línea 5 - Menudo'},{id:'l6',nombre:'Línea 6 - Patas Sucias'}];
+const pcSupabaseUrl='https://lujroedkbgffobyblbie.supabase.co';
+const pcSupabaseKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1anJvZWRrYmdmZm9ieWJsYmllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxODkzNDgsImV4cCI6MjA3MDc2NTM0OH0.bSbBZeS59aPSEGPj1YGcmZCyQTfgf3fz9pNDuR2ID7c';
+let pcSb=null,pcAplicandoRemoto=false,pcEscribiendo=false,pcTLive=null;
+function pcInitUI(){const c=$('pcLineas');c.innerHTML=pcLineas.map(({id,nombre})=>`<div class="pc-bloque"><div class="pc-bloque-h"><h3>${nombre}</h3><span class="pc-muted">Captura inicio / término</span></div><div class="pc-line-row"><div><label>Inicio:</label><input type="time" id="pc_${id}_inicio"></div><div><label>Responsable:</label><input type="text" id="pc_${id}_responsable" placeholder="Ej. José Luis"></div></div><div class="pc-block-actions"><button class="btn secondary" onclick="pcGuardarYEnviar('${id}','inicio','${nombre}')">📤 Enviar Inicio</button></div><div class="pc-line-row" style="margin-top:10px;"><div><label>Término:</label><input type="time" id="pc_${id}_fin"></div><div class="pc-muted" style="padding:10px 0;">Consejo: captura responsable al inicio para que salga en el WhatsApp.</div></div><div class="pc-block-actions"><button class="btn secondary" onclick="pcGuardarYEnviar('${id}','fin','${nombre}')">📤 Enviar Término</button></div></div>`).join('');}
+function pcSetDraftStatus(msg){const el=$('pcDraftStatus');if(el)el.textContent=msg;}
+function pcAbrirWhatsApp(texto){window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`,'_blank');}
+function pcDraftKey(){return `vdc360:produccion:draft:${vdcHoyISO()}`;}
+function pcColectarBorrador(){const draft={ts:Date.now(),fecha:vdcHoyISO(),hora_apertura:$('pc_hora_apertura')?.value||'',hora_envio_patas:$('pc_hora_envio_patas')?.value||'',hora_llegada_patas:$('pc_hora_llegada_patas')?.value||'',lineas:{}};pcLineas.forEach(({id})=>draft.lineas[id]={inicio:$(`pc_${id}_inicio`)?.value||'',fin:$(`pc_${id}_fin`)?.value||'',responsable:$(`pc_${id}_responsable`)?.value||''});return draft;}
+function pcAplicarBorrador(draft){if(!draft)return;const active=document.activeElement;const setVal=(id,v)=>{const el=$(id);if(!el||el===active)return;const nv=v||'';if(el.value!==nv)el.value=nv;};setVal('pc_hora_apertura',draft.hora_apertura);setVal('pc_hora_envio_patas',draft.hora_envio_patas);setVal('pc_hora_llegada_patas',draft.hora_llegada_patas);Object.keys(draft.lineas||{}).forEach(id=>{setVal(`pc_${id}_inicio`,draft.lineas[id].inicio);setVal(`pc_${id}_fin`,draft.lineas[id].fin);setVal(`pc_${id}_responsable`,draft.lineas[id].responsable);});}
+function pcGuardarBorrador(){const d=pcColectarBorrador();localStorage.setItem(pcDraftKey(),JSON.stringify(d));pcSetDraftStatus(`Borrador guardado ✅ (${new Date(d.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})})`);}
+function pcCargarBorrador(){const raw=localStorage.getItem(pcDraftKey());if(!raw){pcSetDraftStatus('Borrador: —');return;}try{const d=JSON.parse(raw);pcAplicarBorrador(d);pcSetDraftStatus(`Borrador cargado ✅ (${new Date(d.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})})`);}catch{pcSetDraftStatus('Borrador dañado ⚠️');}}
+async function pcGuardarLiveSupabase(){if(pcAplicandoRemoto||!pcSb)return;const d=pcColectarBorrador();const {error}=await pcSb.from('produccion_camion_live').upsert({fecha:vdcHoyISO(),area:'produccion_camion',data:d,updated_at:new Date().toISOString()},{onConflict:'fecha,area'});if(error){console.error(error);pcSetDraftStatus('Realtime error ⚠️');return;}pcSetDraftStatus(`Sincronizado ✅ (${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})})`);}
+function pcScheduleLiveSave(){if(pcAplicandoRemoto)return;clearTimeout(pcTLive);pcTLive=setTimeout(()=>{pcGuardarBorrador();pcGuardarLiveSupabase();},700);}
+async function pcCargarLiveSupabase(){if(!pcSb)return;const {data,error}=await pcSb.from('produccion_camion_live').select('data, updated_at').eq('fecha',vdcHoyISO()).eq('area','produccion_camion').maybeSingle();if(error){console.error(error);pcSetDraftStatus('No se pudo cargar realtime ⚠️');return;}if(data?.data){pcAplicandoRemoto=true;pcAplicarBorrador(data.data);pcAplicandoRemoto=false;pcSetDraftStatus(`Realtime cargado ✅ (${new Date(data.updated_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})})`);}}
+function pcActivarRealtime(){if(!pcSb)return;pcSb.channel('produccion_camion_live_channel_central').on('postgres_changes',{event:'*',schema:'public',table:'produccion_camion_live',filter:`fecha=eq.${vdcHoyISO()}`},payload=>{const row=payload.new;if(!row||row.area!=='produccion_camion')return;if(pcEscribiendo)return;pcAplicandoRemoto=true;pcAplicarBorrador(row.data);localStorage.setItem(pcDraftKey(),JSON.stringify(row.data));pcAplicandoRemoto=false;pcSetDraftStatus(`Cambio recibido ✅ (${new Date(row.updated_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})})`);}).subscribe(status=>{if(status==='SUBSCRIBED')pcSetDraftStatus('Realtime conectado 🟢');});}
+function pcEnviarAiSensy(texto){const API_KEY='PEGA_AQUI_TU_API_KEY_DE_AISENSY';const recipients=['+524621561193','+524621391119','+524621521152'];recipients.forEach(number=>{fetch('https://backend.aisensy.com/campaign/message',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},body:JSON.stringify({campaignName:'Notificacionesvdc360',destination:number,userName:'Marciano',templateParams:{message:texto}})}).then(r=>r.json()).then(r=>console.log('AiSensy OK:',number,r)).catch(e=>console.error('AiSensy ERROR:',e));});}
+function pcEnviarProxyWhatsapp(texto){['+524621561193','+524621391119','+524621521152'].forEach(numero=>{fetch('https://vdc360-proxy.vercel.app/api/mensaje',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({numero,mensaje:texto})}).then(r=>r.json()).then(d=>console.log('Proxy OK:',numero,d)).catch(e=>console.error('Proxy ERROR:',e));});}
+function pcConstruirMensajeCompleto(){let texto=`🚛 *RESUMEN GENERAL PRODUCCIÓN VDC 360°*\n🗓️ ${vdcHoyISO()}\n\n`;texto+=`*Apertura de Camión*\n🕒 ${$('pc_hora_apertura').value||'—'}\n\n`;texto+=`*Patas*\n🚚 Envío a limpieza: ${$('pc_hora_envio_patas').value||'—'}\n📦 Llegada de limpieza: ${$('pc_hora_llegada_patas').value||'—'}\n\n*Líneas de Producción*\n`;pcLineas.forEach(({id,nombre})=>{texto+=`\n🔹 *${nombre}*\n🕒 Inicio: ${$(`pc_${id}_inicio`).value||'—'}\n✅ Término: ${$(`pc_${id}_fin`).value||'—'}\n👤 Responsable: ${$(`pc_${id}_responsable`).value.trim()||'—'}\n`;});return texto.trim();}
+async function pcGuardarTodoYEnviarResumenCompleto(){if(!pcSb)return alert('Supabase no está cargado.');const rows=[];const fecha=vdcHoyISO();const ap=$('pc_hora_apertura').value||null,ep=$('pc_hora_envio_patas').value||null,lp=$('pc_hora_llegada_patas').value||null;if(ap)rows.push({fecha,linea:'Apertura de Camión',inicio:ap,momento:'inicio'});if(ep)rows.push({fecha,linea:'Envío Patas',inicio:ep,momento:'envio_patas'});if(lp)rows.push({fecha,linea:'Llegada Patas',inicio:lp,momento:'llegada_patas'});pcLineas.forEach(({id,nombre})=>{const inicio=$(`pc_${id}_inicio`).value||null,fin=$(`pc_${id}_fin`).value||null,responsable=$(`pc_${id}_responsable`).value.trim()||null;if(inicio)rows.push({fecha,linea:nombre,inicio,fin:null,responsable,momento:'inicio'});if(fin)rows.push({fecha,linea:nombre,inicio:null,fin,responsable,momento:'fin'});});if(!rows.length)return alert('No hay datos capturados para guardar y enviar.');const {error}=await pcSb.from('produccion_camion').insert(rows);if(error)return alert('Error al guardar todo: '+error.message);await pcGuardarLiveSupabase();const texto=pcConstruirMensajeCompleto();pcEnviarAiSensy(texto);pcEnviarProxyWhatsapp(texto);pcAbrirWhatsApp(texto);pcGuardarBorrador();alert('Resumen completo guardado, sincronizado y enviado correctamente.');}
+async function pcGuardarYEnviar(linea,tipo,nombreLinea){if(!pcSb)return alert('Supabase no está cargado.');const inicio=$(`pc_${linea}_inicio`).value||null,fin=$(`pc_${linea}_fin`).value||null,responsable=$(`pc_${linea}_responsable`).value.trim()||null;if(tipo==='inicio'&&!inicio)return alert('Falta la hora de inicio.');if(tipo==='fin'&&!fin)return alert('Falta la hora de término.');const {error}=await pcSb.from('produccion_camion').insert([{fecha:vdcHoyISO(),linea:nombreLinea,inicio,fin,responsable,momento:tipo}]);if(error)return alert('Error al guardar: '+error.message);await pcGuardarLiveSupabase();const texto=tipo==='inicio'?`🚀 *${nombreLinea}*\n🗓️ ${vdcHoyISO()}\n🕒 Inicio: ${inicio}\n👤 Responsable: ${responsable||'—'}`:`✅ *${nombreLinea}*\n🗓️ ${vdcHoyISO()}\n🕒 Término: ${fin}`;pcEnviarAiSensy(texto);pcEnviarProxyWhatsapp(texto);pcAbrirWhatsApp(texto);pcGuardarBorrador();}
+async function pcGuardarEventoGeneral(idCampo,nombreEvento){if(!pcSb)return alert('Supabase no está cargado.');const hora=$(idCampo).value;if(!hora)return alert('Falta la hora.');const {error}=await pcSb.from('produccion_camion').insert([{fecha:vdcHoyISO(),linea:nombreEvento,inicio:hora,momento:'inicio'}]);if(error)return alert('Error al guardar evento general: '+error.message);await pcGuardarLiveSupabase();const texto=`🚛 *${nombreEvento}*\n🗓️ ${vdcHoyISO()}\n🕒 Hora: ${hora}`;pcEnviarAiSensy(texto);pcEnviarProxyWhatsapp(texto);pcAbrirWhatsApp(texto);pcGuardarBorrador();}
+async function pcGuardarPatas(){if(!pcSb)return alert('Supabase no está cargado.');const envio=$('pc_hora_envio_patas').value||null,llegada=$('pc_hora_llegada_patas').value||null;if(!envio&&!llegada)return alert('Captura al menos una hora.');const rows=[];if(envio)rows.push({fecha:vdcHoyISO(),linea:'Envío Patas',inicio:envio,momento:'envio_patas'});if(llegada)rows.push({fecha:vdcHoyISO(),linea:'Llegada Patas',inicio:llegada,momento:'llegada_patas'});const {error}=await pcSb.from('produccion_camion').insert(rows);if(error)return alert('Error al guardar patas: '+error.message);await pcGuardarLiveSupabase();const texto=`🐾 *Patas*\n🗓️ ${vdcHoyISO()}`+(envio?`\n🚚 Enviadas: ${envio}`:'')+(llegada?`\n📦 Llegaron: ${llegada}`:'');pcEnviarAiSensy(texto);pcEnviarProxyWhatsapp(texto);pcAbrirWhatsApp(texto);pcGuardarBorrador();}
+async function pcGenerarResumen(){if(!pcSb)return alert('Supabase no está cargado.');const {data,error}=await pcSb.from('produccion_camion').select('*').eq('fecha',vdcHoyISO()).order('created_at',{ascending:true});if(error)return alert('Error generando resumen: '+error.message);const texto=(data||[]).map(r=>`🟩 ${r.linea} - ${r.momento}\n🕒 ${r.inicio||r.fin||''}`+(r.responsable?`\n👤 ${r.responsable}`:'')).join('\n\n')||'Sin registros hoy.';const blob=new Blob([texto],{type:'text/plain'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`Resumen_Produccion_VDC360_${vdcHoyISO()}.txt`;link.click();URL.revokeObjectURL(url);}
+function pcForzarGuardarBorrador(){pcGuardarBorrador();pcGuardarLiveSupabase();}
+async function pcForzarSincronizarLive(){await pcCargarLiveSupabase();await pcGuardarLiveSupabase();}
+async function pcLimpiarBorrador(){if(!confirm('¿Seguro que quieres limpiar el borrador de HOY en este equipo y en realtime?'))return;localStorage.removeItem(pcDraftKey());document.querySelectorAll('#produccionCamion input').forEach(i=>i.value='');await pcGuardarLiveSupabase();pcSetDraftStatus('Borrador limpiado 🧹');}
+
+document.addEventListener('DOMContentLoaded',async()=>{lpCrearMaquinas();$('lpFecha').value=vdcHoyISO();document.querySelectorAll('#lavadoPatas input,#lavadoPatas select').forEach(el=>{el.addEventListener('input',lpActualizarStats);el.addEventListener('change',lpActualizarStats);});pcInitUI();if(window.supabase?.createClient){pcSb=window.supabase.createClient(pcSupabaseUrl,pcSupabaseKey);pcCargarBorrador();await pcCargarLiveSupabase();pcActivarRealtime();await pcGuardarLiveSupabase();}else{pcSetDraftStatus('Supabase no cargó ⚠️');}document.addEventListener('focusin',e=>{if(e.target&&e.target.closest('#produccionCamion')&&e.target.tagName==='INPUT')pcEscribiendo=true;});document.addEventListener('focusout',e=>{if(e.target&&e.target.closest('#produccionCamion')&&e.target.tagName==='INPUT'){pcEscribiendo=false;pcScheduleLiveSave();}});document.addEventListener('input',e=>{if(e.target&&e.target.closest('#produccionCamion')&&e.target.tagName==='INPUT')pcScheduleLiveSave();});document.addEventListener('change',e=>{if(e.target&&e.target.closest('#produccionCamion')&&e.target.tagName==='INPUT')pcScheduleLiveSave();});});
 </script>
-
 </body>
 </html>
