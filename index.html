@@ -73,7 +73,6 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
     <button onclick="showModule('limpiezaPanza',this)">🧼 Limpieza de panza</button>
     <button onclick="showModule('enviosMostrador',this)">🥩 Envíos mostrador</button>
     <button onclick="showModule('notasCredito',this)">🧾 Notas a crédito</button>
-    <button onclick="showModule('clientes',this)">👥 Clientes</button>
     <button onclick="showModule('reportes',this)">📈 Reportes</button>
   </div>
 </aside>
@@ -7616,13 +7615,1459 @@ if(USAR_IMPRESION_SILENCIOSA){
 &lt;/html&gt;"></iframe>
 </div>
 </section>
-<section id="clientes" class="module"><div class="empty">Aquí vamos a integrar Clientes.</div></section>
-<section id="reportes" class="module"><div class="empty">Aquí vamos a integrar Reportes.</div></section>
+<section id="reportes" class="module">
+<div class="card" style="padding:0; overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff;">
+    <div>
+      <h3 style="margin:0;font-size:18px;">📈 Reportes</h3>
+      <p style="margin:4px 0 0;color:var(--muted);font-weight:700;font-size:13px;">Reporte general por cliente, producto y rango de fechas integrado al VDC Central.</p>
+    </div>
+    <button class="btn light" onclick="document.getElementById('reportesFrame').contentWindow.location.reload()">🔄 Recargar módulo</button>
+  </div>
+  <iframe id="reportesFrame" title="Reportes VDC" style="width:100%;height:84vh;border:0;background:#f6f7f8;display:block;" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot; /&gt;
+&lt;title&gt;VDC360° — Reporte General Clientes&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
+
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+
+:root{
+  --brand:#0a7a3b;
+  --bg:#f6f7f8;
+  --card:#ffffff;
+  --line:#e5e7eb;
+  --ink:#111827;
+  --muted:#64748b;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:
+    Inter,
+    &quot;Segoe UI&quot;,
+    system-ui,
+    sans-serif;
+
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+header{
+  background:var(--brand);
+  color:#fff;
+  padding:18px;
+}
+
+header h1{
+  margin:0;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+}
+
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:18px;
+  display:grid;
+  gap:16px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+h2{
+  margin:0 0 14px;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-0.3px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto auto;
+  gap:10px;
+  align-items:end;
+}
+
+label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:800;
+  font-size:13px;
+  color:#374151;
+}
+
+input,
+select,
+button{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  font-size:14px;
+  font-weight:600;
+}
+
+button{
+  cursor:pointer;
+  font-weight:900;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--brand);
+  color:#fff;
+  border:none;
+}
+
+.btn-ghost{
+  background:#fff;
+}
+
+.tabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:11px 16px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  font-weight:900;
+  transition:.2s;
+}
+
+.tab.active{
+  background:var(--brand);
+  color:#fff;
+  border-color:var(--brand);
+}
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+th{
+  background:#0a7a3b;
+  color:#fff;
+  padding:10px;
+  text-align:left;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+td{
+  border-bottom:1px solid var(--line);
+  padding:10px;
+  font-size:13px;
+  font-weight:600;
+}
+
+tbody tr:nth-child(even){
+  background:#fafafa;
+}
+
+.right{
+  text-align:right;
+}
+
+.pill{
+  display:inline-block;
+  padding:7px 14px;
+  border-radius:999px;
+  background:#eef7f0;
+  color:var(--brand);
+  font-weight:900;
+  font-size:13px;
+}
+
+.filterGrid{
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:14px;
+  margin-bottom:16px;
+}
+
+.totalBox{
+  background:#eef7f0;
+  border:1px solid #cde7d4;
+  border-radius:16px;
+  padding:16px;
+}
+
+.totalBox span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.totalBox b{
+  font-size:28px;
+  color:var(--brand);
+  font-weight:900;
+}
+
+.cardsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.clientCard{
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+
+.clientTitle{
+  background:#0a7a3b;
+  color:#fff;
+  text-align:center;
+  padding:14px;
+  font-weight:900;
+  font-size:16px;
+  letter-spacing:.3px;
+}
+
+.clientTotal{
+  background:#eef7f0;
+  color:#0a7a3b;
+  padding:14px;
+  text-align:right;
+  font-weight:900;
+  font-size:16px;
+}
+
+.loading{
+  display:none;
+  font-weight:900;
+  color:var(--brand);
+  font-size:15px;
+}
+
+.loading.on{
+  display:block;
+}
+
+@media(max-width:900px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .filterGrid{
+    grid-template-columns:1fr;
+  }
+
+  .cardsGrid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;header&gt;
+  &lt;h1&gt;VDC360° — Reporte General Clientes&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+
+&lt;section class=&quot;card&quot;&gt;
+
+  &lt;h2&gt;📅 Parámetros del Reporte&lt;/h2&gt;
+
+  &lt;div class=&quot;grid&quot;&gt;
+
+    &lt;div&gt;
+      &lt;label&gt;Desde&lt;/label&gt;
+      &lt;input type=&quot;date&quot; id=&quot;fechaDesde&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label&gt;Hasta&lt;/label&gt;
+      &lt;input type=&quot;date&quot; id=&quot;fechaHasta&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label&gt;Producto&lt;/label&gt;
+      &lt;select id=&quot;productoSelect&quot;&gt;
+        &lt;option value=&quot;&quot;&gt;Todos los productos&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;button class=&quot;btn-primary&quot; id=&quot;btnGenerar&quot;&gt;
+        Generar Reporte
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;button class=&quot;btn-primary&quot; id=&quot;btnDocumento&quot;&gt;
+        Generar Documento
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;p class=&quot;loading&quot; id=&quot;loading&quot;&gt;
+    Generando reporte...
+  &lt;/p&gt;
+
+&lt;/section&gt;
+
+&lt;section class=&quot;card&quot;&gt;
+
+  &lt;div class=&quot;tabs&quot;&gt;
+
+    &lt;button class=&quot;tab active&quot; data-tab=&quot;general&quot;&gt;
+      Resumen General
+    &lt;/button&gt;
+
+    &lt;button class=&quot;tab&quot; data-tab=&quot;filtrado&quot;&gt;
+      Filtrado
+    &lt;/button&gt;
+
+    &lt;button class=&quot;tab&quot; data-tab=&quot;clientes&quot;&gt;
+      Clientes Resumen OK
+    &lt;/button&gt;
+
+  &lt;/div&gt;
+
+&lt;/section&gt;
+
+&lt;section class=&quot;card section active&quot; id=&quot;tab-general&quot;&gt;
+
+  &lt;h2&gt;📋 Resumen General&lt;/h2&gt;
+
+  &lt;span class=&quot;pill&quot; id=&quot;generalInfo&quot;&gt;
+    Sin datos
+  &lt;/span&gt;
+
+  &lt;table&gt;
+
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Nombre&lt;/th&gt;
+        &lt;th&gt;Fecha&lt;/th&gt;
+        &lt;th class=&quot;right&quot;&gt;Kilos&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;tbody id=&quot;generalBody&quot;&gt;&lt;/tbody&gt;
+
+  &lt;/table&gt;
+
+&lt;/section&gt;
+
+&lt;section class=&quot;card section&quot; id=&quot;tab-filtrado&quot;&gt;
+
+  &lt;h2&gt;🔎 Filtrado por Cliente&lt;/h2&gt;
+
+  &lt;div class=&quot;filterGrid&quot;&gt;
+
+    &lt;div&gt;
+      &lt;label&gt;Cliente&lt;/label&gt;
+
+      &lt;select id=&quot;clienteFiltro&quot;&gt;
+        &lt;option value=&quot;&quot;&gt;
+          Selecciona cliente
+        &lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;totalBox&quot;&gt;
+      &lt;span&gt;Total kilos filtrados&lt;/span&gt;
+      &lt;b id=&quot;totalFiltrado&quot;&gt;0.00 kg&lt;/b&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;table&gt;
+
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Nombre&lt;/th&gt;
+        &lt;th&gt;Fecha&lt;/th&gt;
+        &lt;th class=&quot;right&quot;&gt;Kilos&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;tbody id=&quot;filtradoBody&quot;&gt;&lt;/tbody&gt;
+
+  &lt;/table&gt;
+
+&lt;/section&gt;
+
+&lt;section class=&quot;card section&quot; id=&quot;tab-clientes&quot;&gt;
+
+  &lt;h2&gt;🧾 Clientes Resumen OK&lt;/h2&gt;
+
+  &lt;div class=&quot;cardsGrid&quot; id=&quot;clientesCards&quot;&gt;&lt;/div&gt;
+
+&lt;/section&gt;
+
+&lt;/main&gt;
+
+&lt;script&gt;
+
+ const SUPABASE_URL = &quot;https://bjebybdqcqscouxlinfd.supabase.co&quot;;
+const SUPABASE_ANON_KEY = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqZWJ5YmRxY3FzY291eGxpbmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjQ3MTksImV4cCI6MjA3MTkwMDcxOX0.mQgWtiYEyJTiF04pdcLv63SqPNrU1Iehws0vKqr82O0&quot;;
+
+const sb = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+ const MOSTRADOR_URL = &quot;https://eqynjddcosvdqjzztznn.supabase.co&quot;;
+
+const MOSTRADOR_ANON_KEY = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxeW5qZGRjb3N2ZHFqenp0em5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxMzYwMzIsImV4cCI6MjA3MTcxMjAzMn0.Q51wsGelUvxRfqsMYRY5JduCGyZ7s6AzOhqsRf3kOhk&quot;;
+
+const sbMostrador = supabase.createClient(
+  MOSTRADOR_URL,
+  MOSTRADOR_ANON_KEY
+);
+
+const T_ENVIADOS_MOSTRADOR = &quot;mostrador_enviados&quot;;
+const T_DEVUELTOS_MOSTRADOR = &quot;mostrador_devueltos&quot;;
+
+const LOGO_URL =
+&quot;https://marcianoper.github.io/vdc-central/logo.png&quot;;
+
+const STORE_NAME =
+&quot;Carnes y Vísceras del Centro&quot;;
+
+let REPORTE = [];
+
+const $ = s =&gt; document.querySelector(s);
+
+function to2(n){
+  return Number(n || 0).toFixed(2);
+}
+
+function todayISO(){
+
+  const d = new Date();
+  const z = d.getTimezoneOffset() * 60000;
+
+  return new Date(d-z)
+    .toISOString()
+    .slice(0,10);
+
+}
+
+function monthStartISO(){
+
+  const d = new Date();
+  const z = d.getTimezoneOffset() * 60000;
+
+  const m = new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    1
+  );
+
+  return new Date(m-z)
+    .toISOString()
+    .slice(0,10);
+
+}
+
+function productoBonito(s){
+
+  const limpio = String(s || &quot;&quot;)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,&quot; &quot;);
+
+  if(!limpio) return &quot;&quot;;
+
+  return limpio.charAt(0).toUpperCase() +
+         limpio.slice(1);
+
+}
+
+function normalizeKey(s){
+
+  return String(s || &quot;&quot;)
+    .trim()
+    .toLowerCase()
+    .normalize(&quot;NFD&quot;)
+    .replace(/[\u0300-\u036f]/g,&quot;&quot;)
+    .replace(/\s+/g,&quot; &quot;);
+
+}
+  const KG_PROMEDIO_CABEZA = 15.5;
+
+function productoEsCabeza(producto){
+
+  const p = normalizeKey(producto);
+
+  return (
+    p.includes(&quot;cabeza&quot;)
+  );
+
+}
+
+function piezasCabeza(kilos){
+
+  return Math.round(
+    Number(kilos || 0) /
+    KG_PROMEDIO_CABEZA
+  );
+
+}
+
+async function cargarProductos(){
+
+  const { data, error } = await sb
+    .from(&quot;productos&quot;)
+    .select(&quot;nombre&quot;)
+    .order(&quot;nombre&quot;);
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const select = $(&quot;#productoSelect&quot;);
+
+  (data || []).forEach(p=&gt;{
+
+    const opt = document.createElement(&quot;option&quot;);
+
+    opt.value = p.nombre;
+    opt.textContent = productoBonito(p.nombre);
+
+    select.appendChild(opt);
+
+  });
+
+}
+
+async function generarReporte(){
+
+  const desde = $(&quot;#fechaDesde&quot;).value;
+  const hasta = $(&quot;#fechaHasta&quot;).value;
+  const producto = $(&quot;#productoSelect&quot;).value;
+
+  if(!desde || !hasta){
+    alert(&quot;Selecciona fechas&quot;);
+    return;
+  }
+
+  $(&quot;#loading&quot;).classList.add(&quot;on&quot;);
+
+  try{
+
+    const mapa = new Map();
+
+    function agregarAlMapa(nombre, fecha, kilos){
+
+      const key =
+        `${normalizeKey(nombre)}|${fecha}`;
+
+      if(!mapa.has(key)){
+        mapa.set(key,{
+          nombre,
+          fecha,
+          kilos:0
+        });
+      }
+
+      mapa.get(key).kilos += Number(kilos || 0);
+
+    }
+
+    function productoCoincide(productoRegistro){
+
+      if(!producto) return true;
+
+      const pFiltro = normalizeKey(producto);
+      const pRegistro = normalizeKey(productoRegistro);
+
+      // Si seleccionas Cabeza, acepta todas las variantes
+      if(productoEsCabeza(producto)){
+        return productoEsCabeza(productoRegistro);
+      }
+
+      // Coincidencia exacta o flexible
+      return (
+        pRegistro === pFiltro ||
+        pRegistro.includes(pFiltro) ||
+        pFiltro.includes(pRegistro)
+      );
+
+    }
+
+    // =========================
+    // 1. NOTAS A CRÉDITO
+    // =========================
+
+    const { data:notas, error:notasError } = await sb
+      .from(&quot;notas_credito&quot;)
+      .select(`
+        id,
+        fecha,
+        clientes(nombre)
+      `)
+      .gte(&quot;fecha&quot;, desde)
+      .lte(&quot;fecha&quot;, hasta);
+
+    if(notasError) throw notasError;
+
+    const ids = (notas || []).map(n=&gt;n.id);
+
+    if(ids.length){
+
+      const { data:detalles, error:detError } = await sb
+        .from(&quot;notas_detalle&quot;)
+        .select(`
+          nota_id,
+          producto,
+          cantidad
+        `)
+        .in(&quot;nota_id&quot;, ids);
+
+      if(detError) throw detError;
+
+      (detalles || []).forEach(d=&gt;{
+
+        if(!productoCoincide(d.producto)){
+          return;
+        }
+
+        const nota =
+          notas.find(n=&gt;n.id === d.nota_id);
+
+        if(!nota) return;
+
+        const nombre =
+          productoBonito(
+            nota.clientes?.nombre ||
+            &quot;Sin cliente&quot;
+          );
+
+        if(
+          normalizeKey(nombre) ===
+          normalizeKey(&quot;Venta Bodega&quot;)
+        ){
+          return;
+        }
+
+        agregarAlMapa(
+          nombre,
+          nota.fecha,
+          Number(d.cantidad || 0)
+        );
+
+      });
+
+    }
+
+    // =========================
+    // 2. VENTA MOSTRADOR GENERAL
+    // =========================
+
+    const { data:envios, error:envError } = await sbMostrador
+      .from(&quot;mostrador_enviados&quot;)
+      .select(&quot;fecha, producto, kilos&quot;)
+      .gte(&quot;fecha&quot;, desde)
+      .lte(&quot;fecha&quot;, hasta);
+
+    if(envError) throw envError;
+
+    const { data:devueltos, error:devError } = await sbMostrador
+      .from(&quot;mostrador_devueltos&quot;)
+      .select(&quot;fecha, producto, kilos&quot;)
+      .gte(&quot;fecha&quot;, desde)
+      .lte(&quot;fecha&quot;, hasta);
+
+    if(devError) throw devError;
+
+    const nombreMostrador =
+      &quot;Venta Mostrador General&quot;;
+
+    (envios || []).forEach(r=&gt;{
+
+      if(!productoCoincide(r.producto)){
+        return;
+      }
+
+      agregarAlMapa(
+        nombreMostrador,
+        r.fecha,
+        Number(r.kilos || 0)
+      );
+
+    });
+
+    (devueltos || []).forEach(r=&gt;{
+
+      if(!productoCoincide(r.producto)){
+        return;
+      }
+
+      agregarAlMapa(
+        nombreMostrador,
+        r.fecha,
+        -Number(r.kilos || 0)
+      );
+
+    });
+
+    REPORTE = Array
+      .from(mapa.values())
+      .filter(r=&gt;Number(r.kilos || 0) !== 0)
+      .map(r=&gt;({
+        nombre:r.nombre,
+        fecha:r.fecha,
+        kilos:Number(to2(r.kilos))
+      }))
+      .sort((a,b)=&gt; b.kilos - a.kilos);
+
+    if(!REPORTE.length){
+      alert(&quot;No hay datos en ese rango&quot;);
+    }
+
+    renderAll();
+
+  }catch(err){
+
+    console.error(err);
+    alert(&quot;Error generando reporte&quot;);
+
+  }finally{
+
+    $(&quot;#loading&quot;).classList.remove(&quot;on&quot;);
+
+  }
+
+}
+
+function renderAll(){
+
+  renderGeneral();
+  renderClientesSelect();
+  renderFiltrado();
+  renderCards();
+
+}
+
+function renderGeneral(){
+
+  const totalKg = REPORTE
+    .reduce((a,b)=&gt;
+      a + Number(b.kilos || 0)
+    ,0);
+
+  const productoActual =
+    $(&quot;#productoSelect&quot;).value;
+
+  let piezasTxt = &quot;&quot;;
+
+  if(
+    productoActual &amp;&amp;
+    productoEsCabeza(productoActual)
+  ){
+
+    piezasTxt =
+      ` · Piezas estimadas: ${
+        piezasCabeza(totalKg)
+      } cabezas`;
+
+  }
+
+  $(&quot;#generalInfo&quot;).textContent =
+    `Registros: ${REPORTE.length} · Total: ${to2(totalKg)} kg${piezasTxt}`;
+
+  $(&quot;#generalBody&quot;).innerHTML =
+    REPORTE.map(r=&gt;`
+
+      &lt;tr&gt;
+        &lt;td&gt;${r.nombre}&lt;/td&gt;
+        &lt;td&gt;${r.fecha}&lt;/td&gt;
+        &lt;td class=&quot;right&quot;&gt;${to2(r.kilos)}&lt;/td&gt;
+      &lt;/tr&gt;
+
+    `).join(&quot;&quot;);
+
+}
+function renderClientesSelect(){
+
+  const clientes =
+    [...new Set(
+      REPORTE.map(r=&gt;r.nombre)
+    )]
+    .sort((a,b)=&gt;
+      a.localeCompare(b,&quot;es&quot;)
+    );
+
+  $(&quot;#clienteFiltro&quot;).innerHTML =
+    `&lt;option value=&quot;&quot;&gt;Selecciona cliente&lt;/option&gt;` +
+    clientes.map(c=&gt;`
+      &lt;option value=&quot;${c}&quot;&gt;
+        ${c}
+      &lt;/option&gt;
+    `).join(&quot;&quot;);
+
+}
+
+function renderFiltrado(){
+
+  const cliente =
+    $(&quot;#clienteFiltro&quot;).value;
+
+  const rows = cliente
+    ? REPORTE.filter(r=&gt;r.nombre === cliente)
+    : [];
+
+  const total = rows
+    .reduce((a,b)=&gt;
+      a + Number(b.kilos || 0)
+    ,0);
+
+  const productoActual =
+    $(&quot;#productoSelect&quot;).value;
+
+  let texto =
+    `${to2(total)} kg`;
+
+  if(
+    productoActual &amp;&amp;
+    productoEsCabeza(productoActual)
+  ){
+
+    texto += `
+     · ${
+       piezasCabeza(total)
+     } cabezas aprox.
+    `;
+
+  }
+
+  $(&quot;#totalFiltrado&quot;).textContent =
+    texto;
+
+  $(&quot;#filtradoBody&quot;).innerHTML =
+    rows.map(r=&gt;`
+
+      &lt;tr&gt;
+        &lt;td&gt;${r.nombre}&lt;/td&gt;
+        &lt;td&gt;${r.fecha}&lt;/td&gt;
+        &lt;td class=&quot;right&quot;&gt;${to2(r.kilos)}&lt;/td&gt;
+      &lt;/tr&gt;
+
+    `).join(&quot;&quot;);
+
+}
+
+function renderCards(){
+
+  const grupos = {};
+
+  REPORTE.forEach(r=&gt;{
+
+    if(!grupos[r.nombre]){
+      grupos[r.nombre] = [];
+    }
+
+    grupos[r.nombre].push(r);
+
+  });
+
+  $(&quot;#clientesCards&quot;).innerHTML =
+    Object.entries(grupos)
+    .sort((a,b)=&gt;{
+
+      const totalA =
+        a[1].reduce((x,y)=&gt;
+          x + Number(y.kilos || 0)
+        ,0);
+
+      const totalB =
+        b[1].reduce((x,y)=&gt;
+          x + Number(y.kilos || 0)
+        ,0);
+
+      return totalB - totalA;
+
+    })
+    .map(([cliente, rows])=&gt;{
+
+      const total = rows
+        .reduce((a,b)=&gt;
+          a + Number(b.kilos || 0)
+        ,0);
+
+      const mostrarPiezas =
+        productoEsCabeza($(&quot;#productoSelect&quot;).value);
+
+      return `
+
+      &lt;div class=&quot;clientCard&quot;&gt;
+
+        &lt;div class=&quot;clientTitle&quot;&gt;
+          ${cliente}
+        &lt;/div&gt;
+
+        &lt;table&gt;
+
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Fecha&lt;/th&gt;
+              &lt;th class=&quot;right&quot;&gt;Kilos&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+
+          &lt;tbody&gt;
+
+            ${rows
+              .sort((a,b)=&gt; b.kilos - a.kilos)
+              .map(r=&gt;`
+
+                &lt;tr&gt;
+                  &lt;td&gt;${r.fecha}&lt;/td&gt;
+                  &lt;td class=&quot;right&quot;&gt;
+                    ${to2(r.kilos)}
+                  &lt;/td&gt;
+                &lt;/tr&gt;
+
+              `).join(&quot;&quot;)}
+
+          &lt;/tbody&gt;
+
+        &lt;/table&gt;
+
+        &lt;div class=&quot;clientTotal&quot;&gt;
+
+          TOTAL: ${to2(total)} kg
+
+          ${
+            mostrarPiezas
+            ? `
+              &lt;div style=&quot;
+                margin-top:6px;
+                font-size:14px;
+                color:#166534;
+              &quot;&gt;
+                ${piezasCabeza(total)} cabezas aprox.
+              &lt;/div&gt;
+            `
+            : &quot;&quot;
+          }
+
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+
+      `;
+
+    }).join(&quot;&quot;);
+
+}
+
+function generarDocumento(){
+
+  if(!REPORTE.length){
+    alert(&quot;Primero genera un reporte&quot;);
+    return;
+  }
+
+  const desde =
+    $(&quot;#fechaDesde&quot;).value;
+
+  const hasta =
+    $(&quot;#fechaHasta&quot;).value;
+
+  const producto =
+    $(&quot;#productoSelect&quot;).value ||
+    &quot;Todos&quot;;
+
+  const grupos = {};
+
+  REPORTE.forEach(r=&gt;{
+
+    if(!grupos[r.nombre]){
+      grupos[r.nombre] = [];
+    }
+
+    grupos[r.nombre].push(r);
+
+  });
+
+  const clientesOrdenados =
+    Object.entries(grupos)
+    .sort((a,b)=&gt;{
+
+      const totalA =
+        a[1].reduce((x,y)=&gt;
+          x + Number(y.kilos || 0)
+        ,0);
+
+      const totalB =
+        b[1].reduce((x,y)=&gt;
+          x + Number(y.kilos || 0)
+        ,0);
+
+      return totalB - totalA;
+
+    });
+
+  const totalKg = REPORTE
+    .reduce((a,b)=&gt;
+      a + Number(b.kilos || 0)
+    ,0);
+  
+  const mostrarPiezas =
+  productoEsCabeza(producto);
+
+const piezasTotales =
+  piezasCabeza(totalKg);
+
+  const html = `
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+
+&lt;style&gt;
+
+@page{
+  size:letter landscape;
+  margin:8mm;
+}
+
+body{
+  font-family:
+    Inter,
+    &quot;Segoe UI&quot;,
+    system-ui,
+    sans-serif;
+
+  font-size:12px;
+  color:#111827;
+
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+
+  letter-spacing:.1px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:4px solid #0a7a3b;
+  margin-bottom:14px;
+  padding-bottom:10px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand img{
+  width:90px;
+}
+
+.brand h1{
+  margin:0;
+  color:#0a7a3b;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+}
+
+.summary{
+  text-align:right;
+  font-size:12px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.kpi{
+  background:#eef7f0;
+  border:1px solid #cde7d4;
+  padding:12px;
+  border-radius:12px;
+}
+
+.kpi span{
+  display:block;
+  font-size:11px;
+  color:#64748b;
+  margin-bottom:4px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.kpi b{
+  color:#0a7a3b;
+  font-size:22px;
+  font-weight:900;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:14px;
+}
+
+th{
+  background:#0a7a3b;
+  color:#fff;
+  padding:8px;
+  border:1px solid #0a7a3b;
+
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+td{
+  border:1px solid #d1d5db;
+  padding:8px;
+
+  font-size:12px;
+  font-weight:600;
+}
+
+.right{
+  text-align:right;
+  font-weight:800;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.clientCard{
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
+.clientTitle{
+  background:#0a7a3b;
+  color:#fff;
+  text-align:center;
+
+  padding:12px;
+
+  font-weight:900;
+  font-size:16px;
+
+  letter-spacing:.3px;
+}
+
+.clientTotal{
+  background:#eef7f0;
+  color:#0a7a3b;
+
+  padding:12px;
+
+  text-align:right;
+
+  font-weight:900;
+  font-size:15px;
+}
+
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;div class=&quot;header&quot;&gt;
+
+  &lt;div class=&quot;brand&quot;&gt;
+
+    &lt;img src=&quot;${LOGO_URL}&quot;&gt;
+
+    &lt;div&gt;
+      &lt;h1&gt;${STORE_NAME}&lt;/h1&gt;
+      &lt;div&gt;
+        Reporte General Clientes
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;div class=&quot;summary&quot;&gt;
+
+    &lt;div&gt;
+      &lt;b&gt;Desde:&lt;/b&gt; ${desde}
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;b&gt;Hasta:&lt;/b&gt; ${hasta}
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;b&gt;Producto:&lt;/b&gt; ${producto}
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div class=&quot;kpis&quot;&gt;
+
+  &lt;div class=&quot;kpi&quot;&gt;
+    &lt;span&gt;Total clientes&lt;/span&gt;
+    &lt;b&gt;${clientesOrdenados.length}&lt;/b&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;kpi&quot;&gt;
+  &lt;span&gt;Total kilos&lt;/span&gt;
+  &lt;b&gt;${to2(totalKg)} kg&lt;/b&gt;
+&lt;/div&gt;
+
+${
+  mostrarPiezas
+  ? `
+    &lt;div class=&quot;kpi&quot;&gt;
+      &lt;span&gt;Piezas estimadas&lt;/span&gt;
+      &lt;b&gt;${piezasTotales}&lt;/b&gt;
+    &lt;/div&gt;
+  `
+  : &quot;&quot;
+}
+
+  &lt;div class=&quot;kpi&quot;&gt;
+    &lt;span&gt;Producto&lt;/span&gt;
+    &lt;b&gt;${producto}&lt;/b&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;kpi&quot;&gt;
+    &lt;span&gt;Orden&lt;/span&gt;
+    &lt;b&gt;Mayor → menor&lt;/b&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div class=&quot;cards&quot;&gt;
+
+${clientesOrdenados.map(([cliente, rows])=&gt;{
+
+const total = rows
+.reduce((a,b)=&gt;
+  a + Number(b.kilos || 0)
+,0);
+
+return `
+
+&lt;div class=&quot;clientCard&quot;&gt;
+
+&lt;div class=&quot;clientTitle&quot;&gt;
+${cliente}
+&lt;/div&gt;
+
+&lt;table&gt;
+
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Fecha&lt;/th&gt;
+&lt;th class=&quot;right&quot;&gt;Kilos&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+
+${rows
+.sort((a,b)=&gt; b.kilos - a.kilos)
+.map(r=&gt;`
+
+&lt;tr&gt;
+&lt;td&gt;${r.fecha}&lt;/td&gt;
+&lt;td class=&quot;right&quot;&gt;
+${to2(r.kilos)}
+&lt;/td&gt;
+&lt;/tr&gt;
+
+`).join(&quot;&quot;)}
+
+&lt;/tbody&gt;
+
+&lt;/table&gt;
+
+&lt;div class=&quot;clientTotal&quot;&gt;
+
+TOTAL: ${to2(total)} kg
+
+${
+  mostrarPiezas
+  ? `
+    &lt;div style=&quot;
+      margin-top:6px;
+      font-size:13px;
+    &quot;&gt;
+      ${piezasCabeza(total)}
+      cabezas aprox.
+    &lt;/div&gt;
+  `
+  : &quot;&quot;
+}
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+`;
+
+}).join(&quot;&quot;)}
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+`;
+
+  const win =
+    window.open(
+      &quot;&quot;,
+      &quot;_blank&quot;,
+      &quot;width=1200,height=800&quot;
+    );
+
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+
+  setTimeout(()=&gt;{
+    win.print();
+  },500);
+
+}
+
+document
+.querySelectorAll(&quot;.tab&quot;)
+.forEach(btn=&gt;{
+
+  btn.addEventListener(&quot;click&quot;, ()=&gt;{
+
+    document
+    .querySelectorAll(&quot;.tab&quot;)
+    .forEach(b=&gt;
+      b.classList.remove(&quot;active&quot;)
+    );
+
+    document
+    .querySelectorAll(&quot;.section&quot;)
+    .forEach(s=&gt;
+      s.classList.remove(&quot;active&quot;)
+    );
+
+    btn.classList.add(&quot;active&quot;);
+
+    $(&quot;#tab-&quot; + btn.dataset.tab)
+      .classList.add(&quot;active&quot;);
+
+  });
+
+});
+
+$(&quot;#btnGenerar&quot;)
+.addEventListener(
+  &quot;click&quot;,
+  generarReporte
+);
+
+$(&quot;#btnDocumento&quot;)
+.addEventListener(
+  &quot;click&quot;,
+  generarDocumento
+);
+
+$(&quot;#clienteFiltro&quot;)
+.addEventListener(
+  &quot;change&quot;,
+  renderFiltrado
+);
+
+window.addEventListener(
+  &quot;load&quot;,
+  async ()=&gt;{
+
+    $(&quot;#fechaDesde&quot;).value =
+      monthStartISO();
+
+    $(&quot;#fechaHasta&quot;).value =
+      todayISO();
+
+    await cargarProductos();
+
+  }
+);
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+</div>
+</section>
 </main>
 </div>
 
 <script>
-const MODULES={dashboard:['Dashboard','Vista general del Sistema VDC 360°'],hojaViaje:['Hoja de viaje','Registro de viajes, productos y pesadas'],hojaSebo:['Hoja de sebo','Pesajes, papel de sebo, etiquetas 80mm y WhatsApp'],cajasMenudo:['Cajas de menudo','Entradas, conteo final, resumen por marca y WhatsApp'],produccionCamion:['Producción camión','Control de líneas de producción'],lavadoPatas:['Lavado de patas','Control de salida, llegada y descarga por máquina'],limpiezaPanza:['Limpieza de panza','Control del proceso de limpieza'],enviosMostrador:['Envíos a mostrador','Registro de enviados, devueltos y kilos netos'],notasCredito:['Notas a crédito','Control de notas, clientes y productos'],clientes:['Clientes','Base de clientes y datos comerciales'],reportes:['Reportes','Análisis general del sistema']};
+const MODULES={dashboard:['Dashboard','Vista general del Sistema VDC 360°'],hojaViaje:['Hoja de viaje','Registro de viajes, productos y pesadas'],hojaSebo:['Hoja de sebo','Pesajes, papel de sebo, etiquetas 80mm y WhatsApp'],cajasMenudo:['Cajas de menudo','Entradas, conteo final, resumen por marca y WhatsApp'],produccionCamion:['Producción camión','Control de líneas de producción'],lavadoPatas:['Lavado de patas','Control de salida, llegada y descarga por máquina'],limpiezaPanza:['Limpieza de panza','Control del proceso de limpieza'],enviosMostrador:['Envíos a mostrador','Registro de enviados, devueltos y kilos netos'],notasCredito:['Notas a crédito','Control de notas, clientes y productos'],reportes:['Reportes','Reporte general de clientes, productos y kilos']};
 function showModule(id,btn){document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('moduleTitle').textContent=MODULES[id]?.[0]||'VDC 360°';document.getElementById('moduleSubtitle').textContent=MODULES[id]?.[1]||'';}
 const $=id=>document.getElementById(id);
 function vdcHoyISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
