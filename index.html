@@ -67,6 +67,7 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
     <button class="active" onclick="showModule('dashboard',this)">📊 Dashboard</button>
     <button onclick="showModule('hojaViaje',this)">🚚 Hoja de viaje</button>
     <button onclick="showModule('hojaSebo',this)">🛢️ Hoja de sebo</button>
+    <button onclick="showModule('cajasMenudo',this)">📦 Cajas de menudo</button>
     <button onclick="showModule('produccionCamion',this)">🏭 Producción camión</button>
     <button onclick="showModule('lavadoPatas',this)">🐾 Lavado de patas</button>
     <button onclick="showModule('limpiezaPanza',this)">🧼 Limpieza de panza</button>
@@ -83,6 +84,438 @@ input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(10,
 <section id="dashboard" class="module active">
   <div class="stats"><div class="stat"><span>Módulos activos</span><strong>10</strong></div><div class="stat"><span>Operación diaria</span><strong>VDC</strong></div><div class="stat"><span>Reportes</span><strong>360°</strong></div><div class="stat"><span>Estado</span><strong>OK</strong></div></div>
   <div class="empty">Selecciona un módulo del menú izquierdo para operar dentro de esta misma página.</div>
+</section>
+
+
+<section id="cajasMenudo" class="module">
+<div class="card" style="padding:0; overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff;">
+    <div>
+      <h3 style="margin:0;font-size:18px;">📦 Cajas de Menudo</h3>
+      <p style="margin:4px 0 0;color:var(--muted);font-weight:700;font-size:13px;">Control de entradas, conteo final, resumen diario por marca y WhatsApp.</p>
+    </div>
+    <button class="btn light" onclick="document.getElementById('cajasMenudoFrame').contentWindow.location.reload()">🔄 Recargar módulo</button>
+  </div>
+  <iframe id="cajasMenudoFrame" title="Cajas de Menudo VDC" style="width:100%;height:84vh;border:0;background:#f6f7f8;display:block;" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot; /&gt;
+  &lt;title&gt;VDC360° – Cajas Menudo&lt;/title&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
+  &lt;style&gt;
+    :root{--ink:#111;--brand:#0a7a3b;--muted:#6b7280;--bg:#f6f7f8;--card:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family: ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto}
+    header{background:var(--brand);color:#fff;padding:14px 18px}
+    header h1{margin:0;font-size:18px}
+    main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:16px}
+    h2{margin:0 0 10px 0;font-size:18px}
+    label{display:block;margin-top:10px;font-size:14px;color:#111}
+    input,select,button,textarea{
+      width:100%;padding:10px;margin-top:6px;font-size:14px;border:1px solid #e5e7eb;border-radius:8px;background:#fff
+    }
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .btn{cursor:pointer}
+    .btn-primary{background:var(--brand);color:#fff;border:none}
+    .btn-muted{background:#111;color:#fff;border:none}
+    .btn-ghost{background:#fff;border:1px solid #e5e7eb;color:#111}
+    .muted{color:var(--muted);font-size:13px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border-bottom:1px solid #eef0f2;text-align:left;font-size:14px}
+    th{background:#fafafa}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#eef7f0;color:#0a7a3b;font-size:12px}
+    .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .right{margin-left:auto}
+    .danger{color:#b91c1c}
+    .ok{color:#166534}
+    .center{text-align:center}
+    .mini{font-size:12px}
+    .sep{height:1px;background:#eee;margin:10px 0}
+    @media (max-width: 920px){ .row{grid-template-columns:1fr} }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+  &lt;h1&gt;VDC360° · Cajas de Menudo&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;flex&quot;&gt;
+      &lt;div class=&quot;flex&quot; style=&quot;gap:6px&quot;&gt;
+        &lt;label for=&quot;fechaTrabajo&quot; class=&quot;muted&quot;&gt;Fecha de trabajo&lt;/label&gt;
+        &lt;input id=&quot;fechaTrabajo&quot; type=&quot;date&quot; /&gt;
+      &lt;/div&gt;
+      &lt;span class=&quot;right muted&quot;&gt;SI = CF día anterior · E = entradas (COUNT) · CF = conteo final&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;card&quot;&gt;
+      &lt;h2&gt;📦 Registrar Entrada&lt;/h2&gt;
+      &lt;div class=&quot;row-2&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Marca&lt;/label&gt;
+          &lt;select id=&quot;entMarca&quot;&gt;&lt;/select&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;Cantidad de cajas (filas a insertar)&lt;/label&gt;
+          &lt;input id=&quot;entCantidad&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;1&quot; value=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;row-3&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Proveedor&lt;/label&gt;
+          &lt;input id=&quot;entProveedor&quot; placeholder=&quot;(opcional)&quot; /&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;Lote / Ref&lt;/label&gt;
+          &lt;input id=&quot;entLote&quot; placeholder=&quot;(opcional)&quot; /&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;Operador&lt;/label&gt;
+          &lt;input id=&quot;entOperador&quot; placeholder=&quot;(opcional)&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;flex&quot; style=&quot;margin-top:12px&quot;&gt;
+        &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnGuardarEntrada&quot; type=&quot;button&quot;&gt;Guardar Entrada&lt;/button&gt;
+        &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnWAEntrada&quot; type=&quot;button&quot;&gt;WhatsApp Entrada&lt;/button&gt;
+        &lt;span class=&quot;muted right&quot; id=&quot;entStatus&quot;&gt;—&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;p class=&quot;mini muted&quot;&gt;
+        Nota: en tu tabla &lt;b&gt;cajas_menudo_entrada&lt;/b&gt; cada fila equivale a &lt;b&gt;1 caja&lt;/b&gt;.
+        Si capturas “10”, insertamos 10 filas.
+      &lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;card&quot;&gt;
+      &lt;h2&gt;🧮 Cierre Diario (Conteo Final por marca)&lt;/h2&gt;
+      &lt;div class=&quot;row-2&quot;&gt;
+        &lt;div&gt;
+          &lt;label&gt;Encargado del conteo&lt;/label&gt;
+          &lt;input id=&quot;cfEncargado&quot; placeholder=&quot;Nombre&quot; /&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;Fecha del conteo&lt;/label&gt;
+          &lt;input id=&quot;cfFecha&quot; type=&quot;date&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;table id=&quot;cfTabla&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Marca&lt;/th&gt;
+            &lt;th class=&quot;center&quot;&gt;CF (cajas)&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;&lt;/tbody&gt;
+      &lt;/table&gt;
+
+      &lt;div class=&quot;flex&quot; style=&quot;margin-top:12px&quot;&gt;
+        &lt;button class=&quot;btn btn-primary&quot; id=&quot;btnGuardarCF&quot; type=&quot;button&quot;&gt;Guardar Conteo&lt;/button&gt;
+        &lt;button class=&quot;btn btn-ghost&quot; id=&quot;btnWAResumen&quot; type=&quot;button&quot;&gt;WhatsApp CF por marca&lt;/button&gt;
+        &lt;span class=&quot;muted right&quot; id=&quot;cfStatus&quot;&gt;—&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;flex&quot;&gt;
+      &lt;h2&gt;📊 Resumen Diario por Marca&lt;/h2&gt;
+      &lt;button class=&quot;btn btn-muted right&quot; id=&quot;btnActualizarResumen&quot; type=&quot;button&quot;&gt;Actualizar&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;table id=&quot;resumenTabla&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;Marca&lt;/th&gt;
+          &lt;th&gt;SI&lt;/th&gt;
+          &lt;th&gt;E&lt;/th&gt;
+          &lt;th&gt;CF&lt;/th&gt;
+          &lt;th&gt;S = SI+E–CF&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;&lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;flex&quot;&gt;
+      &lt;div id=&quot;totalesBox&quot; class=&quot;pill&quot;&gt;Totales — SI: 0 · E: 0 · CF: 0 · S: 0&lt;/div&gt;
+      &lt;span class=&quot;right muted&quot; id=&quot;alertasBox&quot;&gt;Alertas: —&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- ✅ Supabase como ESM (GitHub Pages friendly) --&gt;
+&lt;script type=&quot;module&quot;&gt;
+  import { createClient } from &quot;https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm&quot;;
+
+  const SUPABASE_URL = &quot;https://bjebybdqcqscouxlinfd.supabase.co&quot;;
+  const SUPABASE_ANON_KEY = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqZWJ5YmRxY3FzY291eGxpbmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjQ3MTksImV4cCI6MjA3MTkwMDcxOX0.mQgWtiYEyJTiF04pdcLv63SqPNrU1Iehws0vKqr82O0&quot;;
+
+  // Anti doble-ejecución (extensiones / auto-reload)
+  const sb = window.__VDC360_SB ?? (window.__VDC360_SB = createClient(SUPABASE_URL, SUPABASE_ANON_KEY));
+
+  const $ = (sel) =&gt; document.querySelector(sel);
+
+  function formatDateISO(d){
+    const x = new Date(d);
+    const tz = x.getTimezoneOffset() * 60000;
+    return new Date(x - tz).toISOString().slice(0,10);
+  }
+  function todayISO(){ return formatDateISO(new Date()); }
+
+  function toast(el, msg){
+    if(!el) return;
+    el.textContent = msg;
+    clearTimeout(el.__t);
+    el.__t = setTimeout(()=&gt;{ el.textContent=&quot;—&quot;; }, 4500);
+  }
+  function errMsg(e){ return e?.message || e?.hint || e?.details || &quot;Error desconocido&quot;; }
+
+  function openWA(text){
+    const msg = encodeURIComponent(text);
+    const url = `https://wa.me/?text=${msg}`;
+    const url2 = `https://api.whatsapp.com/send?text=${msg}`;
+    const win = window.open(url, &quot;_blank&quot;);
+    setTimeout(()=&gt;{ if(!win || win.closed) window.open(url2, &quot;_blank&quot;); }, 700);
+  }
+
+  // UI refs
+  const fechaTrabajo = $(&quot;#fechaTrabajo&quot;);
+  const entMarca = $(&quot;#entMarca&quot;);
+  const entCantidad = $(&quot;#entCantidad&quot;);
+  const entProveedor = $(&quot;#entProveedor&quot;);
+  const entLote = $(&quot;#entLote&quot;);
+  const entOperador = $(&quot;#entOperador&quot;);
+  const entStatus = $(&quot;#entStatus&quot;);
+
+  const cfFecha = $(&quot;#cfFecha&quot;);
+  const cfEncargado = $(&quot;#cfEncargado&quot;);
+  const cfTablaBody = $(&quot;#cfTabla tbody&quot;);
+  const cfStatus = $(&quot;#cfStatus&quot;);
+
+  const resumenTablaBody = $(&quot;#resumenTabla tbody&quot;);
+  const totalesBox = $(&quot;#totalesBox&quot;);
+  const alertasBox = $(&quot;#alertasBox&quot;);
+
+  fechaTrabajo.value = todayISO();
+  cfFecha.value = todayISO();
+
+  async function loadMarcas(){
+    const { data, error } = await sb
+      .from(&quot;marcas_menudo&quot;)
+      .select(&quot;nombre&quot;)
+      .eq(&quot;activa&quot;, true)
+      .order(&quot;nombre&quot;, { ascending: true });
+
+    if(error){
+      console.error(error);
+      toast(entStatus, `❌ No se pudieron cargar marcas: ${errMsg(error)}`);
+      return;
+    }
+
+    const list = data || [];
+    entMarca.innerHTML = list.map(m=&gt;`&lt;option value=&quot;${m.nombre}&quot;&gt;${m.nombre}&lt;/option&gt;`).join(&quot;&quot;);
+
+    cfTablaBody.innerHTML = list.map(m=&gt;`
+      &lt;tr&gt;
+        &lt;td&gt;${m.nombre}&lt;/td&gt;
+        &lt;td class=&quot;center&quot;&gt;
+          &lt;input type=&quot;number&quot; min=&quot;0&quot; step=&quot;1&quot; class=&quot;cf-input&quot; data-marca=&quot;${m.nombre}&quot; placeholder=&quot;0&quot; /&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    `).join(&quot;&quot;);
+  }
+
+  async function guardarEntrada(){
+    const marca = entMarca.value;
+    const cantidad = Math.max(1, parseInt(entCantidad.value || &quot;1&quot;, 10));
+    const proveedor = entProveedor.value || null;
+    const lote = entLote.value || null;
+
+    const operador = (entOperador.value || &quot;&quot;).trim();
+    const usuarioRegistro = operador || &quot;sistema&quot;;
+    const f = fechaTrabajo.value || todayISO();
+
+    const rows = Array.from({length: cantidad}).map(() =&gt; ({
+      marca,
+      proveedor,
+      lote,
+      operador: operador || null,
+      usuario_registro: usuarioRegistro,
+      fecha_entrada: f,
+      cantidad_cajas: 1
+    }));
+
+    const { error } = await sb.from(&quot;cajas_menudo_entrada&quot;).insert(rows);
+    if(error){
+      console.error(&quot;Insert error:&quot;, error);
+      toast(entStatus, `❌ ${errMsg(error)}`);
+      return;
+    }
+    toast(entStatus, `✅ Guardadas ${cantidad} cajas de ${marca}`);
+  }
+
+  function waEntrada(){
+    const marca = entMarca.value;
+    const cantidad = Math.max(1, parseInt(entCantidad.value||&quot;1&quot;,10));
+    const proveedor = entProveedor.value || &quot;N/D&quot;;
+    const lote = entLote.value || &quot;N/D&quot;;
+    const operador = entOperador.value || &quot;N/D&quot;;
+    const f = fechaTrabajo.value || todayISO();
+
+    openWA([
+      &quot;📦 ENTRADA REGISTRADA&quot;,
+      `Marca: ${marca}`,
+      `Proveedor: ${proveedor}`,
+      `Cantidad: ${cantidad} cajas`,
+      `Lote/Ref: ${lote}`,
+      `Fecha: ${f}`,
+      `Operador: ${operador}`
+    ].join(&quot;\n&quot;));
+  }
+
+  async function guardarCF(){
+    const f = cfFecha.value || todayISO();
+    const encargado = (cfEncargado.value || &quot;&quot;).trim() || null;
+
+    const inputs = Array.from(document.querySelectorAll(&quot;.cf-input&quot;));
+    const rows = inputs
+      .map(i =&gt; ({
+        marca: i.dataset.marca,
+        cantidad_reportada: parseInt(i.value || &quot;0&quot;, 10),
+        fecha_conteo: f,
+        usuario_conteo: encargado
+      }))
+      .filter(r =&gt; Number.isFinite(r.cantidad_reportada) &amp;&amp; r.cantidad_reportada &gt;= 0);
+
+    if(rows.length === 0){
+      toast(cfStatus, &quot;⚠️ Nada que guardar&quot;);
+      return;
+    }
+
+    const { error } = await sb.from(&quot;cajas_menudo_conteo_diario&quot;).insert(rows);
+    if(error){
+      console.error(error);
+      toast(cfStatus, `❌ ${errMsg(error)}`);
+      return;
+    }
+    toast(cfStatus, &quot;✅ Conteo guardado&quot;);
+  }
+
+  async function actualizarResumen(){
+    const f = fechaTrabajo.value || todayISO();
+
+    const { data: marcas, error: e1 } = await sb
+      .from(&quot;v_menudo_resumen_diario&quot;)
+      .select(&quot;*&quot;)
+      .eq(&quot;fecha&quot;, f)
+      .order(&quot;marca&quot;, { ascending: true });
+
+    if(e1){
+      console.error(e1);
+      toast(entStatus, `❌ Resumen por marca no disponible: ${errMsg(e1)}`);
+      return;
+    }
+
+    resumenTablaBody.innerHTML = (marcas||[]).map(r=&gt;{
+      const sCalc = (Number(r.si)||0) + (Number(r.e)||0) - (Number(r.cf)||0);
+      const sShow = (r.s ?? sCalc);
+      const klass = Number(sShow) &lt; 0 ? &quot;danger&quot; : &quot;ok&quot;;
+      return `
+        &lt;tr&gt;
+          &lt;td&gt;${r.marca}&lt;/td&gt;
+          &lt;td&gt;${r.si ?? 0}&lt;/td&gt;
+          &lt;td&gt;${r.e ?? 0}&lt;/td&gt;
+          &lt;td&gt;${r.cf ?? 0}&lt;/td&gt;
+          &lt;td class=&quot;${klass}&quot;&gt;${sShow ?? 0}&lt;/td&gt;
+        &lt;/tr&gt;
+      `;
+    }).join(&quot;&quot;);
+
+    const { data: tots, error: e2 } = await sb
+      .from(&quot;v_menudo_resumen_totales&quot;)
+      .select(&quot;*&quot;)
+      .eq(&quot;fecha&quot;, f)
+      .maybeSingle();
+
+    if(e2){
+      console.error(e2);
+      toast(entStatus, `❌ Totales no disponibles: ${errMsg(e2)}`);
+    }
+
+    const t = tots || { si_total:0, e_total:0, cf_total:0, s_total:0 };
+    totalesBox.textContent = `Totales — SI: ${t.si_total||0} · E: ${t.e_total||0} · CF: ${t.cf_total||0} · S: ${t.s_total||0}`;
+
+    const { data: al, error: e3 } = await sb
+      .from(&quot;v_menudo_alertas&quot;)
+      .select(&quot;*&quot;)
+      .eq(&quot;fecha&quot;, f);
+
+    if(e3){
+      console.error(e3);
+      alertasBox.textContent = &quot;Alertas: (error al consultar)&quot;;
+    } else {
+      alertasBox.textContent = (al &amp;&amp; al.length&gt;0)
+        ? `Alertas: ${al.length} (revisar salidas negativas)`
+        : &quot;Alertas: —&quot;;
+    }
+  }
+
+  async function waResumen(){
+    const f = fechaTrabajo.value || todayISO();
+
+    const { data: marcas, error } = await sb
+      .from(&quot;v_menudo_resumen_diario&quot;)
+      .select(&quot;marca, cf&quot;)
+      .eq(&quot;fecha&quot;, f)
+      .order(&quot;marca&quot;, { ascending: true });
+
+    if (error) {
+      console.error(error);
+      openWA(`CF por marca no disponible: ${errMsg(error)}`);
+      return;
+    }
+
+    const lineas = (marcas || []).map(r =&gt; `${r.marca}: ${r.cf ?? 0} cajas`);
+    openWA(lineas.length ? lineas.join(&quot;\n&quot;) : &quot;Sin datos de CF por marca&quot;);
+  }
+
+  // Eventos
+  $(&quot;#btnGuardarEntrada&quot;).addEventListener(&quot;click&quot;, async ()=&gt;{
+    await guardarEntrada();
+    await actualizarResumen();
+  });
+  $(&quot;#btnWAEntrada&quot;).addEventListener(&quot;click&quot;, waEntrada);
+  $(&quot;#btnGuardarCF&quot;).addEventListener(&quot;click&quot;, async ()=&gt;{
+    await guardarCF();
+    await actualizarResumen();
+  });
+  $(&quot;#btnWAResumen&quot;).addEventListener(&quot;click&quot;, waResumen);
+  $(&quot;#btnActualizarResumen&quot;).addEventListener(&quot;click&quot;, actualizarResumen);
+  fechaTrabajo.addEventListener(&quot;change&quot;, actualizarResumen);
+
+  // Boot
+  try{
+    await loadMarcas();
+    await actualizarResumen();
+  } catch(e){
+    console.error(e);
+    toast(entStatus, `❌ ${errMsg(e)}`);
+  }
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</div>
 </section>
 
 <section id="produccionCamion" class="module">
@@ -7189,7 +7622,7 @@ if(USAR_IMPRESION_SILENCIOSA){
 </div>
 
 <script>
-const MODULES={dashboard:['Dashboard','Vista general del Sistema VDC 360°'],hojaViaje:['Hoja de viaje','Registro de viajes, productos y pesadas'],hojaSebo:['Hoja de sebo','Pesajes, papel de sebo, etiquetas 80mm y WhatsApp'],produccionCamion:['Producción camión','Control de líneas de producción'],lavadoPatas:['Lavado de patas','Control de salida, llegada y descarga por máquina'],limpiezaPanza:['Limpieza de panza','Control del proceso de limpieza'],enviosMostrador:['Envíos a mostrador','Registro de enviados, devueltos y kilos netos'],notasCredito:['Notas a crédito','Control de notas, clientes y productos'],clientes:['Clientes','Base de clientes y datos comerciales'],reportes:['Reportes','Análisis general del sistema']};
+const MODULES={dashboard:['Dashboard','Vista general del Sistema VDC 360°'],hojaViaje:['Hoja de viaje','Registro de viajes, productos y pesadas'],hojaSebo:['Hoja de sebo','Pesajes, papel de sebo, etiquetas 80mm y WhatsApp'],cajasMenudo:['Cajas de menudo','Entradas, conteo final, resumen por marca y WhatsApp'],produccionCamion:['Producción camión','Control de líneas de producción'],lavadoPatas:['Lavado de patas','Control de salida, llegada y descarga por máquina'],limpiezaPanza:['Limpieza de panza','Control del proceso de limpieza'],enviosMostrador:['Envíos a mostrador','Registro de enviados, devueltos y kilos netos'],notasCredito:['Notas a crédito','Control de notas, clientes y productos'],clientes:['Clientes','Base de clientes y datos comerciales'],reportes:['Reportes','Análisis general del sistema']};
 function showModule(id,btn){document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('moduleTitle').textContent=MODULES[id]?.[0]||'VDC 360°';document.getElementById('moduleSubtitle').textContent=MODULES[id]?.[1]||'';}
 const $=id=>document.getElementById(id);
 function vdcHoyISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
